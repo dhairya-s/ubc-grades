@@ -6,6 +6,7 @@ import {
 	InsightResult,
 	NotFoundError,
 } from "./IInsightFacade";
+import ValidateQuery from "../services/validateQuery";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -26,10 +27,23 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		return Promise.reject("Not implemented.");
+		// console.log("here");
+
+		let v = new ValidateQuery(query as typeof Object);
+		try {
+			console.log(v.validateQuery());
+		} catch (e) {
+			console.error("", e);
+			// throw new InsightError(e.toString());
+		}
+
+		return {} as Promise<InsightResult[]>;
+		// return Promise.reject("Not implemented.");
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
 		return Promise.reject("Not implemented.");
 	}
+
+
 }
