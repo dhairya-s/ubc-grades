@@ -3,6 +3,9 @@ import {InsightError} from "../controller/IInsightFacade";
 
 export default class ValidateQuery {
 	private query: object;
+	private sfield = ["dept", "id", "instructor", "title", "uuid"];
+	private mfield = ["avg", "pass", "fail", "audit", "year"];
+
 	constructor(query: object) {
 		this.query = query;
 	}
@@ -66,7 +69,6 @@ export default class ValidateQuery {
 	}
 
 	private validateMCOMP(mcomp: object): boolean {
-		const mfield = ["avg", "pass", "fail", "audit", "year"];
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(mcomp);
@@ -80,7 +82,7 @@ export default class ValidateQuery {
 				throw new InsightError("Invalid Query");
 			}
 			let isValidString = this.validateIdString(mkey[0]);
-			if (!isValidString || !mfield.includes(mkey[1])) {
+			if (!isValidString || !this.mfield.includes(mkey[1])) {
 				throw new InsightError("Invalid Query");
 			}
 
@@ -108,7 +110,6 @@ export default class ValidateQuery {
 	}
 
 	private validateSCOMP(scomp: object): boolean {
-		const sfield = ["dept", "id", "instructor", "title", "uuid"];
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(scomp);
@@ -120,7 +121,7 @@ export default class ValidateQuery {
 				throw new InsightError("Invalid Query");
 			}
 			let isValidString = this.validateIdString(skey[0]);
-			if (!isValidString || !sfield.includes(skey[1])) {
+			if (!isValidString || !this.sfield.includes(skey[1])) {
 				throw new InsightError("Invalid Query");
 			}
 			try {
@@ -151,8 +152,48 @@ export default class ValidateQuery {
 	}
 
 	private validateOptions(options: object): boolean  {
-		console.log(options);
-		return true;
+		let isValid: boolean = false;
+		let keys: string[];
+		keys = Object.keys(options);
+		let hasCols: boolean = false;
+		console.log(keys);
+		for (let key of keys) {
+			if (key === "COLUMNS") {
+				hasCols = true;
+				isValid = this.validateColumns(options[key as keyof typeof options]);
+			} else if (key === "ORDER") {
+				isValid = this.validateOrder(options[key as keyof typeof options]);
+			}
+		}
+
+		return isValid;
+	}
+
+	private validateColumns(cols: string[]): boolean {
+		let isValid = false;
+		for (let col of cols) {
+			let val = col.split("_");
+			let isValidId = this.validateIdString(val[0]);
+
+			if (!isValidId || (!this.mfield.includes(val[1]) && !this.sfield.includes(val[1]))) {
+				throw new InsightError("Invalid Query");
+			}
+		}
+
+		isValid = true;
+		return isValid;
+	}
+
+	private validateOrder(order: string) {
+		let isValid = false;
+		let val = order.split("_");
+		let isValidId = this.validateIdString(val[0]);
+
+		if (!isValidId || (!this.mfield.includes(val[1]) && !this.sfield.includes(val[1]))) {
+			throw new InsightError("Invalid Query");
+		}
+		isValid = true;
+		return isValid;
 	}
 
 	private validateIdString(idString: string): boolean {
