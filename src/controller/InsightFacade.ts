@@ -4,7 +4,7 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError,
+	NotFoundError, ResultTooLargeError,
 } from "./IInsightFacade";
 import ValidateQuery from "../services/validateQuery";
 
@@ -33,7 +33,14 @@ export default class InsightFacade implements IInsightFacade {
 		try {
 			console.log(v.validateQuery());
 		} catch (e) {
-			console.error("", e);
+			if (e === InsightError){
+				throw e;
+			} else if (e === ResultTooLargeError) {
+				throw e;
+			} else {
+				throw new InsightError(String(e instanceof Error));
+			}
+
 			// throw new InsightError(e.toString());
 		}
 

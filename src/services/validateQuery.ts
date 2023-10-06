@@ -87,7 +87,7 @@ export default class ValidateQuery {
 			}
 
 			try {
-				const value: number = mcomp[key as keyof typeof mcomp];
+				const value: number = mcomp[key as keyof typeof mcomp]; // fail if numeric string or array or empty
 				console.log("MCOMP val", value);
 				isValid = true;
 			} catch (e) {
@@ -125,7 +125,7 @@ export default class ValidateQuery {
 				throw new InsightError("Invalid Query");
 			}
 			try {
-				const value: string = scomp[key as keyof typeof scomp];
+				const value: string = scomp[key as keyof typeof scomp]; // fail if array or empty
 				isValid = this.validateInputString(value);
 				console.log("scomp val", value);
 			} catch (e) {
@@ -135,18 +135,16 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateInputString(inputString: string): boolean  { // implement
-		return true;
-	}
 	private validateNEGATION(neg: object): boolean  {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(neg);
 		console.log("Negation", keys);
 
-		for (let key in keys) {
-			isValid = this.validateBody(neg[key as keyof typeof neg]);
+		if (keys.length > 1) {
+			throw new InsightError("Invalid Query");
 		}
+		isValid = this.validateBody(neg);
 
 		return isValid;
 	}
@@ -163,7 +161,13 @@ export default class ValidateQuery {
 				isValid = this.validateColumns(options[key as keyof typeof options]);
 			} else if (key === "ORDER") {
 				isValid = this.validateOrder(options[key as keyof typeof options]);
+			} else {
+				throw new InsightError("Incorrect Options");
 			}
+		}
+
+		if (!hasCols) {
+			throw new InsightError("Options missing columns");
 		}
 
 		return isValid;
@@ -198,6 +202,11 @@ export default class ValidateQuery {
 
 	private validateIdString(idString: string): boolean {
 		const regEx = /[^a-zA-Z0-9[\]^]+/;
-		return !regEx.test(idString);
+		return !regEx.test(idString); // if false, throw error
+	}
+
+	private validateInputString(inputString: string): boolean  { // implement
+		const regEx = /^([*A-Za-z[^\]][A-Za-z[^\]]*[*A-Za-z[^\]]|[*A-Za-z[^\]])$/;
+		return !regEx.test(inputString); // if false, throw error
 	}
 }
