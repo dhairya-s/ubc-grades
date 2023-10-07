@@ -59,7 +59,7 @@ describe("InsightFacade", function () {
 
 		it("should resolve with a permissible dataset id", async function () {
 			let result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-			return expect(result).to.deep.equals([]);
+			return expect(result).to.deep.equals(["ubc"]);
 		});
 	});
 

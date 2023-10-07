@@ -70,44 +70,44 @@ export default class SectionEntry {
 		this.audit = audit;
 	}
 
-	public get_uuid(uuid: string): string {
-		return uuid;
+	public get_uuid(): string {
+		return this.uuid;
 	}
 
-	public get_id(id: string): string {
-		return id;
+	public get_id(): string {
+		return this.id;
 	}
 
-	public get_title(title: string): string {
-		return title;
+	public get_title(): string {
+		return this.title;
 	}
 
-	public get_instructor(instructor: string): string {
-		return instructor;
+	public get_instructor(): string {
+		return this.instructor;
 	}
 
-	public get_dept(dept: string): string {
-		return dept;
+	public get_dept(): string {
+		return this.dept;
 	}
 
-	public get_year(year: number): number {
-		return year;
+	public get_year(): number {
+		return this.year;
 	}
 
-	public get_avg(avg: number): number {
-		return avg;
+	public get_avg(): number {
+		return this.avg;
 	}
 
-	public get_pass(pass: number): number {
-		return pass;
+	public get_pass(): number {
+		return this.pass;
 	}
 
-	public get_fail(fail: number): number {
-		return fail;
+	public get_fail(): number {
+		return this.fail;
 	}
 
-	public get_audit(audit: number): number {
-		return audit;
+	public get_audit(): number {
+		return this.audit;
 	}
 
 }

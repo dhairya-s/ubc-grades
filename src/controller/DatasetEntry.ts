@@ -10,8 +10,9 @@ export default class DatasetEntry implements InsightDataset{
 	public numRows: number = 0;
 	public path: string = "src/saved_data/"; // For on disk storage
 
-	constructor(id: string) {
+	constructor(id: string, kind: InsightDatasetKind) {
 		this.id = id;
+		this.kind = kind;
 	}
 	public async parse_dataset_entry(zip: JSZip, unzipped_content: JSZip): Promise<void> {
 		let filenames = Object.keys(unzipped_content.files);
