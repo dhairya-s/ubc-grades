@@ -17,38 +17,45 @@ export default class InsightFacade implements IInsightFacade{
                 "'sections'."));
 		}
 		try {
-			let parsedContent = await this.parseContent(content, id);
+			let parsedContent = await this.parseContent(content, id, kind);
 			parsedContent.get_numRows();
-			return Promise.resolve([]);
+			this.datasets.push(parsedContent);
+			let names = this.get_dataset_names();
+			return Promise.resolve(names);
 		} catch {
 			return Promise.reject(new InsightError("Invalid content was provided."));
 		}
 	}
 
+	private get_dataset_names(): string[] {
+		return this.datasets.map(function(dataset) {
+			return dataset.get_id();
+		});
+	}
 	private validateId(id: string): boolean {
 		return !(id.length < 1 || id.includes("_"));
 	}
 
-	private async parseContent(content: string, id: string): Promise<Awaited<DatasetEntry>> {
+	private async parseContent(content: string, id: string, kind: InsightDatasetKind): Promise<Awaited<DatasetEntry>> {
 		/*
 		Parses content into a readable Dataset object.
 		 */
 		try {
-			let entry = await this.parseZip(content, id); // TODO: Does this need to return anything at all?
+			let entry = await this.parseZip(content, id, kind); // TODO: Does this need to return anything at all?
 			return Promise.resolve(entry);
 		} catch {
 			return Promise.reject(new InsightError("Content could not be parsed"));
 		}
 	}
 
-	private async parseZip(content: string, id: string): Promise<DatasetEntry> {
+	private async parseZip(content: string, id: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
 		let zip = new JSZip();
 		let path = "src/saved_data/";
-		let entry = new DatasetEntry(id);
+		let entry = new DatasetEntry(id, kind);
 		await zip.loadAsync(content, {base64: true}).then(async function (unzipped_contents) {
 			try {
 				await entry.parse_dataset_entry(zip, unzipped_contents);
-				console.log(entry);
+				// console.log(entry);
 				return entry;
 			} catch {
 				return new InsightError("Unable to parse course");
