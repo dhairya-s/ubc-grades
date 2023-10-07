@@ -88,6 +88,9 @@ export default class ValidateQuery {
 
 			try {
 				const value: number = mcomp[key as keyof typeof mcomp]; // fail if numeric string or array or empty
+				if (typeof mcomp[key as keyof typeof mcomp] !== "number") {
+					throw new InsightError("Invalid Query");
+				}
 				console.log("MCOMP val", value);
 				isValid = true;
 			} catch (e) {
@@ -126,6 +129,9 @@ export default class ValidateQuery {
 			}
 			try {
 				const value: string = scomp[key as keyof typeof scomp]; // fail if array or empty
+				if (typeof scomp[key as keyof typeof scomp] !== "string") {
+					throw new InsightError("Invalid Query");
+				}
 				isValid = this.validateInputString(value);
 				console.log("scomp val", value);
 			} catch (e) {
@@ -201,12 +207,18 @@ export default class ValidateQuery {
 	}
 
 	private validateIdString(idString: string): boolean {
-		const regEx = /[^a-zA-Z0-9[\]^]+/;
-		return !regEx.test(idString); // if false, throw error
+		const regEx = /[a-zA-Z0-9[\]^]+/;
+		if (!regEx.test(idString)) {
+			throw new InsightError("Invalid id string");
+		}
+		return true;
 	}
 
 	private validateInputString(inputString: string): boolean  { // implement
-		const regEx = /^([*A-Za-z[^\]][A-Za-z[^\]]*[*A-Za-z[^\]]|[*A-Za-z[^\]])$/;
-		return !regEx.test(inputString); // if false, throw error
+		const regEx = /^ *$|^([* A-Za-z0-9[^\]][ A-Za-z0-9[^\]]*[* A-Za-z0-9[^\]]|[* A-Za-z0-9[^\]])$/;
+		if (!regEx.test(inputString)) {
+			throw new InsightError("Invalid input string");
+		}
+		return true;
 	}
 }
