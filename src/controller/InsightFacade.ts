@@ -51,10 +51,12 @@ export default class InsightFacade implements IInsightFacade{
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
 		// console.log("here");
-
-		let v = new ValidateQuery(query as typeof Object);
+		let isValid: boolean = false;
+		let validate = new ValidateQuery(query as typeof Object);
 		try {
-			console.log(v.validateQuery());
+			isValid = validate.validateQuery();
+
+
 		} catch (e) {
 			if (e === InsightError) {
 				throw e;
@@ -63,8 +65,6 @@ export default class InsightFacade implements IInsightFacade{
 			} else {
 				throw new InsightError(String(e instanceof Error));
 			}
-
-			// throw new InsightError(e.toString());
 		}
 
 		return {} as Promise<InsightResult[]>;
@@ -89,32 +89,10 @@ export default class InsightFacade implements IInsightFacade{
 	}
 
 	public listDatasets(): Promise<InsightDataset[]> {
-        // return Promise.resolve(
-        // // [{
-        // //                     id:"dataset1",
-        // //                     kind: InsightDatasetKind.Sections,
-        // //                     numRows: 5298
-        // //                 }]
-        // // )
-        //     [
-        //
-        //         {
-        //             id:"dataset2",
-        //             kind: InsightDatasetKind.Sections,
-        //             numRows: 1
-        //         } ,
-        //         {
-        //             id:"dataset1",
-        //             kind: InsightDatasetKind.Sections,
-        //             numRows: 5298
-        //         }])
 		return Promise.resolve([]);
 	}
 
 	public removeDataset(id: string): Promise<string> {
-        // return Promise.resolve("id string");
-        // return Promise.reject(new NotFoundError())
-        // return Promise.reject(new InsightError("insightError"))
 		return Promise.resolve("");
 	}
 

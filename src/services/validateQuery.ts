@@ -221,4 +221,8 @@ export default class ValidateQuery {
 		}
 		return true;
 	}
+
+	public getCols(): string[] {
+		return [];
+	}
 }
