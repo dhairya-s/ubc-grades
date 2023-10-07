@@ -56,7 +56,13 @@ describe("InsightFacade", function () {
 			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
+
+		it("should resolve with a permissible dataset id", async function () {
+			let result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			return expect(result).to.deep.equals([]);
+		});
 	});
+
 
 	/*
 	 * This test suite dynamically generates tests from the JSON files in test/resources/queries.

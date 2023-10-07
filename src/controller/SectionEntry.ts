@@ -1,14 +1,34 @@
+import {InsightError} from "./IInsightFacade";
+
 export default class SectionEntry {
 	private uuid: string = "";
 	private id: string = "";
 	private title: string = "";
 	private instructor: string = "";
 	private dept: string = "";
-	private year: number = 2000;
-	private avg: number = 50;
-	private pass: number = 0;
-	private fail: number = 0;
-	private audit: number = 100;
+	private year: number = -100;
+	private avg: number = -100;
+	private pass: number = -100;
+	private fail: number = -100;
+	private audit: number = -100;
+
+	public constructor(jsonSection: any) {
+		try {
+			this.set_uuid(jsonSection["id"]);
+			this.set_id(jsonSection["Course"]);
+			this.set_title(jsonSection["Title"]);
+			this.set_instructor(jsonSection["Professor"]);
+			this.set_dept(jsonSection["Subject"]);
+			this.set_year(jsonSection["Year"]);
+			this.set_avg(jsonSection["Avg"]);
+			this.set_pass(jsonSection["Pass"]);
+			this.set_fail(jsonSection["Fail"]);
+			this.set_audit(jsonSection["Audit"]);
+		} catch {
+			throw new InsightError("Section could not be created");
+		}
+
+	}
 
 	public set_uuid(uuid: string) {
 		this.uuid = uuid;
