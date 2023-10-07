@@ -52,11 +52,18 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
-		// console.log("here");
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
 		try {
 			isValid = validate.validateQuery();
+			let result: InsightResult[] = [];
+			for (let dataset of this.datasets) {
+				for (let course of dataset.get_courses()) {
+					for (let section of course.getSections()) {
+						// if (section.get_avg())
+					}
+				}
+			}
 		} catch (e) {
 			if (e === InsightError) {
 				throw e;
