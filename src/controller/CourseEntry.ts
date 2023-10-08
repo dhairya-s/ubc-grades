@@ -34,16 +34,16 @@ export default class CourseEntry {
 	}
 
 	public saveCourse(path: string) {
-
+		return;
 
 	};
 
 	public removeCourse(path: string) {
-
+		return;
 	};
 
 	public loadSections(directory: string) {
-
+		return;
 	}
 
 	public addSection(section: SectionEntry){
