@@ -26,7 +26,7 @@ export default class CollectQuery {
 		this.resultCols = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
 
 		let r = this.collectBody(this.query["WHERE" as keyof typeof this.query]);
-		console.log("r", r);
+		// console.log("r", r);
 
 		return r[0] as InsightResult[];
 	}
@@ -172,7 +172,10 @@ export default class CollectQuery {
 		for (let dataset of this.datasetEntries) {
 			for (let course of dataset.get_courses()) {
 				for (let section of course.getSections()) {
-					propertiesToAdd.push(this.handleMFields(section, localKeyField, key, value));
+					let obj = this.handleMFields(section, localKeyField, key, value);
+					if (Object.keys(obj).length !== 0) {
+						propertiesToAdd.push(obj);
+					}
 				}
 			}
 		}
