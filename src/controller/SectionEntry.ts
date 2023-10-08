@@ -38,7 +38,7 @@ export default class SectionEntry {
 	}
 
 	public set_valid(valid: string) {
-
+		return;
 	}
 	public set_uuid(uuid: string) {
 		this.uuid = uuid;
