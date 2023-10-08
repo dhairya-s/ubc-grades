@@ -1,10 +1,6 @@
 import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, InsightResult} from "./IInsightFacade";
-import {isBooleanObject} from "util/types";
-import CourseEntry from "./CourseEntry";
-import base = Mocha.reporters.base;
 import DatasetEntry from "./DatasetEntry";
 import JSZip from "jszip";
-import * as fs from "fs";
 
 export default class InsightFacade implements IInsightFacade{
 	private datasets: DatasetEntry[] = [];
@@ -16,15 +12,25 @@ export default class InsightFacade implements IInsightFacade{
 			return Promise.reject(new InsightError("addDataset was given a 'rooms' kind when it only accepts " +
                 "'sections'."));
 		}
-		try {
-			let parsedContent = await this.parseContent(content, id, kind);
-			parsedContent.get_numRows();
-			this.datasets.push(parsedContent);
-			let names = this.get_dataset_names();
-			return Promise.resolve(names);
-		} catch {
-			return Promise.reject(new InsightError("Invalid content was provided."));
-		}
+		// try {
+		// 	let parsedContent = await this.parseContent(content, id, kind);
+		// 	parsedContent.get_numRows();
+		// 	parsedContent.save_dataset();
+		// 	this.datasets.push(parsedContent);
+		// 	let names = this.get_dataset_names();
+		// 	return Promise.resolve(names);
+		// } catch {
+		// 	return Promise.reject(new InsightError("Invalid content was provided."));
+		// }
+		let parsedContent = await this.parseContent(content, id, kind);
+		parsedContent.get_numRows();
+		parsedContent.save_dataset();
+		let newContent = new DatasetEntry("ubc", InsightDatasetKind.Sections);
+		newContent.load_dataset("src/saved_data/ubc.txt");
+		// console.log(newContent.get_courses());
+		this.datasets.push(parsedContent);
+		let names = this.get_dataset_names();
+		return Promise.resolve(names);
 	}
 
 	private get_dataset_names(): string[] {
@@ -33,6 +39,7 @@ export default class InsightFacade implements IInsightFacade{
 		});
 	}
 	private validateId(id: string): boolean {
+		// TODO: Need to check that this ID is not duplicated.
 		return !(id.length < 1 || id.includes("_"));
 	}
 

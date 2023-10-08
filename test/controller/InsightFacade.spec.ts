@@ -58,9 +58,11 @@ describe("InsightFacade", function () {
 		});
 
 		it("should resolve with a permissible dataset id", async function () {
+			this.timeout(6000); // A very long environment setup.
 			let result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			return expect(result).to.deep.equals(["ubc"]);
 		});
+
 	});
 
 

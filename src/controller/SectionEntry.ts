@@ -1,4 +1,5 @@
 import {InsightError} from "./IInsightFacade";
+import InsightFacade from "./InsightFacade";
 
 export default class SectionEntry {
 	private uuid: string = "";
@@ -11,25 +12,34 @@ export default class SectionEntry {
 	private pass: number = -100;
 	private fail: number = -100;
 	private audit: number = -100;
+	private valid: boolean = false;
 
 	public constructor(jsonSection: any) {
-		try {
-			this.set_uuid(jsonSection["id"]);
-			this.set_id(jsonSection["Course"]);
-			this.set_title(jsonSection["Title"]);
-			this.set_instructor(jsonSection["Professor"]);
-			this.set_dept(jsonSection["Subject"]);
-			this.set_year(jsonSection["Year"]);
-			this.set_avg(jsonSection["Avg"]);
-			this.set_pass(jsonSection["Pass"]);
-			this.set_fail(jsonSection["Fail"]);
-			this.set_audit(jsonSection["Audit"]);
-		} catch {
+		let keys = Object.keys(jsonSection);
+		let expectedKeys = ["id", "Course", "Title", "Professor","Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
+		const hasAllElems = expectedKeys.every((elem) => keys.includes(elem));
+		if (!hasAllElems) {
 			throw new InsightError("Section could not be created");
 		}
-
+		this.set_uuid(jsonSection["id"]);
+		this.set_id(jsonSection["Course"]);
+		this.set_title(jsonSection["Title"]);
+		this.set_instructor(jsonSection["Professor"]);
+		this.set_dept(jsonSection["Subject"]);
+		this.set_year(jsonSection["Year"]);
+		this.set_avg(jsonSection["Avg"]);
+		this.set_pass(jsonSection["Pass"]);
+		this.set_fail(jsonSection["Fail"]);
+		this.set_audit(jsonSection["Audit"]);
 	}
 
+	public get_valid() {
+		return this.valid;
+	}
+
+	public set_valid(valid: string) {
+
+	}
 	public set_uuid(uuid: string) {
 		this.uuid = uuid;
 	}
