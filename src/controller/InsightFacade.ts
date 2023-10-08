@@ -13,6 +13,7 @@ import DatasetEntry from "./DatasetEntry";
 import JSZip from "jszip";
 import ValidateQuery from "../services/validateQuery";
 import * as fs from "fs";
+import CollectQuery from "../services/collectQuery";
 
 export default class InsightFacade implements IInsightFacade {
 	private datasets: DatasetEntry[] = [];
@@ -58,19 +59,19 @@ export default class InsightFacade implements IInsightFacade {
 		}
 	}
 
-	public performQuery(query: unknown): Promise<InsightResult[]> {
+	public async performQuery(query: unknown): Promise<InsightResult[]> {
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
+		let collect = new CollectQuery(query as typeof Object, this.datasets);
+		let results: InsightResult[] = [];
 		try {
 			isValid = validate.validateQuery();
-			let result: InsightResult[] = [];
-			for (let dataset of this.datasets) {
-				for (let course of dataset.get_courses()) {
-					for (let section of course.getSections()) {
-						// if (section.get_avg())
-					}
-				}
+
+			if (!isValid) {
+				throw new InsightError("Invalid Query");
 			}
+			results = await collect.CollectQuery();
+
 		} catch (e) {
 			if (e === InsightError) {
 				throw e;
@@ -81,7 +82,7 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		}
 
-		return {} as Promise<InsightResult[]>;
+		return Promise.resolve(results);
 	}
 
 	private async parseZip(content: string, id: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
