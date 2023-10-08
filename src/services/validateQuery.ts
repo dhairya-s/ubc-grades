@@ -49,7 +49,7 @@ export default class ValidateQuery {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(body);
-		console.log("Body", keys);
+		// console.log("Body", keys);
 
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
@@ -72,7 +72,7 @@ export default class ValidateQuery {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(mcomp);
-		console.log("MCOMP", keys);
+		// console.log("MCOMP", keys);
 
 
 		for (let key of keys) {
@@ -91,7 +91,7 @@ export default class ValidateQuery {
 				if (typeof mcomp[key as keyof typeof mcomp] !== "number") {
 					throw new InsightError("Invalid Query");
 				}
-				console.log("MCOMP val", value);
+				// console.log("MCOMP val", value);
 				isValid = true;
 			} catch (e) {
 				throw new InsightError("Invalid Query");
@@ -104,7 +104,7 @@ export default class ValidateQuery {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(logiccomp);
-		console.log("Logic Comp", keys);
+		// console.log("Logic Comp", keys);
 		for (let key of keys) {
 			isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp]);
 		}
@@ -116,7 +116,7 @@ export default class ValidateQuery {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(scomp);
-		console.log("SCOMP", keys);
+		// console.log("SCOMP", keys);
 
 		for (let key of keys) {
 			let skey = key.split("_");
@@ -133,7 +133,7 @@ export default class ValidateQuery {
 					throw new InsightError("Invalid Query");
 				}
 				isValid = this.validateInputString(value);
-				console.log("scomp val", value);
+				// console.log("scomp val", value);
 			} catch (e) {
 				throw new InsightError("Invalid Query");
 			}
@@ -145,7 +145,7 @@ export default class ValidateQuery {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(neg);
-		console.log("Negation", keys);
+		// console.log("Negation", keys);
 
 		if (keys.length > 1) {
 			throw new InsightError("Invalid Query");
@@ -160,7 +160,7 @@ export default class ValidateQuery {
 		let keys: string[];
 		keys = Object.keys(options);
 		let hasCols: boolean = false;
-		console.log(keys);
+		// console.log(keys);
 		for (let key of keys) {
 			if (key === "COLUMNS") {
 				hasCols = true;
@@ -220,5 +220,9 @@ export default class ValidateQuery {
 			throw new InsightError("Invalid input string");
 		}
 		return true;
+	}
+
+	public getCols(): string[] {
+		return [];
 	}
 }
