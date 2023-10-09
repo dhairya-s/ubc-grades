@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 
-const persistDir = "./data";
+const persistDir = "./src/saved_data/";
 
 /**
  * Convert a file into a base64 string.
@@ -16,7 +16,14 @@ const getContentFromArchives = (name: string): string =>
  * Removes all files within the persistDir.
  */
 function clearDisk(): void {
-	fs.removeSync(persistDir);
+	let dirFiles = fs.readdirSync(persistDir);
+	dirFiles = dirFiles.filter(function(value) {
+		return value !== ".gitkeep";
+	});
+	for (const file of dirFiles) {
+		console.log(persistDir + file);
+		fs.removeSync(persistDir + file);
+	}
 }
 
 export {getContentFromArchives, clearDisk};

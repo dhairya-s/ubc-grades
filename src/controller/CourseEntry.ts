@@ -18,15 +18,19 @@ export default class CourseEntry {
 	}
 
 	public courseFromJSON(sectionData: string, courseName: string) {
-		this.courseName = courseName;
-		let sectionJSON = JSON.parse(sectionData);
-		for (const result of sectionJSON["result"]){
-			try{
-				let section = new SectionEntry(result);
-				this.addSection(section);
-			} catch {
-				// Don't add the section.
+		try{
+			this.courseName = courseName;
+			let sectionJSON = JSON.parse(sectionData);
+			for (const result of sectionJSON["result"]){
+				try{
+					let section = new SectionEntry(result);
+					this.addSection(section);
+				} catch {
+					// Don't add the section.
+				}
 			}
+		} catch {
+			throw new InsightError("An invalid JSON was passed");
 		}
 		if (this.getSections().length <= 0) {
 			throw new InsightError("Course " + courseName + " is invalid.");
@@ -35,7 +39,6 @@ export default class CourseEntry {
 
 	public saveCourse(path: string) {
 		return;
-
 	};
 
 	public removeCourse(path: string) {
