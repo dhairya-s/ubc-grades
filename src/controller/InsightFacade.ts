@@ -4,24 +4,31 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError
+	NotFoundError,
+  ResultTooLargeError,
 } from "./IInsightFacade";
+import {isBooleanObject} from "util/types";
+import CourseEntry from "./CourseEntry";
+import base = Mocha.reporters.base;
 import DatasetEntry from "./DatasetEntry";
 import JSZip from "jszip";
+import ValidateQuery from "../services/validateQuery";
 import * as fs from "fs";
+import CollectQuery from "../services/collectQuery";
 import * as fs_extra from "fs-extra";
 
-
-export default class InsightFacade implements IInsightFacade{
+export default class InsightFacade implements IInsightFacade {
 	private datasets: DatasetEntry[] = [];
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// Need to load datasets that have previously been in the system
 		if (!this.validateIdAdd(id)) {
 			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
                 "Try an ID without an underscore."));
+
 		} else if (!this.validateKind(kind)) {
-			return Promise.reject(new InsightError("addDataset was given a 'rooms' kind when it only accepts " +
-                "'sections'."));
+			return Promise.reject(
+				new InsightError("addDataset was given a 'rooms' kind when it only accepts " + "'sections'.")
+			);
 		}
 		try {
 			let parsedContent = await this.parseContent(content, id, kind);
@@ -41,7 +48,7 @@ export default class InsightFacade implements IInsightFacade{
 		return existingIds.includes(id);
 	}
 	private get_dataset_names(): string[] {
-		return this.datasets.map(function(dataset) {
+		return this.datasets.map(function (dataset) {
 			return dataset.get_id();
 		});
 	}
@@ -61,6 +68,31 @@ export default class InsightFacade implements IInsightFacade{
 		}
 	}
 
+	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		let isValid: boolean = false;
+		let validate = new ValidateQuery(query as typeof Object);
+		let collect = new CollectQuery(query as typeof Object, this.datasets);
+		let results: InsightResult[] = [];
+		try {
+			isValid = validate.validateQuery();
+
+			if (!isValid) {
+				throw new InsightError("Invalid Query");
+			}
+			results = await collect.CollectQuery();
+		} catch (e) {
+			if (e === InsightError) {
+				throw e;
+			} else if (e === ResultTooLargeError) {
+				throw e;
+			} else {
+				throw new InsightError(String(e instanceof Error));
+			}
+		}
+
+		return Promise.resolve(results);
+	}
+
 	private async parseZip(content: string, id: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
 		let zip = new JSZip();
 		let path = "src/saved_data/";
@@ -76,7 +108,6 @@ export default class InsightFacade implements IInsightFacade{
 		});
 		return entry;
 	}
-
 
 	private validateKind(kind: InsightDatasetKind): boolean {
 		return kind !== InsightDatasetKind.Rooms;
@@ -105,11 +136,6 @@ export default class InsightFacade implements IInsightFacade{
 		}
 	}
 
-	public performQuery(query: unknown): Promise<InsightResult[]> {
-		return Promise.resolve([]);
-        // return Promise.reject(new InsightError)
-	}
-
 	private validateIdRemove(id: string): boolean {
 		return !(id.trim().length < 1 || id.includes("_"));
 	}
@@ -135,5 +161,4 @@ export default class InsightFacade implements IInsightFacade{
 
 		return Promise.resolve(id);
 	}
-
 }

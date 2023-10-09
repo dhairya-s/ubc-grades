@@ -1,0 +1,12 @@
+{
+	"title": "missingOptions",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_title": "*edu*c*"
+			}
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
