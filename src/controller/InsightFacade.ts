@@ -5,7 +5,7 @@ import {
 	InsightError,
 	InsightResult,
 	NotFoundError,
-  ResultTooLargeError,
+	ResultTooLargeError,
 } from "./IInsightFacade";
 import {isBooleanObject} from "util/types";
 import CourseEntry from "./CourseEntry";
