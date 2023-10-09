@@ -3,7 +3,7 @@ import {
 	InsightDataset,
 	InsightDatasetKind,
 	InsightError,
-	InsightResult,
+	InsightResult, NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
 import {isBooleanObject} from "util/types";
@@ -132,11 +132,6 @@ export default class InsightFacade implements IInsightFacade {
 		} catch {
 			return Promise.reject(new InsightError("Could not load datasets."));
 		}
-	}
-
-	public performQuery(query: unknown): Promise<InsightResult[]> {
-		return Promise.resolve([]);
-        // return Promise.reject(new InsightError)
 	}
 
 	private validateIdRemove(id: string): boolean {
