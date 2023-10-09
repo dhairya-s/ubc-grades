@@ -26,7 +26,7 @@ export default class InsightFacade implements IInsightFacade{
 		try {
 			let parsedContent = await this.parseContent(content, id, kind);
 			parsedContent.get_numRows();
-			parsedContent.save_dataset();
+			await parsedContent.save_dataset();
 			this.datasets.push(parsedContent);
 			let names = this.get_dataset_names();
 			return Promise.resolve(names);
@@ -91,14 +91,15 @@ export default class InsightFacade implements IInsightFacade{
 			dirFiles = dirFiles.filter(function (value) {
 				return value !== ".gitkeep";
 			});
-			let datasetIds = dirFiles.map((x) => x.substring(1, -3));
+			let loadedDatasetPromises: Array<Promise<DatasetEntry>> = [];
+			let datasetIds = dirFiles.map((x) => x.substring(0, x.length - 4));
 			for (const i in datasetIds) {
 				let newContent = new DatasetEntry(datasetIds[i], InsightDatasetKind.Sections);
-				// eslint-disable-next-line no-await-in-loop
-				await newContent.load_dataset(dir + dirFiles[i]);
-				this.datasets.push(newContent);
+				let result = newContent.load_dataset(dir + dirFiles[i]);
+				loadedDatasetPromises.push(result);
 			}
-			return Promise.resolve(this.datasets);
+			this.datasets = await Promise.all(loadedDatasetPromises);
+			return Promise.resolve(await Promise.all(loadedDatasetPromises));
 		} catch {
 			return Promise.reject(new InsightError("Could not load datasets."));
 		}
@@ -113,9 +114,6 @@ export default class InsightFacade implements IInsightFacade{
 		return !(id.trim().length < 1 || id.includes("_"));
 	}
 	public removeDataset(id: string): Promise<string> {
-        // return Promise.resolve("id string");
-        // return Promise.reject(new NotFoundError())
-        // return Promise.reject(new InsightError("insightError"))
 		if (!this.validateIdRemove(id)) {
 			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
 				"Try an ID without an underscore or not all whitespace."));
@@ -127,7 +125,7 @@ export default class InsightFacade implements IInsightFacade{
 		}
 		try {
 			this.datasets = this.datasets.filter(function (dataset) {
-				return dataset.get_id() !== id;
+				return dataset.get_id() === id;
 			});
 			let fileDir = "src/saved_data/" + id + ".txt";
 			fs_extra.removeSync(fileDir);

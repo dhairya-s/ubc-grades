@@ -59,13 +59,14 @@ export default class DatasetEntry implements InsightDataset{
 		return course;
 	}
 
-	public save_dataset(): void {
+	public async save_dataset(): Promise<void> {
 		let path = this.path + this.get_id() + ".txt";
 		let content = JSON.stringify(this);
-		fs.writeFileSync(path, content,"utf-8");
+		fs.writeFileSync(path, content, "utf-8");
+		return Promise.resolve();
 	}
 
-	public async load_dataset(path: string): Promise<void> {
+	public async load_dataset(path: string): Promise<DatasetEntry> {
 		let datasetJSON = JSON.parse(fs.readFileSync(path).toString().trim());
 		let courses: CourseEntry[] = [];
 		for (const course of datasetJSON["courses"]) {
@@ -77,6 +78,7 @@ export default class DatasetEntry implements InsightDataset{
 		this.set_id(datasetJSON["id"]);
 		this.set_path(datasetJSON["path"]);
 		this.set_numRows(datasetJSON["numRows"]);
+		return this;
 	}
 
 	public get_id(): string {
