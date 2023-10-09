@@ -65,7 +65,7 @@ export default class DatasetEntry implements InsightDataset{
 		fs.writeFileSync(path, content,"utf-8");
 	}
 
-	public load_dataset(path: string): void {
+	public async load_dataset(path: string): Promise<void> {
 		let datasetJSON = JSON.parse(fs.readFileSync(path).toString().trim());
 		let courses: CourseEntry[] = [];
 		for (const course of datasetJSON["courses"]) {

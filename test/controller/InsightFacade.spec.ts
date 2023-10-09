@@ -2,15 +2,15 @@ import {
 	IInsightFacade,
 	InsightDatasetKind,
 	InsightError,
-	InsightResult,
+	InsightResult, NotFoundError,
 	ResultTooLargeError
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
-
 import {folderTest} from "@ubccpsc310/folder-test";
 import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../TestUtil";
+import DatasetEntry from "../../src/controller/DatasetEntry";
 
 use(chaiAsPromised);
 
@@ -209,20 +209,148 @@ describe("InsightFacade", function () {
 
 			describe("test save to disk", async function() {
 				it("should resolve and send data to disk on successful add", async function() {
-					this.timeout(6000); // A very long environment setup.
+					this.timeout(30000); // A very long environment setup.
 					const resultAdd = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
+					const newInsightFacade = new InsightFacade();
+					const newDatasets = await newInsightFacade.listDatasets();
+					return expect(datasets).to.deep.members(newDatasets);
+				});
+				it("should resolve and send data to disk on successful add of multiple datasets", async function() {
+					this.timeout(30000); // A very long environment setup.
+					const resultAdd1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const resultAdd2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+					const datasets = await facade.listDatasets();
+					const newInsightFacade = new InsightFacade();
+					const newDatasets = await newInsightFacade.listDatasets();
+					return expect(datasets).to.deep.members(newDatasets);
+				});
+			});
+
+			it("should save data to disk and be readable after a crash", async function() {
+				this.timeout(30000); // A very long environment setup.
+				const result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+				const datasets = await facade.listDatasets();
+				// Fake a crash
+				const newInstance = new InsightFacade();
+				const newDatasets = await newInstance.listDatasets();
+				return expect(datasets).to.deep.members(newDatasets);
+			});
+		});
+
+		describe("removeDataset", function() {
+
+			describe("test id parameter", function() {
+				it("should reject if attempts to remove a dataset that has not been added " +
+					"with NotFoundError", async function() {
+					const resultRemove = facade.removeDataset("dataset1");
+					return expect(resultRemove).to.eventually.be.rejectedWith(NotFoundError);
+				});
+
+				it("should resolve if removes an existing dataset", async function() {
+					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+					const resultRemove = facade.removeDataset("dataset1");
+					return expect(resultRemove).to.eventually.deep.equals("dataset1");
+				});
+
+				describe("remove - test idstring containing underscore", async function() {
+					it("remove - should reject with an idstring containing an underscore as the " +
+						"only element", async function() {
+						const result1 = facade.removeDataset("_");
+						return expect(result1).to.eventually.be.rejectedWith(InsightError);
+					});
+					it("remove - should reject with an idstring containing an underscore " +
+						"in the middle of the idstring", async function() {
+						const result1 = facade.removeDataset("id_string");
+						return expect(result1).to.eventually.be.rejectedWith(InsightError);
+					});
+					it("remove - should reject with an idstring containing an underscore at " +
+						"the beginning of the idstring", async function() {
+						const result1 = facade.removeDataset("_idstring");
+						return expect(result1).to.eventually.be.rejectedWith(InsightError);
+					});
+					it("remove - should reject with an idstring containing an underscore at " +
+						"the end of the idstring", async function() {
+						const result1 = facade.removeDataset("idstring_");
+						return expect(result1).to.eventually.be.rejectedWith(InsightError);
+					});
+				});
+				describe("test id with whitespace characters", function() {
+					it("should reject an id with only spaces", async function() {
+						const result1 = facade.removeDataset(" ");
+						return expect(result1).to.eventually.be.rejectedWith(InsightError);
+					});
+					it("should reject an id with tabs", async function() {
+						const result1 = facade.removeDataset("  ");
+						return expect(result1).to.eventually.be.rejectedWith(InsightError);
+					});
+					it("should resolve an id with whitespace in the id", async function() {
+						const result1 = await facade.addDataset("id string", sections, InsightDatasetKind.Sections);
+						const resultRemove = facade.removeDataset("id string");
+						return expect(resultRemove).to.eventually.deep.equals("id string");
+					});
+				});
+			});
+			describe("test updating disk data", function() {
+				it("should resolve and return an updated list of the data stored on disk " +
+					"when data is removed", async function() {
+					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+					const resultRemove = await facade.removeDataset("dataset1");
+					const datasets = await facade.listDatasets();
 					return expect(datasets).to.deep.members([{
+						id:"dataset2",
+						kind: InsightDatasetKind.Sections,
+						numRows: 5298
+					}]);
+				});
+				it("should resolve and return an updated list of the data stored on disk when " +
+					"crashed", async function() {
+					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+					const resultRemove = await facade.removeDataset("dataset1");
+					// Fake a crash here
+					const newInstance = new InsightFacade();
+					const datasets = await newInstance.listDatasets();
+					return expect(datasets).to.deep.members([{
+						id:"dataset2",
+						kind: InsightDatasetKind.Sections,
+						numRows: 5298
+					}]);
+				});
+			});
+		});
+
+		describe("listDataset", function() {
+			let validSections: string;
+			before(function() {
+				sections = getContentFromArchives("pair.zip");
+				validSections = getContentFromArchives("addDataset_test/contains_one_or_more_valid_sections.zip");
+			});
+			describe("list all currently added datasets, types, and number of rows", function() {
+				it("should resolve if there have been no datasets added", async function() {
+					const datasets = await facade.listDatasets();
+					return expect(datasets).to.deep.equal([]);
+				});
+				it("should resolve if there has been a dataset added and removed", async function() {
+					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const result2 = await facade.removeDataset("dataset1");
+					const datasets = await facade.listDatasets();
+					return expect(datasets).to.deep.equal([]);
+				});
+				it("should resolve if there has been a dataset added", async function() {
+					const result1 = facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const datasets = await facade.listDatasets();
+					return expect(datasets).to.deep.equal([{
 						id:"dataset1",
 						kind: InsightDatasetKind.Sections,
 						numRows: 5298
 					}]);
 				});
-				it("should resolve and send data to disk on successful add of multiple datasets", async function() {
-					this.timeout(8000); // A very long environment setup.
-					const resultAdd1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-					const resultAdd2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
-
+				it("should resolve if there have been many datasets added", async function() {
+					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
 
 					return expect(datasets).to.deep.members([
@@ -234,25 +362,11 @@ describe("InsightFacade", function () {
 						{
 							id:"dataset2",
 							kind: InsightDatasetKind.Sections,
-							numRows: 5298
+							numRows: 1
 						}]);
 				});
 			});
-
-			it("should save data to disk and be readable after a crash", async function() {
-				const result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-				// Fake a crash
-				const newInstance = new InsightFacade();
-				const datasets = await newInstance.listDatasets();
-				return expect(datasets).to.deep.members([{
-					id:"dataset1",
-					kind: InsightDatasetKind.Sections,
-					numRows: 5298
-				}]);
-			});
-
 		});
-
 
 	});
 
