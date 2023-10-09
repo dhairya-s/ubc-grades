@@ -5,6 +5,7 @@ import JSZip from "jszip";
 export default class InsightFacade implements IInsightFacade{
 	private datasets: DatasetEntry[] = [];
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		// Need to load datasets that have previously been in the system
 		if (!this.validateId(id)) {
 			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
                 "Try an ID without an underscore."));
@@ -12,35 +13,35 @@ export default class InsightFacade implements IInsightFacade{
 			return Promise.reject(new InsightError("addDataset was given a 'rooms' kind when it only accepts " +
                 "'sections'."));
 		}
-		// try {
-		// 	let parsedContent = await this.parseContent(content, id, kind);
-		// 	parsedContent.get_numRows();
-		// 	parsedContent.save_dataset();
-		// 	this.datasets.push(parsedContent);
-		// 	let names = this.get_dataset_names();
-		// 	return Promise.resolve(names);
-		// } catch {
-		// 	return Promise.reject(new InsightError("Invalid content was provided."));
-		// }
-		let parsedContent = await this.parseContent(content, id, kind);
-		parsedContent.get_numRows();
-		parsedContent.save_dataset();
-		let newContent = new DatasetEntry("ubc", InsightDatasetKind.Sections);
-		newContent.load_dataset("src/saved_data/ubc.txt");
-		// console.log(newContent.get_courses());
-		this.datasets.push(parsedContent);
-		let names = this.get_dataset_names();
-		return Promise.resolve(names);
+		try {
+			let parsedContent = await this.parseContent(content, id, kind);
+			parsedContent.get_numRows();
+			parsedContent.save_dataset();
+			this.datasets.push(parsedContent);
+			// let newContent = new DatasetEntry("ubc", InsightDatasetKind.Sections);
+			// newContent.load_dataset("src/saved_data/ubc.txt");
+			// // console.log(newContent.get_courses());
+			// this.datasets.push(parsedContent);
+			let names = this.get_dataset_names();
+			return Promise.resolve(names);
+		} catch {
+			return Promise.reject(new InsightError("Invalid content was provided."));
+		}
+
 	}
 
+	private duplicate_id_check(id: string): boolean {
+		// Returns true if this is duplicated
+		let existingIds = this.get_dataset_names();
+		return existingIds.includes(id);
+	}
 	private get_dataset_names(): string[] {
 		return this.datasets.map(function(dataset) {
 			return dataset.get_id();
 		});
 	}
 	private validateId(id: string): boolean {
-		// TODO: Need to check that this ID is not duplicated.
-		return !(id.length < 1 || id.includes("_"));
+		return !(id.length < 1 || id.includes("_")) && !this.duplicate_id_check(id);
 	}
 
 	private async parseContent(content: string, id: string, kind: InsightDatasetKind): Promise<Awaited<DatasetEntry>> {
@@ -65,7 +66,7 @@ export default class InsightFacade implements IInsightFacade{
 				// console.log(entry);
 				return entry;
 			} catch {
-				return new InsightError("Unable to parse course");
+				throw new InsightError("Unable to parse course");
 			}
 		});
 		return entry;

@@ -167,7 +167,7 @@ describe("InsightFacade", function () {
 								it("rejects if it contains no valid courses", async function() {
 									const badDataset = getContentFromArchives(
 										"addDataset_test/no_valid_courses.zip"
-									);
+									); // Contains no "Pass" attribute.
 									const result = facade.addDataset(
 										"idstring", badDataset, InsightDatasetKind.Sections
 									);
@@ -200,7 +200,7 @@ describe("InsightFacade", function () {
 					return expect(result2).to.eventually.deep.members(["dataset1", "dataset2"]);
 				});
 				it("should reject with an idstring that has already been added", async function() {
-					this.timeout(6000); // A very long environment setup.
+					this.timeout(8000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					return expect(result2).to.eventually.be.rejectedWith(InsightError);
