@@ -323,7 +323,6 @@ describe("InsightFacade", function () {
 		describe("listDataset", function() {
 			let validSections: string;
 			before(function() {
-				sections = getContentFromArchives("pair.zip");
 				validSections = getContentFromArchives("addDataset_test/contains_one_or_more_valid_sections.zip");
 			});
 			describe("list all currently added datasets, types, and number of rows", function() {
@@ -392,7 +391,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/queries/tests",
+			"./test/resources/queries/",
 			{
 				assertOnResult: async (actual, expected) => {
 					expect(actual).to.have.deep.members(await expected);
