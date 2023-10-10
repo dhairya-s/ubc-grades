@@ -88,7 +88,7 @@ describe("InsightFacade", function () {
 				});
 
 				it("should resolve with a permissible dataset id", async function () {
-					this.timeout(6000); // A very long environment setup.
+					// this.timeout(6000); // A very long environment setup.
 					let result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 					return expect(result).to.deep.equals(["ubc"]);
 				});
@@ -186,7 +186,7 @@ describe("InsightFacade", function () {
 					return expect(result).to.eventually.be.rejectedWith(InsightError);
 				});
 				it("should resolve with the Sections kind", async function() {
-					this.timeout(6000); // A very long environment setup.
+					// this.timeout(6000); // A very long environment setup.
 					const result = facade.addDataset("idString", sections, InsightDatasetKind.Sections);
 					return expect(result).to.eventually.deep.members(["idString"]);
 				});
@@ -194,13 +194,13 @@ describe("InsightFacade", function () {
 
 			describe("expected output", async function() {
 				it("should resolve with multiple datasets added", async function() {
-					this.timeout(8000); // A very long environment setup.
+					// this.timeout(8000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
 					return expect(result2).to.eventually.deep.members(["dataset1", "dataset2"]);
 				});
 				it("should reject with an idstring that has already been added", async function() {
-					this.timeout(8000); // A very long environment setup.
+					// this.timeout(8000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					return expect(result2).to.eventually.be.rejectedWith(InsightError);
@@ -209,7 +209,7 @@ describe("InsightFacade", function () {
 
 			describe("test save to disk", async function() {
 				it("should resolve and send data to disk on successful add", async function() {
-					this.timeout(30000); // A very long environment setup.
+					// this.timeout(30000); // A very long environment setup.
 					const resultAdd = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
 					const newInsightFacade = new InsightFacade();
@@ -217,7 +217,7 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.members(newDatasets);
 				});
 				it("should resolve and send data to disk on successful add of multiple datasets", async function() {
-					this.timeout(30000); // A very long environment setup.
+					// this.timeout(30000); // A very long environment setup.
 					const resultAdd1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const resultAdd2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
@@ -228,7 +228,7 @@ describe("InsightFacade", function () {
 			});
 
 			it("should save data to disk and be readable after a crash", async function() {
-				this.timeout(30000); // A very long environment setup.
+				// this.timeout(30000); // A very long environment setup.
 				const result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 				const datasets = await facade.listDatasets();
 				// Fake a crash
@@ -338,7 +338,7 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.equal([]);
 				});
 				it("should resolve if there has been a dataset added", async function() {
-					this.timeout(8000); // A very long environment setup.
+					// this.timeout(8000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					let newContent = new DatasetEntry("dataset1", InsightDatasetKind.Sections);
 					let expectedDataset = await newContent.load_dataset("src/saved_data/" + "dataset1.txt");
@@ -346,7 +346,7 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.equal([expectedDataset]);
 				});
 				it("should resolve if there have been many datasets added", async function() {
-					this.timeout(12000); // A very long environment setup.
+					// this.timeout(12000); // A very long environment setup.
 
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
