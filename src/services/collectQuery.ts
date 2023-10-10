@@ -2,8 +2,10 @@ import InsightFacade from "../controller/InsightFacade";
 import {InsightError, InsightResult} from "../controller/IInsightFacade";
 import DatasetEntry from "../controller/DatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
+import CollectMcomp from "./collectMcomp";
+import {collectInsightResult, convertArrayOfObjectToObject} from "./collectionHelpers";
 
-interface Property {
+export interface Property {
 	key: string,
 	value: string | number
 }
@@ -21,12 +23,10 @@ export default class CollectQuery {
 	}
 
 	public async CollectQuery(): Promise<InsightResult[]> {
-		let results: InsightResult[] = [];
-
 		this.resultCols = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
 
 		let r = this.collectBody(this.query["WHERE" as keyof typeof this.query]);
-		// console.log("r", r);
+		console.log("r", r);
 
 		return r[0] as InsightResult[];
 	}
@@ -37,9 +37,11 @@ export default class CollectQuery {
 
 		let propertiesToAdd: object[] = [];
 
+		let collectM = new CollectMcomp(this.datasetEntries, this.resultCols);
+
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
-				propertiesToAdd.push(this.collectMCOMP(body[key as keyof typeof body], key));
+				propertiesToAdd.push(collectM.collectMCOMP(body[key as keyof typeof body], key));
 			} else if (key === "AND" || key === "OR") { // LOGICCOMP
 				propertiesToAdd.push(this.collectLOGICCOMP(body[key as keyof typeof body]));
 			} else if (key === "IS") { // SCOMP
@@ -51,134 +53,6 @@ export default class CollectQuery {
 			}
 		}
 
-		return propertiesToAdd;
-	}
-
-	private collectInsightResult(section: SectionEntry): Property[] {
-		let propertiesToAdd: Property[] = [];
-		for (let resultCol of this.resultCols) {
-			let keyField = resultCol.split("_")[1];
-			if (keyField === "avg") {
-				propertiesToAdd.push({key:resultCol, value: section.get_avg()});
-			} else if (keyField === "pass") {
-				propertiesToAdd.push({key:resultCol, value: section.get_pass()});
-			} else if (keyField === "fail") {
-				propertiesToAdd.push({key:resultCol, value: section.get_fail()});
-			} else if (keyField === "audit") {
-				propertiesToAdd.push({key:resultCol, value: section.get_audit()});
-			} else if (keyField === "year") {
-				propertiesToAdd.push({key:resultCol, value: section.get_year()});
-			} else if (keyField === "dept") {
-				propertiesToAdd.push({key:resultCol, value: section.get_dept()});
-			} else if (keyField === "id") {
-				propertiesToAdd.push({key:resultCol, value: section.get_id()});
-			} else if (keyField === "instructor") {
-				propertiesToAdd.push({key:resultCol, value: section.get_instructor()});
-			} else if (keyField === "title") {
-				propertiesToAdd.push({key:resultCol, value: section.get_title()});
-			} else if (keyField === "uuid") {
-				propertiesToAdd.push({key:resultCol, value: section.get_uuid()});
-			}
-		}
-
-		return propertiesToAdd;
-	}
-
-	private convertArrayOfObjectToObject(properties: Property[]): object {
-		let result: Record<string, string | number> = {};
-		for (let property of properties) {
-			result[property.key] = property.value;
-		}
-		return result;
-	}
-	private applyGT(section: SectionEntry, value: number, sectionVal: number): object {
-		let propertiesToAdd: Property[] = [];
-		if (sectionVal > value) {
-			propertiesToAdd = this.collectInsightResult(section);
-		}
-		return this.convertArrayOfObjectToObject(propertiesToAdd);
-	}
-
-	private applyEQ(section: SectionEntry, value: number, sectionVal: number): object {
-		let propertiesToAdd: Property[] = [];
-		if (sectionVal === value) {
-			propertiesToAdd = this.collectInsightResult(section);
-		}
-		return this.convertArrayOfObjectToObject(propertiesToAdd);
-	}
-
-	private applyLT(section: SectionEntry, value: number, sectionVal: number): object {
-		let propertiesToAdd: Property[] = [];
-		if (sectionVal < value) {
-			propertiesToAdd = this.collectInsightResult(section);
-		}
-		return this.convertArrayOfObjectToObject(propertiesToAdd);
-	}
-
-	private handleMFields(section: SectionEntry, localKeyField: string, key: string, value: number): object {
-		let result: object = {};
-
-		if (localKeyField === "avg") {
-			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_avg());
-			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_avg());
-			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_avg());
-			}
-		} else if (localKeyField === "pass") {
-			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_pass());
-			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_pass());
-			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_pass());
-			}
-		} else if (localKeyField === "fail") {
-			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_fail());
-			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_fail());
-			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_fail());
-			}
-		} else if (localKeyField === "audit") {
-			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_audit());
-			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_audit());
-			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_audit());
-			}
-		} else if (localKeyField === "year") {
-			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_year());
-			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_year());
-			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_year());
-			}
-		}
-		return result;
-	}
-
-	private collectMCOMP(mcomp: object, key: string): object[] {
-		let propertiesToAdd: object[] = [];
-
-		let localKey: string[] = Object.keys(mcomp);
-		const localKeyField = localKey[0].split("_")[1];
-		const value: number = mcomp[localKey[0] as keyof typeof mcomp];
-
-		for (let dataset of this.datasetEntries) {
-			for (let course of dataset.get_courses()) {
-				for (let section of course.getSections()) {
-					let obj = this.handleMFields(section, localKeyField, key, value);
-					if (Object.keys(obj).length !== 0) {
-						propertiesToAdd.push(obj);
-					}
-				}
-			}
-		}
 		return propertiesToAdd;
 	}
 
@@ -195,34 +69,93 @@ export default class CollectQuery {
 		return [];
 	}
 
+	private matchesExactly(section: SectionEntry, value: string, sectionVal: string): object {
+		let propertiesToAdd: Property[] = [];
+		if (sectionVal === value) {
+			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		}
+		return convertArrayOfObjectToObject(propertiesToAdd);
+	}
+
+	private endsWith(section: SectionEntry, value: string, sectionVal: string): object {
+		let propertiesToAdd: Property[] = [];
+		let split = value.split("*")[1];
+		if (sectionVal.endsWith(split)) {
+			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		}
+		return convertArrayOfObjectToObject(propertiesToAdd);
+	}
+
+	private startsWith(section: SectionEntry, value: string, sectionVal: string): object {
+		let propertiesToAdd: Property[] = [];
+		let split = value.split("*")[0];
+		if (sectionVal.startsWith(split)) {
+			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		}
+		return convertArrayOfObjectToObject(propertiesToAdd);
+	}
+
+	private contains(section: SectionEntry, value: string, sectionVal: string): object {
+		let propertiesToAdd: Property[] = [];
+		let split = value.split("*")[1];
+
+		if (sectionVal.includes(split)) {
+			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		}
+		return convertArrayOfObjectToObject(propertiesToAdd);
+	}
+
+	private handleWildCards(section: SectionEntry, value: string, sectionValue: string): object {
+		let result: object = {};
+
+		if (!value.includes("*")) {
+			result = this.matchesExactly(section, value, sectionValue);
+		} else if (value.startsWith("*") && value.endsWith("*")) {
+			result = this.contains(section, value, sectionValue);
+		} else if (value.startsWith("*")) {
+			result = this.endsWith(section, value, sectionValue);
+		} else if (value.endsWith("*")) {
+			result = this.startsWith(section, value, sectionValue);
+		}
+
+		return result;
+	}
+	private handleSFields(section: SectionEntry, localKeyField: string, value: string): object {
+		let result: object = {};
+
+		if (localKeyField === "dept") {
+			result = this.handleWildCards(section, value, section.get_dept());
+		} else if (localKeyField === "id") {
+			result = this.handleWildCards(section, value, section.get_id());
+		} else if (localKeyField === "instructor") {
+			result = this.handleWildCards(section, value, section.get_instructor());
+		} else if (localKeyField === "title") {
+			result = this.handleWildCards(section, value, section.get_title());
+		} else if (localKeyField === "uuid") {
+			result = this.handleWildCards(section, value, section.get_uuid());
+		}
+
+		return result;
+	}
+
 	private collectSCOMP(scomp: object): object[] {
-		// let isValid = false;
-		// let keys: string[];
-		// keys = Object.keys(scomp);
-		// console.log("SCOMP", keys);
-		//
-		// for (let key of keys) {
-		// 	let skey = key.split("_");
-		// 	if (skey.length !== 2) {
-		// 		throw new InsightError("Invalid Query");
-		// 	}
-		// 	let isValidString = this.validateIdString(skey[0]);
-		// 	if (!isValidString || !this.sfield.includes(skey[1])) {
-		// 		throw new InsightError("Invalid Query");
-		// 	}
-		// 	try {
-		// 		const value: string = scomp[key as keyof typeof scomp]; // fail if array or empty
-		// 		if (typeof scomp[key as keyof typeof scomp] !== "string") {
-		// 			throw new InsightError("Invalid Query");
-		// 		}
-		// 		isValid = this.validateInputString(value);
-		// 		console.log("scomp val", value);
-		// 	} catch (e) {
-		// 		throw new InsightError("Invalid Query");
-		// 	}
-		// }
-		// return isValid;
-		return [];
+		let propertiesToAdd: object[] = [];
+
+		let localKey: string[] = Object.keys(scomp);
+		const localKeyField = localKey[0].split("_")[1];
+		const value: string = scomp[localKey[0] as keyof typeof scomp];
+
+		for (let dataset of this.datasetEntries) {
+			for (let course of dataset.get_courses()) {
+				for (let section of course.getSections()) {
+					let obj = this.handleSFields(section, localKeyField, value);
+					if (Object.keys(obj).length !== 0) {
+						propertiesToAdd.push(obj);
+					}
+				}
+			}
+		}
+		return propertiesToAdd;
 	}
 
 	private collectNEGATION(neg: object): object[]  {

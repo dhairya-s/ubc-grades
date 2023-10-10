@@ -1,0 +1,40 @@
+import SectionEntry from "../controller/SectionEntry";
+import {Property} from "./collectQuery";
+
+export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): Property[] {
+	let propertiesToAdd: Property[] = [];
+	for (let resultCol of resultCols) {
+		let keyField = resultCol.split("_")[1];
+		if (keyField === "avg") {
+			propertiesToAdd.push({key:resultCol, value: Number(section.get_avg())});
+		} else if (keyField === "pass") {
+			propertiesToAdd.push({key:resultCol, value: Number(section.get_pass())});
+		} else if (keyField === "fail") {
+			propertiesToAdd.push({key:resultCol, value: Number(section.get_fail())});
+		} else if (keyField === "audit") {
+			propertiesToAdd.push({key:resultCol, value: Number(section.get_audit())});
+		} else if (keyField === "year") {
+			propertiesToAdd.push({key:resultCol, value: Number(section.get_year())});
+		} else if (keyField === "dept") {
+			propertiesToAdd.push({key:resultCol, value: String(section.get_dept())});
+		} else if (keyField === "id") {
+			propertiesToAdd.push({key:resultCol, value: String(section.get_id())});
+		} else if (keyField === "instructor") {
+			propertiesToAdd.push({key:resultCol, value: String(section.get_instructor())});
+		} else if (keyField === "title") {
+			propertiesToAdd.push({key:resultCol, value: String(section.get_title())});
+		} else if (keyField === "uuid") {
+			propertiesToAdd.push({key:resultCol, value: String(section.get_uuid())});
+		}
+	}
+
+	return propertiesToAdd;
+}
+
+export function convertArrayOfObjectToObject(properties: Property[]): object {
+	let result: Record<string, string | number> = {};
+	for (let property of properties) {
+		result[property.key] = property.value;
+	}
+	return result;
+}

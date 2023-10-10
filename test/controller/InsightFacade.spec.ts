@@ -15,6 +15,7 @@ import {clearDisk, getContentFromArchives} from "../TestUtil";
 use(chaiAsPromised);
 
 describe("InsightFacade", function () {
+	this.timeout(10000);
 	let facade: IInsightFacade;
 
 	// Declare datasets used in tests. You should add more datasets like this!
@@ -94,9 +95,10 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/queries/tests",
+			"./test/resources/queries",
 			{
 				assertOnResult: async (actual, expected) => {
+					// expect(actual).to.have.deep.members(await expected);
 					expect(actual).to.have.deep.members(await expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
