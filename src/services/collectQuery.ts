@@ -4,6 +4,7 @@ import DatasetEntry from "../controller/DatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectMcomp from "./collectMcomp";
 import CollectScomp from "./collectScomp";
+import CollectLogicComp from "./collectLogicComp";
 
 export interface Property {
 	key: string,
@@ -12,10 +13,7 @@ export interface Property {
 export default class CollectQuery {
 	private query: object;
 	private datasetEntries: DatasetEntry[] = [];
-	private resultCols = new Set<string>();
-
-	private sfield = ["dept", "id", "instructor", "title", "uuid"];
-	private mfield = ["avg", "pass", "fail", "audit", "year"];
+	// private resultCols = new Set<string>();
 
 	constructor(query: object, datasetEntries: DatasetEntry[]) {
 		this.query = query;
@@ -23,28 +21,28 @@ export default class CollectQuery {
 	}
 
 	public async CollectQuery(): Promise<InsightResult[]> {
-		this.resultCols = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
-
-		let r = this.collectBody(this.query["WHERE" as keyof typeof this.query]);
-		console.log("r", r);
+		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
+		// console.log("Query result cols", resultCols);
+		let r = this.collectBody(this.query["WHERE" as keyof typeof this.query], resultCols);
 
 		return r[0] as InsightResult[];
 	}
 
-	private collectBody(body: object): object[] {
+	public collectBody(body: object, resultCols: Set<string>): object[][] {
 		let keys: string[];
 		keys = Object.keys(body);
 
-		let propertiesToAdd: object[] = [];
+		let propertiesToAdd: object[][] = [];
 
-		let collectM = new CollectMcomp(this.datasetEntries, this.resultCols);
-		let collectS = new CollectScomp(this.datasetEntries, this.resultCols);
-
+		let collectM = new CollectMcomp(this.datasetEntries, resultCols);
+		let collectS = new CollectScomp(this.datasetEntries, resultCols);
+		let collectLogic = new CollectLogicComp(this.datasetEntries,  resultCols);
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
 				propertiesToAdd.push(collectM.collectMCOMP(body[key as keyof typeof body], key));
 			} else if (key === "AND" || key === "OR") { // LOGICCOMP
-				propertiesToAdd.push(this.collectLOGICCOMP(body[key as keyof typeof body]));
+				// console.log("key body", key);
+				propertiesToAdd.push(collectLogic.collectLogicComp(body[key as keyof typeof body], key));
 			} else if (key === "IS") { // SCOMP
 				propertiesToAdd.push(collectS.collectSCOMP(body[key as keyof typeof body]));
 			} else if (key === "NOT") { // NEGATION
