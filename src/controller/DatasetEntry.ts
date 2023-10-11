@@ -18,7 +18,12 @@ export default class DatasetEntry implements InsightDataset{
 		let filenames = Object.keys(unzipped_content.files);
 
 		// Create directory for saved dataset if it does not exist already
-		if (filenames.includes("courses/")) {
+		let filenameCourseContainment: boolean[] = [];
+		for (const filename of filenames) {
+			filenameCourseContainment.push(filename.includes("courses/"));
+		}
+
+		if (filenameCourseContainment.includes(true)) {
 			let courses: Array<Promise<CourseEntry>> = [];
 			for (const filename of Object.keys(unzipped_content.files)) {
 				let file = zip.file(filename);
@@ -54,14 +59,14 @@ export default class DatasetEntry implements InsightDataset{
 		return course;
 	}
 
-	public save_dataset(): void {
+	public async save_dataset(): Promise<void> {
 		let path = this.path + this.get_id() + ".txt";
-		console.log(path);
 		let content = JSON.stringify(this);
-		fs.writeFileSync(path, content,"utf-8");
+		fs.writeFileSync(path, content, "utf-8");
+		return Promise.resolve();
 	}
 
-	public load_dataset(path: string): void {
+	public async load_dataset(path: string): Promise<DatasetEntry> {
 		let datasetJSON = JSON.parse(fs.readFileSync(path).toString().trim());
 		let courses: CourseEntry[] = [];
 		for (const course of datasetJSON["courses"]) {
@@ -73,6 +78,7 @@ export default class DatasetEntry implements InsightDataset{
 		this.set_id(datasetJSON["id"]);
 		this.set_path(datasetJSON["path"]);
 		this.set_numRows(datasetJSON["numRows"]);
+		return this;
 	}
 
 	public get_id(): string {

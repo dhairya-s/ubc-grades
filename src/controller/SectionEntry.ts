@@ -62,6 +62,7 @@ export default class SectionEntry {
 
 	public set_year(year: number) {
 		this.year = year;
+		// console.log(this.year);
 	}
 
 	public set_avg(avg: number) {
