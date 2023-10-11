@@ -134,7 +134,7 @@ export default class InsightFacade implements IInsightFacade {
 		// } catch {
 		// 	return Promise.reject(new InsightError("Could not load datasets."));
 		// }
-		return Promise.reject(new InsightError("Could not load datasets"));
+		return Promise.reject(new InsightError("Could not load datasets."));
 	}
 
 	private validateIdRemove(id: string): boolean {
