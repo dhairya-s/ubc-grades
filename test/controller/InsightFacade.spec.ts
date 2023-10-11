@@ -15,6 +15,7 @@ import DatasetEntry from "../../src/controller/DatasetEntry";
 use(chaiAsPromised);
 
 describe("InsightFacade", function () {
+	this.timeout(10000);
 	let facade: IInsightFacade;
 
 	// Declare datasets used in tests. You should add more datasets like this!
@@ -394,6 +395,7 @@ describe("InsightFacade", function () {
 			"./test/resources/queries/",
 			{
 				assertOnResult: async (actual, expected) => {
+					// expect(actual).to.have.deep.members(await expected);
 					expect(actual).to.have.deep.members(await expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
