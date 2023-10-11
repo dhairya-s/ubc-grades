@@ -13,8 +13,8 @@ export default class CollectMcomp {
 		// console.log("M result cols", this.resultCols);
 	}
 
-	public collectMCOMP(mcomp: object, key: string): object[] {
-		let propertiesToAdd: object[] = [];
+	public collectMCOMP(mcomp: object, key: string): SectionEntry[] {
+		let propertiesToAdd: SectionEntry[] = [];
 
 		let localKey: string[] = Object.keys(mcomp); // sections_id
 		const localKeyField = localKey[0].split("_")[1]; // id
@@ -23,9 +23,12 @@ export default class CollectMcomp {
 		for (let dataset of this.datasetEntries) {
 			for (let course of dataset.get_courses()) {
 				for (let section of course.getSections()) {
-					let obj = this.handleMFields(section, localKeyField, key, value);
-					if (Object.keys(obj).length !== 0) {
-						propertiesToAdd.push(obj);
+					let sectionEntry: SectionEntry | null = this.handleMFields(section, localKeyField, key, value);
+					// if (Object.keys(obj).length !== 0) {
+					// 	propertiesToAdd.push(obj);
+					// }
+					if (sectionEntry !==  null) {
+						propertiesToAdd.push(sectionEntry);
 					}
 				}
 			}
@@ -35,35 +38,42 @@ export default class CollectMcomp {
 
 	// private helpers
 
-	private applyGT(section: SectionEntry, value: number, sectionVal: number): object {
-		let propertiesToAdd: Property[] = [];
+	private applyGT(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 		if (sectionVal > value) {
 			// console.log("applyGT result cols", this.resultCols);
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+			// propertiesToAdd = collectInsightResult(section, this.resultCols);
+			return section;
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
+
+		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private applyEQ(section: SectionEntry, value: number, sectionVal: number): object {
-		let propertiesToAdd: Property[] = [];
+	private applyEQ(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 		if (sectionVal === value) {
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+			return  section;
+			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
+		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private applyLT(section: SectionEntry, value: number, sectionVal: number): object {
-		let propertiesToAdd: Property[] = [];
+	private applyLT(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 		if (sectionVal < value) {
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+			return section;
+			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
+		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private handleMFields(section: SectionEntry, localKeyField: string, key: string, value: number): object {
-		let result: object = {};
+	private handleMFields(section: SectionEntry, lKeyField: string, key: string, value: number): SectionEntry | null {
+		let result: SectionEntry | null = null;
 
-		if (localKeyField === "avg") {
+		if (lKeyField === "avg") {
 			if (key === "GT") {
 				result = this.applyGT(section, value, section.get_avg());
 			} else if (key === "EQ") {
@@ -71,7 +81,7 @@ export default class CollectMcomp {
 			} else if (key === "LT") {
 				result = this.applyLT(section, value, section.get_avg());
 			}
-		} else if (localKeyField === "pass") {
+		} else if (lKeyField === "pass") {
 			if (key === "GT") {
 				result = this.applyGT(section, value, section.get_pass());
 			} else if (key === "EQ") {
@@ -79,7 +89,7 @@ export default class CollectMcomp {
 			} else if (key === "LT") {
 				result = this.applyLT(section, value, section.get_pass());
 			}
-		} else if (localKeyField === "fail") {
+		} else if (lKeyField === "fail") {
 			if (key === "GT") {
 				result = this.applyGT(section, value, section.get_fail());
 			} else if (key === "EQ") {
@@ -87,7 +97,7 @@ export default class CollectMcomp {
 			} else if (key === "LT") {
 				result = this.applyLT(section, value, section.get_fail());
 			}
-		} else if (localKeyField === "audit") {
+		} else if (lKeyField === "audit") {
 			if (key === "GT") {
 				result = this.applyGT(section, value, section.get_audit());
 			} else if (key === "EQ") {
@@ -95,7 +105,7 @@ export default class CollectMcomp {
 			} else if (key === "LT") {
 				result = this.applyLT(section, value, section.get_audit());
 			}
-		} else if (localKeyField === "year") {
+		} else if (lKeyField === "year") {
 			if (key === "GT") {
 				result = this.applyGT(section, value, section.get_year());
 			} else if (key === "EQ") {
@@ -104,7 +114,7 @@ export default class CollectMcomp {
 				result = this.applyLT(section, value, section.get_year());
 			}
 		}
-		// console.log(result);
+
 		return result;
 	}
 }
