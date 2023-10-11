@@ -84,7 +84,7 @@ export default class CollectScomp {
 	private endsWith(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
 		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[1];
-		if (sectionVal.endsWith(split)) {
+		if (String(sectionVal).endsWith(split)) {
 			return section;
 			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
@@ -95,7 +95,7 @@ export default class CollectScomp {
 	private startsWith(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
 		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[0];
-		if (sectionVal.startsWith(split)) {
+		if (String(sectionVal).startsWith(split)) {
 			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 			return section;
 		}
@@ -107,7 +107,7 @@ export default class CollectScomp {
 		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[1];
 
-		if (sectionVal.includes(split)) {
+		if (String(sectionVal).includes(split)) {
 			return section;
 			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
