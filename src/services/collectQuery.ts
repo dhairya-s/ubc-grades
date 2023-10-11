@@ -22,7 +22,7 @@ export default class CollectQuery {
 
 	public async CollectQuery(): Promise<InsightResult[]> {
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
-		console.log("Query result cols", resultCols);
+		// console.log("Query result cols", resultCols);
 		let r = this.collectBody(this.query["WHERE" as keyof typeof this.query], resultCols);
 
 		return r as InsightResult[];

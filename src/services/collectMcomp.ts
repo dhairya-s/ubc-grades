@@ -16,8 +16,8 @@ export default class CollectMcomp {
 	public collectMCOMP(mcomp: object, key: string): object[] {
 		let propertiesToAdd: object[] = [];
 
-		let localKey: string[] = Object.keys(mcomp);
-		const localKeyField = localKey[0].split("_")[1];
+		let localKey: string[] = Object.keys(mcomp); // sections_id
+		const localKeyField = localKey[0].split("_")[1]; // id
 		const value: number = mcomp[localKey[0] as keyof typeof mcomp];
 
 		for (let dataset of this.datasetEntries) {

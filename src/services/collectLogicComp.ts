@@ -17,7 +17,7 @@ export default class CollectLogicComp {
 		// console.log("key logic", key);
 		let propertiesToAdd: object[] = [];
 		let propertiesToLogic: object[][] = [];
-		let localKeys: string[] = Object.keys(logiccomp);
+		let localKeys: string[] = Object.keys(logiccomp); // 0,1,2,3
 
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
@@ -66,13 +66,13 @@ export default class CollectLogicComp {
 		// }
 		// return []
 
-		let temp = propertiesToLogic.reduce((prev, curr) => {
+		let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
 			return prev.filter((obj1) => {
-				return curr.some((obj2) => (this.compareObjects(obj1, obj2))
+				return curr.some((obj2) => (false)
 				);
 			});
 		},propertiesToLogic[0]);
-		// console.log("final", temp);
+
 		return temp;
 	}
 
@@ -80,14 +80,14 @@ export default class CollectLogicComp {
 	// private valueIsEq(obj: object ) {
 	//
 	// }
-	private compareObjects(obj1: object, obj2:  object): boolean {
-		for (let col of this.resultCols) {
-			if (obj1[col as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
-				return false;
-			}
-		}
-		return true;
-	}
+	// private compareObjects(obj1: object, obj2:  object): boolean {
+	// 	for (let col of this.resultCols) {
+	// 		if (obj1[ as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
+	// 			return false;
+	// 		}
+	// 	}
+	// 	return true;
+	// }
 
 	private handleOrComp(propertiesToLogic: object[][]): object[] {
 		return [];
