@@ -10,6 +10,7 @@ export default class CollectScomp {
 	constructor(datasetEntries: DatasetEntry[], resultCols: Set<string>) {
 		this.datasetEntries = datasetEntries;
 		this.resultCols = resultCols;
+		// console.log("S result cols", this.resultCols);
 	}
 
 	public collectSCOMP(scomp: object): object[] {
@@ -70,7 +71,8 @@ export default class CollectScomp {
 
 	private matchesExactly(section: SectionEntry, value: string, sectionVal: string): object {
 		let propertiesToAdd: Property[] = [];
-		if (sectionVal === value) {
+
+		if (String(sectionVal) === value) {
 			propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
 		return convertArrayOfObjectToObject(propertiesToAdd);

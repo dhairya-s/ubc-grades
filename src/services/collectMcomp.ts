@@ -10,6 +10,7 @@ export default class CollectMcomp {
 	constructor(datasetEntries: DatasetEntry[], resultCols: Set<string>) {
 		this.datasetEntries = datasetEntries;
 		this.resultCols = resultCols;
+		// console.log("M result cols", this.resultCols);
 	}
 
 	public collectMCOMP(mcomp: object, key: string): object[] {
@@ -37,6 +38,7 @@ export default class CollectMcomp {
 	private applyGT(section: SectionEntry, value: number, sectionVal: number): object {
 		let propertiesToAdd: Property[] = [];
 		if (sectionVal > value) {
+			// console.log("applyGT result cols", this.resultCols);
 			propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
 		return convertArrayOfObjectToObject(propertiesToAdd);
@@ -102,6 +104,7 @@ export default class CollectMcomp {
 				result = this.applyLT(section, value, section.get_year());
 			}
 		}
+		// console.log(result);
 		return result;
 	}
 }
