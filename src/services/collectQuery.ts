@@ -22,31 +22,31 @@ export default class CollectQuery {
 
 	public async CollectQuery(): Promise<InsightResult[]> {
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
-		// console.log("Query result cols", resultCols);
+		console.log("Query result cols", resultCols);
 		let r = this.collectBody(this.query["WHERE" as keyof typeof this.query], resultCols);
 
-		return r[0] as InsightResult[];
+		return r as InsightResult[];
 	}
 
-	public collectBody(body: object, resultCols: Set<string>): object[][] {
+	public collectBody(body: object, resultCols: Set<string>): object[] {
 		let keys: string[];
 		keys = Object.keys(body);
 
-		let propertiesToAdd: object[][] = [];
+		let propertiesToAdd: object[] = [];
 
 		let collectM = new CollectMcomp(this.datasetEntries, resultCols);
 		let collectS = new CollectScomp(this.datasetEntries, resultCols);
 		let collectLogic = new CollectLogicComp(this.datasetEntries,  resultCols);
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
-				propertiesToAdd.push(collectM.collectMCOMP(body[key as keyof typeof body], key));
+				propertiesToAdd = collectM.collectMCOMP(body[key as keyof typeof body], key);
 			} else if (key === "AND" || key === "OR") { // LOGICCOMP
 				// console.log("key body", key);
-				propertiesToAdd.push(collectLogic.collectLogicComp(body[key as keyof typeof body], key));
+				propertiesToAdd = collectLogic.collectLogicComp(body[key as keyof typeof body], key);
 			} else if (key === "IS") { // SCOMP
-				propertiesToAdd.push(collectS.collectSCOMP(body[key as keyof typeof body]));
+				propertiesToAdd = collectS.collectSCOMP(body[key as keyof typeof body]);
 			} else if (key === "NOT") { // NEGATION
-				propertiesToAdd.push(this.collectNEGATION(body[key as keyof typeof body]));
+				propertiesToAdd = this.collectNEGATION(body[key as keyof typeof body]);
 			} else {
 				throw new InsightError("Invalid Query - Failed in Body");
 			}
@@ -85,7 +85,10 @@ export default class CollectQuery {
 
 	private collectOptions(options: object): Set<string>  {
 		let resultCols = new Set<string>();
-		resultCols.add(options["ORDER" as keyof  typeof options]);
+		let orderCol: string = options["ORDER" as keyof  typeof options];
+		if (orderCol !== undefined) {
+			resultCols.add(orderCol);
+		}
 
 		let cols: string[] = options["COLUMNS" as keyof  typeof options];
 		for (let col of cols) {

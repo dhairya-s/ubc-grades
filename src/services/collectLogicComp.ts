@@ -21,47 +21,72 @@ export default class CollectLogicComp {
 
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
-			let collectComp: object[][];
+			let collectComp: object[];
 			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp], this.resultCols);
-			if (Object.keys(collectComp).length !== 0){
-				propertiesToLogic.push(collectComp[0]);
-			}
+			// if (Object.keys(collectComp).length !== 0){
+			propertiesToLogic.push(collectComp);
+			// }
 		}
 
 		if (key === "AND") {
-			propertiesToAdd.push(this.handleAndComp(propertiesToLogic));
+			propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
-			propertiesToAdd.push(this.handleOrComp(propertiesToLogic));
+			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
 
 		return propertiesToAdd;
 	}
 
 	private handleAndComp(propertiesToLogic: object[][]): object[] {
+		//
+		// for (let prop of propertiesToLogic) {
+		// 	console.log(prop.length);
+		// }
 
-		console.log(propertiesToLogic);
+		// [
+		// 		[
+		// 			{"section_id":"id", "section_num": 31},
+		// 			{"section_id":"id2", "section_num": 89}
+		// 		],
+		// 		[
+		// 			{section_id:"id2", "section_num": 89}
+		// 		]
+		// ]
+		//
+		// return value
+		// [
+		// 			{"section_id":"id2", "section_num": 89}
+		// ]
 
-		// // console.log("properties to logic", propertiesToLogic);
-		// return propertiesToLogic.reduce((prev, curr) => {
-		// 	return prev.filter((obj1) => {
-		// 		return curr.filter((obj2) => (this.compareObjects(obj1, obj2))
-		// 	);
-		// 	});
-		// });
-		return [];
+		//
+		// for (let props of propertiesToLogic) {
+		// 	for (let objs of props) {
+		//
+		// 	}
+		// }
+		// return []
+
+		let temp = propertiesToLogic.reduce((prev, curr) => {
+			return prev.filter((obj1) => {
+				return curr.some((obj2) => (this.compareObjects(obj1, obj2))
+				);
+			});
+		},propertiesToLogic[0]);
+		// console.log("final", temp);
+		return temp;
 	}
 
-	private compareObjects(obj1: object, obj2: object): boolean {
-		let isEq = false;
+
+	// private valueIsEq(obj: object ) {
+	//
+	// }
+	private compareObjects(obj1: object, obj2:  object): boolean {
 		for (let col of this.resultCols) {
-			if (obj1[col as keyof typeof obj1] === obj2[col as keyof typeof obj2]) {
-				isEq = true;
-			}
-			if (!isEq) {
-				break;
+			if (obj1[col as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
+				return false;
 			}
 		}
-		return isEq;
+		return true;
 	}
 
 	private handleOrComp(propertiesToLogic: object[][]): object[] {

@@ -1,0 +1,452 @@
+{
+	"title": "andMfield36Res",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 70
+					}
+				},
+				{
+					"IS": {
+						"sections_dept": "*"
+					}
+				},
+				{
+					"GT": {
+						"sections_pass": 100
+					}
+				},
+				{
+					"GT": {
+						"sections_fail": 10
+					}
+				},
+				{
+					"GT": {
+						"sections_audit": 0
+					}
+				},
+				{
+					"GT": {
+						"sections_year": 2000
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_uuid",
+				"sections_id",
+				"sections_title",
+				"sections_instructor",
+				"sections_dept",
+				"sections_avg",
+				"sections_pass",
+				"sections_fail",
+				"sections_audit"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_uuid": "59353",
+			"sections_id": "233",
+			"sections_title": "org chem biol sc",
+			"sections_instructor": "stewart, jaclyn",
+			"sections_dept": "chem",
+			"sections_avg": 70.01,
+			"sections_pass": 335,
+			"sections_fail": 17,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "78338",
+			"sections_id": "102",
+			"sections_title": "princpl macrecon",
+			"sections_instructor": "gateman, robert",
+			"sections_dept": "econ",
+			"sections_avg": 70.14,
+			"sections_pass": 163,
+			"sections_fail": 13,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "86114",
+			"sections_id": "112",
+			"sections_title": "unicellular life",
+			"sections_instructor": "benbasat, julyet",
+			"sections_dept": "biol",
+			"sections_avg": 70.4,
+			"sections_pass": 190,
+			"sections_fail": 30,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "88960",
+			"sections_id": "200",
+			"sections_title": "cell biology 1",
+			"sections_instructor": "rosenberg, ellen",
+			"sections_dept": "biol",
+			"sections_avg": 70.48,
+			"sections_pass": 1026,
+			"sections_fail": 106,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "23070",
+			"sections_id": "102",
+			"sections_title": "intr stars&galxs",
+			"sections_instructor": "van waerbeke, ludovic",
+			"sections_dept": "astr",
+			"sections_avg": 70.83,
+			"sections_pass": 109,
+			"sections_fail": 17,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "41167",
+			"sections_id": "100",
+			"sections_title": "intro physics",
+			"sections_instructor": "kotlicki, andrzej",
+			"sections_dept": "phys",
+			"sections_avg": 70.93,
+			"sections_pass": 228,
+			"sections_fail": 29,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "64766",
+			"sections_id": "154",
+			"sections_title": "chem for engr",
+			"sections_instructor": "hoogendoorn, irma",
+			"sections_dept": "chem",
+			"sections_avg": 71.06,
+			"sections_pass": 329,
+			"sections_fail": 41,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "709",
+			"sections_id": "290",
+			"sections_title": "int quan dec mak",
+			"sections_instructor": "graham, brian",
+			"sections_dept": "comm",
+			"sections_avg": 71.13,
+			"sections_pass": 223,
+			"sections_fail": 14,
+			"sections_audit": 4
+		},
+		{
+			"sections_uuid": "9968",
+			"sections_id": "101",
+			"sections_title": "prncpls micrecon",
+			"sections_instructor": "adshade, marina",
+			"sections_dept": "econ",
+			"sections_avg": 71.2,
+			"sections_pass": 230,
+			"sections_fail": 11,
+			"sections_audit": 2
+		},
+		{
+			"sections_uuid": "49051",
+			"sections_id": "241",
+			"sections_title": "mass&enrgy balnc",
+			"sections_instructor": "gyenge, elod lajos",
+			"sections_dept": "chbe",
+			"sections_avg": 71.25,
+			"sections_pass": 161,
+			"sections_fail": 16,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "41170",
+			"sections_id": "101",
+			"sections_title": "energy & waves",
+			"sections_instructor": "iqbal, javed",
+			"sections_dept": "phys",
+			"sections_avg": 71.39,
+			"sections_pass": 199,
+			"sections_fail": 23,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "73744",
+			"sections_id": "200",
+			"sections_title": "elem stat applic",
+			"sections_instructor": "yu, hoi yin eugenia",
+			"sections_dept": "stat",
+			"sections_avg": 71.42,
+			"sections_pass": 301,
+			"sections_fail": 12,
+			"sections_audit": 2
+		},
+		{
+			"sections_uuid": "83392",
+			"sections_id": "110",
+			"sections_title": "comptn, progrmng",
+			"sections_instructor": "carter, paul martin",
+			"sections_dept": "cpsc",
+			"sections_avg": 71.44,
+			"sections_pass": 115,
+			"sections_fail": 18,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "70537",
+			"sections_id": "114",
+			"sections_title": "catastroph earth",
+			"sections_instructor": "gilley, brett;maldonado-pareja, maria;porritt, lucy;russell, james kelly;stull, roland;sutherland, stuart",
+			"sections_dept": "eosc",
+			"sections_avg": 71.48,
+			"sections_pass": 317,
+			"sections_fail": 14,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "68890",
+			"sections_id": "118",
+			"sections_title": "gold & gems",
+			"sections_instructor": "dzikowski, tashia;turner, david",
+			"sections_dept": "eosc",
+			"sections_avg": 71.76,
+			"sections_pass": 196,
+			"sections_fail": 19,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "42129",
+			"sections_id": "200",
+			"sections_title": "fund cell bio",
+			"sections_instructor": "young, robin",
+			"sections_dept": "biol",
+			"sections_avg": 71.78,
+			"sections_pass": 1126,
+			"sections_fail": 72,
+			"sections_audit": 2
+		},
+		{
+			"sections_uuid": "98854",
+			"sections_id": "200",
+			"sections_title": "elem stat applic",
+			"sections_instructor": "yu, hoi yin eugenia",
+			"sections_dept": "stat",
+			"sections_avg": 71.9,
+			"sections_pass": 306,
+			"sections_fail": 19,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "14345",
+			"sections_id": "402",
+			"sections_title": "proteins",
+			"sections_instructor": "brayer, gary;mauk, grant",
+			"sections_dept": "bioc",
+			"sections_avg": 72.09,
+			"sections_pass": 152,
+			"sections_fail": 11,
+			"sections_audit": 2
+		},
+		{
+			"sections_uuid": "87269",
+			"sections_id": "101",
+			"sections_title": "prncpls micrecon",
+			"sections_instructor": "deseau, stephane",
+			"sections_dept": "econ",
+			"sections_avg": 72.12,
+			"sections_pass": 156,
+			"sections_fail": 16,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "21897",
+			"sections_id": "102",
+			"sections_title": "princpl macrecon",
+			"sections_instructor": "zrill, lanny",
+			"sections_dept": "econ",
+			"sections_avg": 72.17,
+			"sections_pass": 242,
+			"sections_fail": 15,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "57718",
+			"sections_id": "290",
+			"sections_title": "int quan dec mak",
+			"sections_instructor": "graham, brian",
+			"sections_dept": "comm",
+			"sections_avg": 72.22,
+			"sections_pass": 219,
+			"sections_fail": 16,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "62372",
+			"sections_id": "259",
+			"sections_title": "dta&alg elec eng",
+			"sections_instructor": "khosravi, hassan",
+			"sections_dept": "cpsc",
+			"sections_avg": 72.4,
+			"sections_pass": 189,
+			"sections_fail": 18,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "34257",
+			"sections_id": "112",
+			"sections_title": "unicellular life",
+			"sections_instructor": "",
+			"sections_dept": "biol",
+			"sections_avg": 72.48,
+			"sections_pass": 234,
+			"sections_fail": 30,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "43505",
+			"sections_id": "200",
+			"sections_title": "elem stat applic",
+			"sections_instructor": "casquilho resende, camila",
+			"sections_dept": "stat",
+			"sections_avg": 72.5,
+			"sections_pass": 142,
+			"sections_fail": 12,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "68873",
+			"sections_id": "112",
+			"sections_title": "fluid earth",
+			"sections_instructor": "francois, roger;steyn, douw gerbrand",
+			"sections_dept": "eosc",
+			"sections_avg": 73.01,
+			"sections_pass": 186,
+			"sections_fail": 11,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "12367",
+			"sections_id": "202",
+			"sections_title": "med micb & immun",
+			"sections_instructor": "kion, tracy",
+			"sections_dept": "micb",
+			"sections_avg": 73.3,
+			"sections_pass": 238,
+			"sections_fail": 20,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "18096",
+			"sections_id": "300",
+			"sections_title": "biometrics",
+			"sections_instructor": "marin, michael",
+			"sections_dept": "biol",
+			"sections_avg": 73.39,
+			"sections_pass": 220,
+			"sections_fail": 11,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "5923",
+			"sections_id": "102",
+			"sections_title": "elec light & rad",
+			"sections_instructor": "bates, frances;plotkin, steven",
+			"sections_dept": "phys",
+			"sections_avg": 73.41,
+			"sections_pass": 184,
+			"sections_fail": 27,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "9657",
+			"sections_id": "302",
+			"sections_title": "immunology",
+			"sections_instructor": "johnson, pauline;kion, tracy",
+			"sections_dept": "micb",
+			"sections_avg": 73.6,
+			"sections_pass": 182,
+			"sections_fail": 11,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "18612",
+			"sections_id": "301",
+			"sections_title": "tech terms medic",
+			"sections_instructor": "reid, shelley",
+			"sections_dept": "clst",
+			"sections_avg": 73.66,
+			"sections_pass": 238,
+			"sections_fail": 19,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "55065",
+			"sections_id": "200",
+			"sections_title": "fund cell bio",
+			"sections_instructor": "young, robin",
+			"sections_dept": "biol",
+			"sections_avg": 73.7,
+			"sections_pass": 1174,
+			"sections_fail": 95,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "82163",
+			"sections_id": "302",
+			"sections_title": "atmsphr envirmnt",
+			"sections_instructor": "wheeler, michael",
+			"sections_dept": "chem",
+			"sections_avg": 74.75,
+			"sections_pass": 215,
+			"sections_fail": 12,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "67300",
+			"sections_id": "110",
+			"sections_title": "comptn, progrmng",
+			"sections_instructor": "allen, meghan",
+			"sections_dept": "cpsc",
+			"sections_avg": 75.81,
+			"sections_pass": 145,
+			"sections_fail": 16,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "70531",
+			"sections_id": "112",
+			"sections_title": "fluid earth",
+			"sections_instructor": "block, stephanie;harris, sara",
+			"sections_dept": "eosc",
+			"sections_avg": 77.11,
+			"sections_pass": 301,
+			"sections_fail": 11,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "4215",
+			"sections_id": "160",
+			"sections_title": "comp eng design",
+			"sections_instructor": "davies, paul;gelbart, michael",
+			"sections_dept": "apsc",
+			"sections_avg": 78.49,
+			"sections_pass": 252,
+			"sections_fail": 20,
+			"sections_audit": 1
+		},
+		{
+			"sections_uuid": "5920",
+			"sections_id": "101",
+			"sections_title": "energy & waves",
+			"sections_instructor": "bates, simon;charbonneau, arthur;ives, joss;koster, evert;kotlicki, andrzej",
+			"sections_dept": "phys",
+			"sections_avg": 79.42,
+			"sections_pass": 259,
+			"sections_fail": 16,
+			"sections_audit": 1
+		}
+	]
+}

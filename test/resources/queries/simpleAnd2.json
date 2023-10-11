@@ -33,12 +33,12 @@
 	"errorExpected": false,
 	"expected": [
 		{
+			"sections_avg": 99.19,
 			"sections_uuid": "26777",
 			"sections_id": "574",
 			"sections_title": "career planning",
 			"sections_instructor": "cox, daniel",
 			"sections_dept": "cnps",
-			"sections_avg": 99.19,
 			"sections_pass": 16,
 			"sections_fail": 0,
 			"sections_audit": 0
