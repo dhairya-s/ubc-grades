@@ -150,7 +150,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		try {
 			this.datasets = this.datasets.filter(function (dataset) {
-				return dataset.get_id() === id;
+				return dataset.get_id() !== id;
 			});
 			let fileDir = "test/resources/saved_data/" + id + ".txt";
 			fs_extra.removeSync(fileDir);

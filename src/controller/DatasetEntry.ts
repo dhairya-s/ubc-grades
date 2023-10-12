@@ -86,7 +86,6 @@ export default class DatasetEntry implements InsightDataset{
 		// 	this.set_id(datasetJSON['id']);
 		// 	this.set_path(datasetJSON['path']);
 		// 	this.set_numRows(parseInt(datasetJSON["numRows"]));
-		// 	console.log(this.numRows);
 		// 	const insightDataset = this.dataset_entry_to_insight_dataset();
 		// 	return Promise.resolve(insightDataset);
 		// });
