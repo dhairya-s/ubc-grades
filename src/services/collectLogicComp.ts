@@ -66,14 +66,14 @@ export default class CollectLogicComp {
 		// }
 		// return []
 
-		let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
+		return propertiesToLogic.slice(1).reduce((prev, curr) => {
 			return prev.filter((obj1) => {
 				return curr.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
 				);
 			});
 		},propertiesToLogic[0]);
 
-		return temp;
+		// return temp;
 	}
 
 
@@ -94,9 +94,9 @@ export default class CollectLogicComp {
 		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
 
 		for (let section of propertiesToLogic) {
-			console.log("section", section);
+			// console.log("section", section);
 			for (let s of section) {
-				console.log("s", s);
+				// console.log("s", s);
 				set.add(s);
 			}
 		}
