@@ -1,6 +1,6 @@
 import * as fs from "fs-extra";
 
-const persistDir = "./src/saved_data/";
+const persistDir = "./test/resources/saved_data/";
 
 /**
  * Convert a file into a base64 string.
