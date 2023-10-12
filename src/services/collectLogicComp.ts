@@ -91,6 +91,15 @@ export default class CollectLogicComp {
 
 	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
 
+		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+
+		for (let section of propertiesToLogic) {
+			console.log("section", section);
+			for (let s of section) {
+				console.log("s", s);
+				set.add(s);
+			}
+		}
 
 		// let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
 		// 	return curr.filter((obj1) => {
@@ -100,6 +109,28 @@ export default class CollectLogicComp {
 		// },propertiesToLogic[0]);
 		//
 		// return temp;
-		return [];
+		return Array.from(set.values());
+	}
+
+
+}
+
+class SetWithContentEquality<T> {
+	private items: T[] = [];
+	private getKey: (item: T) => string;
+	constructor(getKey: (item: T) => string) {
+		this.getKey = getKey;
+	}
+	public add(item: T): void {
+		const key = this.getKey(item);
+		if (!this.items.some((existing) => this.getKey(existing) === key)) {
+			this.items.push(item);
+		}
+	}
+	public has(item: T): boolean {
+		return this.items.some((existing) => this.getKey(existing) === this.getKey(item));
+	}
+	public values(): T[] {
+		return [...this.items];
 	}
 }
