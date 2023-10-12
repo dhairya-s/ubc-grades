@@ -11,11 +11,10 @@ export default class SectionEntry {
 	private pass: number = -100;
 	private fail: number = -100;
 	private audit: number = -100;
-	private valid: boolean = false;
 
 	public section_from_zip_json(jsonSection: any) {
 		let keys = Object.keys(jsonSection);
-		let expectedKeys = ["id", "Course", "Title", "Professor","Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
+		let expectedKeys = ["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 		const hasAllElems = expectedKeys.every((elem) => keys.includes(elem));
 		if (!hasAllElems) {
 			throw new InsightError("Section could not be created");
@@ -45,13 +44,6 @@ export default class SectionEntry {
 		this.set_audit(sectionObject["audit"]);
 	}
 
-	public get_valid() {
-		return this.valid;
-	}
-
-	public set_valid(valid: string) {
-		return;
-	}
 	public set_uuid(uuid: string) {
 		this.uuid = uuid;
 	}
@@ -135,5 +127,4 @@ export default class SectionEntry {
 	public get_audit(): number {
 		return this.audit;
 	}
-
 }
