@@ -66,10 +66,10 @@ export default class DatasetEntry implements InsightDataset{
 		return Promise.resolve();
 	}
 
-	public async load_dataset(path: string): Promise<DatasetEntry> {
 	public dataset_entry_to_insight_dataset(): InsightDataset {
 		return {
 			id: this.get_id(),
+			kind: this.get_kind(),
 			numRows: this.numRows,
 		};
 	}
