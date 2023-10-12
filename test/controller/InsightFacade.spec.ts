@@ -10,7 +10,6 @@ import {folderTest} from "@ubccpsc310/folder-test";
 import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../TestUtil";
-import DatasetEntry from "../../src/controller/DatasetEntry";
 
 use(chaiAsPromised);
 
@@ -338,22 +337,23 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.equal([]);
 				});
 				it("should resolve if there has been a dataset added", async function() {
+					this.timeout(4000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-					let newContent = new DatasetEntry("dataset1", InsightDatasetKind.Sections);
-					let expectedDataset = await newContent.load_dataset("src/saved_data/" + "dataset1.txt");
 					const datasets = await facade.listDatasets();
-					return expect(datasets).to.deep.equal([expectedDataset]);
+					return expect(datasets).to.deep.equal(
+						[{id: "dataset1", kind: "sections", numRows: 64612}]
+					);
 				});
 				it("should resolve if there have been many datasets added", async function() {
 					this.timeout(4000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
-					let newContent1 = new DatasetEntry("dataset1", InsightDatasetKind.Sections);
-					let expectedDataset1 = await newContent1.load_dataset("src/saved_data/" + "dataset1.txt");
-					let newContent2 = new DatasetEntry("dataset2", InsightDatasetKind.Sections);
-					let expectedDataset2 = await newContent2.load_dataset("src/saved_data/" + "dataset2.txt");
 					const datasets = await facade.listDatasets();
-					return expect(datasets).to.deep.equal([expectedDataset1, expectedDataset2]);
+					console.log(datasets);
+					return expect(datasets).to.deep.equal([
+						{id: "dataset1", kind: "sections", numRows: 64612},
+						{id: "dataset2", kind: "sections", numRows: 1}
+					]);
 				});
 			});
 		});
@@ -390,7 +390,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/queries/",
+			"./test/resources/queries/tests",
 			{
 				assertOnResult: async (actual, expected) => {
 					expect(actual).to.have.deep.members(await expected);

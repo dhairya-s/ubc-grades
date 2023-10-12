@@ -25,7 +25,7 @@ export default class SectionEntry {
 		this.set_title(jsonSection["Title"]);
 		this.set_instructor(jsonSection["Professor"]);
 		this.set_dept(jsonSection["Subject"]);
-		this.set_year(jsonSection["Year"]);
+		this.set_year(parseInt(jsonSection["Year"], 10), jsonSection);
 		this.set_avg(jsonSection["Avg"]);
 		this.set_pass(jsonSection["Pass"]);
 		this.set_fail(jsonSection["Fail"]);
@@ -38,7 +38,7 @@ export default class SectionEntry {
 		this.set_title(sectionObject["title"]);
 		this.set_instructor(sectionObject["instructor"]);
 		this.set_dept(sectionObject["dept"]);
-		this.set_year(sectionObject["year"]);
+		this.set_year(sectionObject["year"], sectionObject);
 		this.set_avg(sectionObject["avg"]);
 		this.set_pass(sectionObject["pass"]);
 		this.set_fail(sectionObject["fail"]);
@@ -72,9 +72,12 @@ export default class SectionEntry {
 		this.dept = dept;
 	}
 
-	public set_year(year: number) {
-		this.year = year;
-		// console.log(this.year);
+	public set_year(year: number, jsonSection: any) {
+		if (jsonSection["Section"] && jsonSection["Section"] === "overall") {
+			this.year = 1900;
+		} else {
+			this.year = year;
+		}
 	}
 
 	public set_avg(avg: number) {
