@@ -7,9 +7,10 @@ export default class CourseEntry {
 
 	public courseFromObject(course: any) {
 		this.courseName = course["courseName"];
-		for (const section in course["sections"]){
+		for (const section of course["sections"]){
 			try {
-				let sectionEntry = new SectionEntry(section);
+				let sectionEntry = new SectionEntry();
+				sectionEntry.section_from_dataset(section);
 				this.addSection(sectionEntry);
 			} catch {
 				// Don't add the section
@@ -23,7 +24,8 @@ export default class CourseEntry {
 			let sectionJSON = JSON.parse(sectionData);
 			for (const result of sectionJSON["result"]){
 				try{
-					let section = new SectionEntry(result);
+					let section = new SectionEntry();
+					section.section_from_zip_json(result);
 					this.addSection(section);
 				} catch {
 					// Don't add the section.
