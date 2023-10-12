@@ -87,7 +87,7 @@ export default class CollectQuery {
 			} else if (key === "IS") { // SCOMP
 				propertiesToAdd = collectS.collectSCOMP(body[key as keyof typeof body]);
 			} else if (key === "NOT") { // NEGATION
-				// propertiesToAdd = this.collectNEGATION(body[key as keyof typeof body]);
+				propertiesToAdd = this.collectNEGATION(body[key as keyof typeof body]);
 			} else {
 				throw new InsightError("Invalid Query - Failed in Body");
 			}
@@ -109,7 +109,7 @@ export default class CollectQuery {
 		return [];
 	}
 
-	private collectNEGATION(neg: object): object[]  {
+	private collectNEGATION(neg: object): SectionEntry[]  {
 		// let isValid = false;
 		// let keys: string[];
 		// keys = Object.keys(neg);
