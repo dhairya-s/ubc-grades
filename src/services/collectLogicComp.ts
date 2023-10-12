@@ -90,6 +90,16 @@ export default class CollectLogicComp {
 	// }
 
 	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
+
+
+		// let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
+		// 	return curr.filter((obj1) => {
+		// 		return !prev.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
+		// 		);
+		// 	});
+		// },propertiesToLogic[0]);
+		//
+		// return temp;
 		return [];
 	}
 }
