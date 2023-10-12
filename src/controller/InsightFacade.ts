@@ -7,7 +7,7 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import DatasetEntry from "./DatasetEntry";
+import DatasetEntry from "../../src/controller/DatasetEntry";
 import JSZip from "jszip";
 import ValidateQuery from "../services/validateQuery";
 import * as fs from "fs";
