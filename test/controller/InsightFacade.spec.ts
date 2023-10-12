@@ -323,6 +323,7 @@ describe("InsightFacade", function () {
 		describe("listDataset", function() {
 			let validSections: string;
 			before(function() {
+				sections = getContentFromArchives("pair.zip");
 				validSections = getContentFromArchives("addDataset_test/contains_one_or_more_valid_sections.zip");
 			});
 			describe("list all currently added datasets, types, and number of rows", function() {
@@ -337,7 +338,6 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.equal([]);
 				});
 				it("should resolve if there has been a dataset added", async function() {
-					// this.timeout(8000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					let newContent = new DatasetEntry("dataset1", InsightDatasetKind.Sections);
 					let expectedDataset = await newContent.load_dataset("src/saved_data/" + "dataset1.txt");
@@ -345,16 +345,15 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.equal([expectedDataset]);
 				});
 				it("should resolve if there have been many datasets added", async function() {
-					// this.timeout(12000); // A very long environment setup.
-
+					this.timeout(4000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
-					const datasets = await facade.listDatasets();
 					let newContent1 = new DatasetEntry("dataset1", InsightDatasetKind.Sections);
 					let expectedDataset1 = await newContent1.load_dataset("src/saved_data/" + "dataset1.txt");
 					let newContent2 = new DatasetEntry("dataset2", InsightDatasetKind.Sections);
 					let expectedDataset2 = await newContent2.load_dataset("src/saved_data/" + "dataset2.txt");
-					return expect(datasets).to.deep.members([newContent1, newContent2]);
+					const datasets = await facade.listDatasets();
+					return expect(datasets).to.deep.equal([expectedDataset1, expectedDataset2]);
 				});
 			});
 		});

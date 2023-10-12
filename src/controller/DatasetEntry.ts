@@ -67,25 +67,63 @@ export default class DatasetEntry implements InsightDataset{
 	}
 
 	public async load_dataset(path: string): Promise<DatasetEntry> {
-		let datasetJSON = JSON.parse(fs.readFileSync(path).toString().trim());
+	public dataset_entry_to_insight_dataset(): InsightDataset {
+		return {
+			id: this.get_id(),
+			numRows: this.numRows,
+		};
+	}
+	public async load_dataset(path: string): Promise<InsightDataset> {
+		// fs.readFile(path, 'utf8', (err, data): Promise<InsightDataset> => {
+		// 	let datasetJSON = JSON.parse(data);
+		// 	let courses: CourseEntry[] = [];
+		// 	for (const course of datasetJSON["courses"]) {
+		// 		let parsedCourse = new CourseEntry();
+		// 		parsedCourse.courseFromObject(course);
+		// 		courses.push(parsedCourse);
+		// 	}
+		// 	this.set_courses(courses);
+		// 	this.set_id(datasetJSON['id']);
+		// 	this.set_path(datasetJSON['path']);
+		// 	this.set_numRows(parseInt(datasetJSON["numRows"]));
+		// 	console.log(this.numRows);
+		// 	const insightDataset = this.dataset_entry_to_insight_dataset();
+		// 	return Promise.resolve(insightDataset);
+		// });
+		let fileContent: string;
+		fileContent = await new Promise((resolve, reject) => {
+			return fs.readFile(path, "utf8", (error, data) => {
+				if (error) {
+					return reject(error);
+				}
+				return resolve(data);
+			});
+		});
 		let courses: CourseEntry[] = [];
-		for (const course of datasetJSON["courses"]) {
+		let datasetObject = JSON.parse(fileContent);
+		for (const course of datasetObject["courses"]) {
 			let parsedCourse = new CourseEntry();
 			parsedCourse.courseFromObject(course);
 			courses.push(parsedCourse);
 		}
 		this.set_courses(courses);
-		this.set_id(datasetJSON["id"]);
-		this.set_path(datasetJSON["path"]);
-		this.set_numRows(datasetJSON["numRows"]);
-		return this;
+		this.set_id(datasetObject["id"]);
+		this.set_path(datasetObject["path"]);
+		this.set_numRows(parseInt(datasetObject["numRows"], 10));
+		const insightDataset = this.dataset_entry_to_insight_dataset();
+		return Promise.resolve(insightDataset);
 	}
+
 
 	public get_id(): string {
 		return this.id;
 	}
 	public get_courses(): CourseEntry[]{
 		return this.courses;
+	}
+
+	public get_kind(): InsightDatasetKind {
+		return this.kind;
 	}
 
 	public get_numRows(): number {
