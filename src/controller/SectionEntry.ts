@@ -1,5 +1,4 @@
 import {InsightError} from "./IInsightFacade";
-import InsightFacade from "./InsightFacade";
 
 export default class SectionEntry {
 	private uuid: string = "";

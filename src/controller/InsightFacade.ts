@@ -7,9 +7,6 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import {isBooleanObject} from "util/types";
-import CourseEntry from "./CourseEntry";
-import base = Mocha.reporters.base;
 import DatasetEntry from "./DatasetEntry";
 import JSZip from "jszip";
 import ValidateQuery from "../services/validateQuery";
