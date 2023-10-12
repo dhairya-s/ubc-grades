@@ -12,9 +12,9 @@ export default class SectionEntry {
 	private fail: number = -100;
 	private audit: number = -100;
 
-	public constructor(jsonSection: any) {
+	public section_from_zip_json(jsonSection: any) {
 		let keys = Object.keys(jsonSection);
-		let expectedKeys = ["id", "Course", "Title", "Professor","Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
+		let expectedKeys = ["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 		const hasAllElems = expectedKeys.every((elem) => keys.includes(elem));
 		if (!hasAllElems) {
 			throw new InsightError("Section could not be created");
@@ -29,6 +29,19 @@ export default class SectionEntry {
 		this.set_pass(jsonSection["Pass"]);
 		this.set_fail(jsonSection["Fail"]);
 		this.set_audit(jsonSection["Audit"]);
+	}
+
+	public section_from_dataset(sectionObject: any) {
+		this.set_uuid(sectionObject["uuid"]);
+		this.set_id(sectionObject["id"]);
+		this.set_title(sectionObject["title"]);
+		this.set_instructor(sectionObject["instructor"]);
+		this.set_dept(sectionObject["dept"]);
+		this.set_year(sectionObject["year"], sectionObject);
+		this.set_avg(sectionObject["avg"]);
+		this.set_pass(sectionObject["pass"]);
+		this.set_fail(sectionObject["fail"]);
+		this.set_audit(sectionObject["audit"]);
 	}
 
 	public set_uuid(uuid: string) {
@@ -114,5 +127,4 @@ export default class SectionEntry {
 	public get_audit(): number {
 		return this.audit;
 	}
-
 }
