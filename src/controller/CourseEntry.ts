@@ -39,6 +39,7 @@ export default class CourseEntry {
 
 	public saveCourse(path: string) {
 		return;
+
 	};
 
 	public removeCourse(path: string) {

@@ -3,7 +3,8 @@ import {
 	InsightDataset,
 	InsightDatasetKind,
 	InsightError,
-	InsightResult, NotFoundError,
+	InsightResult,
+	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
 import {isBooleanObject} from "util/types";
@@ -23,6 +24,7 @@ export default class InsightFacade implements IInsightFacade {
 		if (!this.validateIdAdd(id)) {
 			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
                 "Try an ID without an underscore."));
+
 		} else if (!this.validateKind(kind)) {
 			return Promise.reject(
 				new InsightError("addDataset was given a 'rooms' kind when it only accepts " + "'sections'.")
@@ -111,27 +113,28 @@ export default class InsightFacade implements IInsightFacade {
 		return kind !== InsightDatasetKind.Rooms;
 	}
 	public async listDatasets(): Promise<InsightDataset[]> {
-		this.datasets = [];
-		// Load datasets from folder
-		// List key properties
-		let dir = "src/saved_data/";
-		try {
-			let dirFiles = fs.readdirSync(dir);
-			dirFiles = dirFiles.filter(function (value) {
-				return value !== ".gitkeep";
-			});
-			let loadedDatasetPromises: Array<Promise<DatasetEntry>> = [];
-			let datasetIds = dirFiles.map((x) => x.substring(0, x.length - 4));
-			for (const i in datasetIds) {
-				let newContent = new DatasetEntry(datasetIds[i], InsightDatasetKind.Sections);
-				let result = newContent.load_dataset(dir + dirFiles[i]);
-				loadedDatasetPromises.push(result);
-			}
-			this.datasets = await Promise.all(loadedDatasetPromises);
-			return Promise.resolve(await Promise.all(loadedDatasetPromises));
-		} catch {
-			return Promise.reject(new InsightError("Could not load datasets."));
-		}
+		// this.datasets = [];
+		// // Load datasets from folder
+		// // List key properties
+		// let dir = "src/saved_data/";
+		// try {
+		// 	let dirFiles = fs.readdirSync(dir);
+		// 	dirFiles = dirFiles.filter(function (value) {
+		// 		return value !== ".gitkeep";
+		// 	});
+		// 	let loadedDatasetPromises: Array<Promise<DatasetEntry>> = [];
+		// 	let datasetIds = dirFiles.map((x) => x.substring(0, x.length - 4));
+		// 	for (const i in datasetIds) {
+		// 		let newContent = new DatasetEntry(datasetIds[i], InsightDatasetKind.Sections);
+		// 		let result = newContent.load_dataset(dir + dirFiles[i]);
+		// 		loadedDatasetPromises.push(result);
+		// 	}
+		// 	this.datasets = await Promise.all(loadedDatasetPromises);
+		// 	return Promise.resolve(await Promise.all(loadedDatasetPromises));
+		// } catch {
+		// 	return Promise.reject(new InsightError("Could not load datasets."));
+		// }
+		return Promise.reject(new InsightError("Could not load datasets."));
 	}
 
 	private validateIdRemove(id: string): boolean {
@@ -158,5 +161,6 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		return Promise.resolve(id);
+		// return Promise.reject(new InsightError("Could not remove dataset"));
 	}
 }
