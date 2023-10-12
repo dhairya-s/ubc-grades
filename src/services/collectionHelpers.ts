@@ -1,7 +1,7 @@
 import SectionEntry from "../controller/SectionEntry";
 import {Property} from "./collectQuery";
 
-export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): Property[] {
+export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): object {
 	let propertiesToAdd: Property[] = [];
 	for (let resultCol of resultCols) {
 		let keyField = resultCol.split("_")[1];
@@ -28,8 +28,19 @@ export function collectInsightResult(section: SectionEntry, resultCols: Set<stri
 		}
 	}
 
-	return propertiesToAdd;
+	return convertArrayOfObjectToObject(propertiesToAdd);
 }
+
+export function compare(val: string|number, val2: string|number) {
+	if (val < val2) {
+		return -1;
+	} else if (val > val2) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 
 export function convertArrayOfObjectToObject(properties: Property[]): object {
 	let result: Record<string, string | number> = {};

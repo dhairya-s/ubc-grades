@@ -13,15 +13,15 @@ export default class CollectLogicComp {
 		// console.log("Logic result cols", this.resultCols);
 	}
 
-	public collectLogicComp(logiccomp: object, key: string): object[] {
+	public collectLogicComp(logiccomp: object, key: string): SectionEntry[] {
 		// console.log("key logic", key);
-		let propertiesToAdd: object[] = [];
-		let propertiesToLogic: object[][] = [];
-		let localKeys: string[] = Object.keys(logiccomp);
+		let propertiesToAdd: SectionEntry[] = [];
+		let propertiesToLogic: SectionEntry[][] = [];
+		let localKeys: string[] = Object.keys(logiccomp); // 0,1,2,3
 
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
-			let collectComp: object[];
+			let collectComp: SectionEntry[];
 			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp], this.resultCols);
 			// if (Object.keys(collectComp).length !== 0){
 			propertiesToLogic.push(collectComp);
@@ -37,7 +37,7 @@ export default class CollectLogicComp {
 		return propertiesToAdd;
 	}
 
-	private handleAndComp(propertiesToLogic: object[][]): object[] {
+	private handleAndComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
 		//
 		// for (let prop of propertiesToLogic) {
 		// 	console.log(prop.length);
@@ -66,13 +66,13 @@ export default class CollectLogicComp {
 		// }
 		// return []
 
-		let temp = propertiesToLogic.reduce((prev, curr) => {
+		let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
 			return prev.filter((obj1) => {
-				return curr.some((obj2) => (this.compareObjects(obj1, obj2))
+				return curr.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
 				);
 			});
 		},propertiesToLogic[0]);
-		// console.log("final", temp);
+
 		return temp;
 	}
 
@@ -80,16 +80,26 @@ export default class CollectLogicComp {
 	// private valueIsEq(obj: object ) {
 	//
 	// }
-	private compareObjects(obj1: object, obj2:  object): boolean {
-		for (let col of this.resultCols) {
-			if (obj1[col as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
-				return false;
-			}
-		}
-		return true;
-	}
+	// private compareObjects(obj1: object, obj2:  object): boolean {
+	// 	for (let col of this.resultCols) {
+	// 		if (obj1[ as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
+	// 			return false;
+	// 		}
+	// 	}
+	// 	return true;
+	// }
 
-	private handleOrComp(propertiesToLogic: object[][]): object[] {
+	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
+
+
+		// let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
+		// 	return curr.filter((obj1) => {
+		// 		return !prev.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
+		// 		);
+		// 	});
+		// },propertiesToLogic[0]);
+		//
+		// return temp;
 		return [];
 	}
 }

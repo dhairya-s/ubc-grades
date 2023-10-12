@@ -1,5 +1,4 @@
 import {InsightError} from "./IInsightFacade";
-import InsightFacade from "./InsightFacade";
 
 export default class SectionEntry {
 	private uuid: string = "";
@@ -12,7 +11,6 @@ export default class SectionEntry {
 	private pass: number = -100;
 	private fail: number = -100;
 	private audit: number = -100;
-	private valid: boolean = false;
 
 	public constructor(jsonSection: any) {
 		let keys = Object.keys(jsonSection);
@@ -26,20 +24,13 @@ export default class SectionEntry {
 		this.set_title(jsonSection["Title"]);
 		this.set_instructor(jsonSection["Professor"]);
 		this.set_dept(jsonSection["Subject"]);
-		this.set_year(jsonSection["Year"]);
+		this.set_year(parseInt(jsonSection["Year"], 10), jsonSection);
 		this.set_avg(jsonSection["Avg"]);
 		this.set_pass(jsonSection["Pass"]);
 		this.set_fail(jsonSection["Fail"]);
 		this.set_audit(jsonSection["Audit"]);
 	}
 
-	public get_valid() {
-		return this.valid;
-	}
-
-	public set_valid(valid: string) {
-		return;
-	}
 	public set_uuid(uuid: string) {
 		this.uuid = uuid;
 	}
@@ -60,9 +51,12 @@ export default class SectionEntry {
 		this.dept = dept;
 	}
 
-	public set_year(year: number) {
-		this.year = year;
-		// console.log(this.year);
+	public set_year(year: number, jsonSection: any) {
+		if (jsonSection["Section"] && jsonSection["Section"] === "overall") {
+			this.year = 1900;
+		} else {
+			this.year = year;
+		}
 	}
 
 	public set_avg(avg: number) {

@@ -13,8 +13,8 @@ export default class CollectScomp {
 		// console.log("S result cols", this.resultCols);
 	}
 
-	public collectSCOMP(scomp: object): object[] {
-		let propertiesToAdd: object[] = [];
+	public collectSCOMP(scomp: object): SectionEntry[] {
+		let propertiesToAdd: SectionEntry[] = [];
 
 		let localKey: string[] = Object.keys(scomp);
 		const localKeyField = localKey[0].split("_")[1];
@@ -23,9 +23,12 @@ export default class CollectScomp {
 		for (let dataset of this.datasetEntries) {
 			for (let course of dataset.get_courses()) {
 				for (let section of course.getSections()) {
-					let obj = this.handleSFields(section, localKeyField, value);
-					if (Object.keys(obj).length !== 0) {
-						propertiesToAdd.push(obj);
+					let sectionEntry: SectionEntry | null = this.handleSFields(section, localKeyField, value);
+					// if (Object.keys(obj).length !== 0) {
+					// 	propertiesToAdd.push(obj);
+					// }
+					if (sectionEntry !== null) {
+						propertiesToAdd.push(sectionEntry);
 					}
 				}
 			}
@@ -35,8 +38,8 @@ export default class CollectScomp {
 
 	// private helpers
 
-	private handleSFields(section: SectionEntry, localKeyField: string, value: string): object {
-		let result: object = {};
+	private handleSFields(section: SectionEntry, localKeyField: string, value: string): SectionEntry | null {
+		let result: SectionEntry | null = null;
 
 		if (localKeyField === "dept") {
 			result = this.handleWildCards(section, value, section.get_dept());
@@ -53,8 +56,8 @@ export default class CollectScomp {
 		return result;
 	}
 
-	private handleWildCards(section: SectionEntry, value: string, sectionValue: string): object {
-		let result: object = {};
+	private handleWildCards(section: SectionEntry, value: string, sectionValue: string): SectionEntry | null {
+		let result: SectionEntry | null = null;
 
 		if (!value.includes("*")) {
 			result = this.matchesExactly(section, value, sectionValue);
@@ -69,41 +72,47 @@ export default class CollectScomp {
 		return result;
 	}
 
-	private matchesExactly(section: SectionEntry, value: string, sectionVal: string): object {
-		let propertiesToAdd: Property[] = [];
+	private matchesExactly(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 
 		if (String(sectionVal) === value) {
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+			return section;
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
 	}
 
-	private endsWith(section: SectionEntry, value: string, sectionVal: string): object {
-		let propertiesToAdd: Property[] = [];
+	private endsWith(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[1];
-		if (sectionVal.endsWith(split)) {
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		if (String(sectionVal).endsWith(split)) {
+			return section;
+			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		// return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
 	}
 
-	private startsWith(section: SectionEntry, value: string, sectionVal: string): object {
-		let propertiesToAdd: Property[] = [];
+	private startsWith(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[0];
-		if (sectionVal.startsWith(split)) {
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		if (String(sectionVal).startsWith(split)) {
+			// propertiesToAdd = collectInsightResult(section, this.resultCols);
+			return section;
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		// return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
 	}
 
-	private contains(section: SectionEntry, value: string, sectionVal: string): object {
-		let propertiesToAdd: Property[] = [];
+	private contains(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[1];
 
-		if (sectionVal.includes(split)) {
-			propertiesToAdd = collectInsightResult(section, this.resultCols);
+		if (String(sectionVal).includes(split)) {
+			return section;
+			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
-		return convertArrayOfObjectToObject(propertiesToAdd);
+		// return convertArrayOfObjectToObject(propertiesToAdd);
+		return null;
 	}
 
 }
