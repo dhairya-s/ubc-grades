@@ -5,12 +5,9 @@ import {log} from "util";
 
 export default class CollectLogicComp {
 	private datasetEntries: DatasetEntry[] = [];
-	private resultCols: Set<string>;
 
-	constructor(datasetEntries: DatasetEntry[], resultCols: Set<string>) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
-		this.resultCols = resultCols;
-		// console.log("Logic result cols", this.resultCols);
 	}
 
 	public collectLogicComp(logiccomp: object, key: string): SectionEntry[] {
@@ -22,11 +19,21 @@ export default class CollectLogicComp {
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
 			let collectComp: SectionEntry[];
-			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp], this.resultCols);
+			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp]);
 			// if (Object.keys(collectComp).length !== 0){
 			propertiesToLogic.push(collectComp);
 			// }
 		}
+
+		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		// for (let section of propertiesToLogic) {
+		// 	// console.log("section", section);
+		// 	for (let s of section) {
+		// 		// console.log("s", s);
+		// 		set.add(s);
+		// 	}
+		// }
+
 
 		if (key === "AND") {
 			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
@@ -38,11 +45,6 @@ export default class CollectLogicComp {
 	}
 
 	private handleAndComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
-		//
-		// for (let prop of propertiesToLogic) {
-		// 	console.log(prop.length);
-		// }
-
 		// [
 		// 		[
 		// 			{"section_id":"id", "section_num": 31},
@@ -59,56 +61,61 @@ export default class CollectLogicComp {
 		// ]
 
 		//
-		// for (let props of propertiesToLogic) {
-		// 	for (let objs of props) {
+		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		let lenProps = propertiesToLogic.length;
+		// console.log(lenProps);
+		let arrOfUuid: string[] = [];
+		let hashMap = new Map<string, number>();
+
+		for (let section of propertiesToLogic) {
+			for (let s of section) {
+				let numberOfOccurances = hashMap.get(String(s.get_uuid()));
+				if (numberOfOccurances !== undefined) {
+					hashMap.set(String(s.get_uuid()), numberOfOccurances + 1);
+				} else {
+					hashMap.set(String(s.get_uuid()), 1);
+				}
+			}
+		}
+
+		for (let key of hashMap.keys()) {
+			if (hashMap.get(key) === lenProps) {
+				arrOfUuid.push(String(key));
+			}
+		}
+
+		for (let section of propertiesToLogic) {
+			for (let s of section) {
+				for (let a of arrOfUuid) {
+					if (String(s.get_uuid()) === a) {
+						set.add(s);
+					}
+				}
+			}
+		}
+
+
 		//
-		// 	}
-		// }
-		// return []
+		// return propertiesToLogic.slice(1).reduce((prev, curr) => {
+		// 	return prev.filter((obj1) => {
+		// 		return curr.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
+		// 		);
+		// 	});
+		// },propertiesToLogic[0]);
 
-		return propertiesToLogic.slice(1).reduce((prev, curr) => {
-			return prev.filter((obj1) => {
-				return curr.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
-				);
-			});
-		},propertiesToLogic[0]);
-
-		// return temp;
+		return Array.from(set.values());
 	}
-
-
-	// private valueIsEq(obj: object ) {
-	//
-	// }
-	// private compareObjects(obj1: object, obj2:  object): boolean {
-	// 	for (let col of this.resultCols) {
-	// 		if (obj1[ as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
-	// 			return false;
-	// 		}
-	// 	}
-	// 	return true;
-	// }
 
 	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
 
 		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
 
 		for (let section of propertiesToLogic) {
-			// console.log("section", section);
 			for (let s of section) {
-				// console.log("s", s);
 				set.add(s);
 			}
 		}
 
-		// let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
-		// 	return curr.filter((obj1) => {
-		// 		return !prev.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
-		// 		);
-		// 	});
-		// },propertiesToLogic[0]);
-		//
-		// return temp;
 		return Array.from(set.values());
 	}
 

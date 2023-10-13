@@ -1,11 +1,13 @@
 import InsightFacade from "../controller/InsightFacade";
-import {InsightError, InsightResult} from "../controller/IInsightFacade";
+import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import DatasetEntry from "../controller/DatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectMcomp from "./collectMcomp";
 import CollectScomp from "./collectScomp";
 import CollectLogicComp from "./collectLogicComp";
 import {collectInsightResult, compare} from "./collectionHelpers";
+import CollectAll from "./collectAll";
+import CollectNegComp from "./collectNegComp";
 
 export interface Property {
 	key: string,
@@ -25,11 +27,14 @@ export default class CollectQuery {
 		let final: object[] = [];
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
 
-		let r: SectionEntry[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], resultCols);
+		let r: SectionEntry[] = this.collectBody(this.query["WHERE" as keyof typeof this.query]);
 
 		let options = this.query["OPTIONS" as keyof typeof this.query];
 		let orderCol: string | undefined = options["ORDER" as keyof  typeof options];
 
+		if (r.length >= 5000) {
+			throw new ResultTooLargeError("Only queries with a maximum of 5000 results are supported");
+		}
 		if (orderCol !== undefined) {
 			r = this.orderBy(r, orderCol);
 		}
@@ -69,15 +74,21 @@ export default class CollectQuery {
 		return sections.sort(orderCompare);
 	}
 
-	public collectBody(body: object, resultCols: Set<string>): SectionEntry[] {
+	public collectBody(body: object): SectionEntry[] {
 		let keys: string[];
 		keys = Object.keys(body);
 
 		let propertiesToAdd: SectionEntry[] = [];
 
-		let collectM = new CollectMcomp(this.datasetEntries, resultCols);
-		let collectS = new CollectScomp(this.datasetEntries, resultCols);
-		let collectLogic = new CollectLogicComp(this.datasetEntries,  resultCols);
+		let collectM = new CollectMcomp(this.datasetEntries);
+		let collectS = new CollectScomp(this.datasetEntries);
+		let collectLogic = new CollectLogicComp(this.datasetEntries);
+		let collect = new CollectAll(this.datasetEntries);
+		let collectNeg = new CollectNegComp(this.datasetEntries);
+
+		if (keys.length === 0) {
+			propertiesToAdd = collect.collectAllQueries();
+		}
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
 				propertiesToAdd = collectM.collectMCOMP(body[key as keyof typeof body], key);
@@ -87,41 +98,12 @@ export default class CollectQuery {
 			} else if (key === "IS") { // SCOMP
 				propertiesToAdd = collectS.collectSCOMP(body[key as keyof typeof body]);
 			} else if (key === "NOT") { // NEGATION
-				propertiesToAdd = this.collectNEGATION(body[key as keyof typeof body]);
+				// propertiesToAdd = collectNeg.collectNegComp(body[key as keyof typeof body]);
 			} else {
 				throw new InsightError("Invalid Query - Failed in Body");
 			}
 		}
-		// console.log(propertiesToAdd);
 		return propertiesToAdd;
-	}
-
-	private collectLOGICCOMP(logiccomp: object): object[] {
-		// let isValid = false;
-		// let keys: string[];
-		// keys = Object.keys(logiccomp);
-		// console.log("Logic Comp", keys);
-		// for (let key of keys) {
-		// 	isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp]);
-		// }
-		//
-		// return isValid;
-		return [];
-	}
-
-	private collectNEGATION(neg: object): SectionEntry[]  {
-		// let isValid = false;
-		// let keys: string[];
-		// keys = Object.keys(neg);
-		// console.log("Negation", keys);
-		//
-		// if (keys.length > 1) {
-		// 	throw new InsightError("Invalid Query");
-		// }
-		// isValid = this.validateBody(neg);
-		//
-		// return isValid;
-		return [];
 	}
 
 	private collectOptions(options: object): Set<string>  {

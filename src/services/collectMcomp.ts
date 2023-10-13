@@ -5,12 +5,9 @@ import {collectInsightResult, convertArrayOfObjectToObject} from "./collectionHe
 
 export default class CollectMcomp {
 	private datasetEntries: DatasetEntry[] = [];
-	private resultCols: Set<string>;
 
-	constructor(datasetEntries: DatasetEntry[], resultCols: Set<string>) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
-		this.resultCols = resultCols;
-		// console.log("M result cols", this.resultCols);
 	}
 
 	public collectMCOMP(mcomp: object, key: string): SectionEntry[] {
