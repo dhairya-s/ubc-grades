@@ -38,7 +38,7 @@ export default class CollectLogicComp {
 		// let end1 = performance.now();
 		// console.log("LogicComp", (end1 - start) / 1000);
 		if (key === "AND") {
-			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
@@ -75,7 +75,7 @@ export default class CollectLogicComp {
 				arrOfUuid.push(String(key));
 			}
 		}
-
+		//
 		// let end2 = performance.now();
 		// console.log((end2 - end1) / 1000);
 
@@ -117,7 +117,7 @@ export default class CollectLogicComp {
 	}
 
 	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
-		let start = performance.now();
+		// let start = performance.now();
 
 		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
 		//
@@ -136,8 +136,8 @@ export default class CollectLogicComp {
 			}
 		}
 
-		let end1 = performance.now();
-		console.log("OR:", (end1 - start) / 1000);
+		// let end1 = performance.now();
+		// console.log("OR:", (end1 - start) / 1000);
 
 		return Array.from(map.values());
 	}
