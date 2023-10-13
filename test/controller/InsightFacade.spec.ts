@@ -569,7 +569,7 @@ describe("InsightFacade", function () {
 			{
 				assertOnResult: async (actual, expected) => {
 					// expect(actual).to.have.deep.members(await expected);
-					expect(actual).to.have.deep.members(await expected);
+					expect(actual).to.have.deep.equals(await expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
 					error === "ResultTooLargeError" || error === "InsightError",
