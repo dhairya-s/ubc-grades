@@ -78,9 +78,9 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			results = await collect.CollectQuery();
 		} catch (e) {
-			if (e === InsightError) {
+			if (e instanceof InsightError) {
 				throw e;
-			} else if (e === ResultTooLargeError) {
+			} else if (e instanceof ResultTooLargeError) {
 				throw e;
 			} else {
 				throw new InsightError(String(e instanceof Error));

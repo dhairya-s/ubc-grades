@@ -28,6 +28,16 @@ export default class CollectLogicComp {
 			// }
 		}
 
+		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		// for (let section of propertiesToLogic) {
+		// 	// console.log("section", section);
+		// 	for (let s of section) {
+		// 		// console.log("s", s);
+		// 		set.add(s);
+		// 	}
+		// }
+
+
 		if (key === "AND") {
 			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
@@ -38,11 +48,6 @@ export default class CollectLogicComp {
 	}
 
 	private handleAndComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
-		//
-		// for (let prop of propertiesToLogic) {
-		// 	console.log(prop.length);
-		// }
-
 		// [
 		// 		[
 		// 			{"section_id":"id", "section_num": 31},
@@ -59,12 +64,7 @@ export default class CollectLogicComp {
 		// ]
 
 		//
-		// for (let props of propertiesToLogic) {
-		// 	for (let objs of props) {
-		//
-		// 	}
-		// }
-		// return []
+
 
 		return propertiesToLogic.slice(1).reduce((prev, curr) => {
 			return prev.filter((obj1) => {
@@ -94,21 +94,11 @@ export default class CollectLogicComp {
 		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
 
 		for (let section of propertiesToLogic) {
-			// console.log("section", section);
 			for (let s of section) {
-				// console.log("s", s);
 				set.add(s);
 			}
 		}
 
-		// let temp = propertiesToLogic.slice(1).reduce((prev, curr) => {
-		// 	return curr.filter((obj1) => {
-		// 		return !prev.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
-		// 		);
-		// 	});
-		// },propertiesToLogic[0]);
-		//
-		// return temp;
 		return Array.from(set.values());
 	}
 

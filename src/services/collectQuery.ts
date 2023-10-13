@@ -1,5 +1,5 @@
 import InsightFacade from "../controller/InsightFacade";
-import {InsightError, InsightResult} from "../controller/IInsightFacade";
+import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import DatasetEntry from "../controller/DatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectMcomp from "./collectMcomp";
@@ -30,6 +30,9 @@ export default class CollectQuery {
 		let options = this.query["OPTIONS" as keyof typeof this.query];
 		let orderCol: string | undefined = options["ORDER" as keyof  typeof options];
 
+		if (r.length >= 5000) {
+			throw new ResultTooLargeError("Only queries with a maximum of 5000 results are supported");
+		}
 		if (orderCol !== undefined) {
 			r = this.orderBy(r, orderCol);
 		}
@@ -78,6 +81,11 @@ export default class CollectQuery {
 		let collectM = new CollectMcomp(this.datasetEntries, resultCols);
 		let collectS = new CollectScomp(this.datasetEntries, resultCols);
 		let collectLogic = new CollectLogicComp(this.datasetEntries,  resultCols);
+
+		if (keys.length === 0) {
+			propertiesToAdd = this.handleEmptyWhere();
+		}
+
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
 				propertiesToAdd = collectM.collectMCOMP(body[key as keyof typeof body], key);
@@ -96,17 +104,18 @@ export default class CollectQuery {
 		return propertiesToAdd;
 	}
 
-	private collectLOGICCOMP(logiccomp: object): object[] {
-		// let isValid = false;
-		// let keys: string[];
-		// keys = Object.keys(logiccomp);
-		// console.log("Logic Comp", keys);
-		// for (let key of keys) {
-		// 	isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp]);
-		// }
-		//
-		// return isValid;
-		return [];
+	private handleEmptyWhere(): SectionEntry[] {
+		let propertiesToAdd: SectionEntry[] = [];
+
+		for (let dataset of this.datasetEntries) {
+			for (let course of dataset.get_courses()) {
+				for (let section of course.getSections()) {
+					propertiesToAdd.push(section);
+				}
+			}
+		}
+
+		return propertiesToAdd;
 	}
 
 	private collectNEGATION(neg: object): SectionEntry[]  {
