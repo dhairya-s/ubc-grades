@@ -1,0 +1,20 @@
+{
+	"title": "uuidContainsWildInvalid",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_uuid": "*67*1"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_avg",
+				"sections_uuid"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

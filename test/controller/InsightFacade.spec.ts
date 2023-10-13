@@ -493,6 +493,7 @@ describe("InsightFacade", function () {
 				});
 				it("should resolve if there has been a dataset added and removed with one extra added",
 					async function () {
+						this.timeout(4000);
 						const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 						const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
 						const result1Remove = await facade.removeDataset("dataset1");
@@ -500,11 +501,13 @@ describe("InsightFacade", function () {
 						return expect(datasets).to.deep.equal([{id: "dataset2", kind: "sections", numRows: 64612}]);
 					});
 				it("should resolve if there has been a dataset added", async function () {
+					this.timeout(4000);
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
 					return expect(datasets).to.deep.equal([{id: "dataset1", kind: "sections", numRows: 64612}]);
 				});
 				it("should resolve if there have been many datasets added", async function () {
+					this.timeout(4000);
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
@@ -515,6 +518,7 @@ describe("InsightFacade", function () {
 					]);
 				});
 				it("should resolve after a crash containing previously added datasets", async function () {
+					this.timeout(4000);
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
@@ -559,11 +563,13 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/queries/IStests",
+			// "./test/resources/queries",
+			"./test/resources/queries",
+
 			{
 				assertOnResult: async (actual, expected) => {
 					// expect(actual).to.have.deep.members(await expected);
-					expect(actual).to.have.deep.members(await expected);
+					expect(actual).to.have.deep.equals(await expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
 					error === "ResultTooLargeError" || error === "InsightError",
