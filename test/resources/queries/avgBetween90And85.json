@@ -1,5 +1,5 @@
 {
-	"title": "avg between 90 and 85",
+	"title": "avgBetween90And85",
 	"input": {
 		"WHERE": {
 			"OR": [
@@ -30,7 +30,8 @@
 			"COLUMNS": [
 				"sections_dept",
 				"sections_id",
-				"sections_avg"
+				"sections_avg",
+				"sections_uuid"
 			],
 			"ORDER": "sections_avg"
 		}

@@ -11,9 +11,6 @@ export default class CollectNegComp {
 	}
 
 	public collectNegComp(negComp: object): SectionEntry[] {
-		// console.log("key logic", key);
-		let propertiesToAdd = new Set<SectionEntry>();
-		// let propertiesToLogic: SectionEntry[][] = [];
 		let propertyToNegate: SectionEntry[] = [];
 		let allProperties: SectionEntry[] = [];
 
@@ -23,13 +20,19 @@ export default class CollectNegComp {
 		let collect = new CollectAll(this.datasetEntries);
 		allProperties = collect.collectAllQueries();
 
+		let propertiesToAdd = new Set<SectionEntry>(allProperties);
+
+		let propertyToNegateUuids: string[] = [];
+		for (let prop of propertyToNegate) {
+			propertyToNegateUuids.push(String(prop.get_uuid()));
+		}
+
 		for (let sectionEntry of allProperties) {
-			for (let sectionToNegate of propertyToNegate) {
-				if (String(sectionEntry.get_uuid()) !== String(sectionToNegate.get_uuid())) {
-					propertiesToAdd.add(sectionEntry);
-				}
+			if (propertyToNegateUuids.includes(String(sectionEntry.get_uuid()))) {
+				propertiesToAdd.delete(sectionEntry);
 			}
 		}
+
 		return Array.from(propertiesToAdd.values());
 	}
 }

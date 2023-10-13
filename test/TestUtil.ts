@@ -21,7 +21,7 @@ function clearDisk(): void {
 		return value !== ".gitkeep";
 	});
 	for (const file of dirFiles) {
-		console.log(persistDir + file);
+		// console.log(persistDir + file);
 		fs.removeSync(persistDir + file);
 	}
 }
