@@ -1,0 +1,56 @@
+{
+	"title": "isTitlemanga & anime",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_title": "manga & anime"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_title",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 72.02
+		},
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 72.02
+		},
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 72.18
+		},
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 72.18
+		},
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 77
+		},
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 77.23
+		},
+		{
+			"sections_dept": "asia",
+			"sections_title": "manga & anime",
+			"sections_avg": 77.48
+		}
+	]
+}

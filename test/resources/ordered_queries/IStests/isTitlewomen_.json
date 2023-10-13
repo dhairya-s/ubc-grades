@@ -1,0 +1,176 @@
+{
+	"title": "isTitlewomen*",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_title": "women*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_title",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 64.14
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 65.14
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 65.63
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 65.86
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 66.07
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 66.51
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 66.55
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 66.63
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 66.71
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 67.91
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 68.32
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 68.79
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 68.93
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 69.16
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 70.49
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 70.78
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.07
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.07
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.12
+		},
+		{
+			"sections_dept": "anth",
+			"sections_title": "women comp persp",
+			"sections_avg": 71.16
+		},
+		{
+			"sections_dept": "anth",
+			"sections_title": "women comp persp",
+			"sections_avg": 71.16
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.54
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.63
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.63
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.92
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 71.92
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 72.7
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 72.92
+		},
+		{
+			"sections_dept": "econ",
+			"sections_title": "women in economy",
+			"sections_avg": 73.38
+		},
+		{
+			"sections_dept": "anth",
+			"sections_title": "women comp persp",
+			"sections_avg": 75.35
+		},
+		{
+			"sections_dept": "anth",
+			"sections_title": "women comp persp",
+			"sections_avg": 75.35
+		}
+	]
+}
