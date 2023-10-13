@@ -559,7 +559,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/queries/IStests/tests",
+			"./test/resources/queries/WILDtests",
 			{
 				assertOnResult: async (actual, expected) => {
 					// expect(actual).to.have.deep.members(await expected);
