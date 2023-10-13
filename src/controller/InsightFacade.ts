@@ -18,9 +18,10 @@ export default class InsightFacade implements IInsightFacade {
 	private datasets: DatasetEntry[] = [];
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// Need to load datasets that have previously been in the system
+		await this.listDatasets(); // in case there is a crash
 		if (!this.validateIdAdd(id)) {
 			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
-                "Try an ID without an underscore."));
+                "Try an ID without an underscore or non duplicate id."));
 
 		} else if (!this.validateKind(kind)) {
 			return Promise.reject(
@@ -66,6 +67,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		await this.listDatasets();
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
 		let collect = new CollectQuery(query as typeof Object, this.datasets);
@@ -119,40 +121,46 @@ export default class InsightFacade implements IInsightFacade {
 			dirFiles = dirFiles.filter(function (value) {
 				return value !== ".gitkeep";
 			});
-			let loadedDatasetPromises: Array<Promise<InsightDataset>> = [];
+			let loadedDatasetPromises: Array<Promise<DatasetEntry>> = [];
 			let datasetIds = dirFiles.map((x) => x.substring(0, x.length - 4));
+
 			for (const i in datasetIds) {
 				let newContent = new DatasetEntry(datasetIds[i], InsightDatasetKind.Sections);
 				let result = newContent.load_dataset(dir + dirFiles[i]);
 				loadedDatasetPromises.push(result);
 			}
-			let loaded = await Promise.all(loadedDatasetPromises);
-			// this.datasets = await Promise.all(loadedDatasetPromises);
-			return Promise.resolve(loaded);
+			let datasetEntries = await Promise.all(loadedDatasetPromises);
+			this.datasets = datasetEntries;
+
+			let loadedDatasets: InsightDataset[] = [];
+			for (const dataset of datasetEntries) {
+				loadedDatasets.push(dataset.dataset_entry_to_insight_dataset());
+			}
+			return Promise.resolve(loadedDatasets);
 		} catch {
 			return Promise.reject(new InsightError("Could not load datasets."));
 		}
-		// return Promise.reject(new InsightError("Could not load datasets."));
 	}
 
 	private validateIdRemove(id: string): boolean {
 		return !(id.trim().length < 1 || id.includes("_"));
 	}
-	public removeDataset(id: string): Promise<string> {
+	public async removeDataset(id: string): Promise<string> {
+		await this.listDatasets(); // in case there is a crash
 		if (!this.validateIdRemove(id)) {
 			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
 				"Try an ID without an underscore or not all whitespace."));
 		}
 
 		let datasetNames = this.get_dataset_names();
-		if(!datasetNames.includes(id)) {
+		if (!datasetNames.includes(id)) {
 			return Promise.reject(new NotFoundError("Dataset not found"));
 		}
 		try {
 			this.datasets = this.datasets.filter(function (dataset) {
 				return dataset.get_id() !== id;
 			});
-			let fileDir = "src/saved_data/" + id + ".txt";
+			let fileDir = "src/saved_data/" + id + ".json";
 			fs_extra.removeSync(fileDir);
 		} catch {
 			return Promise.reject(new InsightError("Unable to remove dataset."));
