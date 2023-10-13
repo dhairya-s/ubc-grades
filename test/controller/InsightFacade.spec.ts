@@ -510,7 +510,7 @@ describe("InsightFacade", function () {
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
-					console.log(datasets);
+					// console.log(datasets);
 					return expect(datasets).to.deep.equal([
 						{id: "dataset1", kind: "sections", numRows: 64612},
 						{id: "dataset2", kind: "sections", numRows: 1},
@@ -549,7 +549,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/queries",
+			"./test/resources/queries/tests",
 			{
 				assertOnResult: async (actual, expected) => {
 					// expect(actual).to.have.deep.members(await expected);

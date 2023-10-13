@@ -5,12 +5,9 @@ import {Property} from "./collectQuery";
 
 export default class CollectScomp {
 	private datasetEntries: DatasetEntry[] = [];
-	private resultCols: Set<string>;
 
-	constructor(datasetEntries: DatasetEntry[], resultCols: Set<string>) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
-		this.resultCols = resultCols;
-		// console.log("S result cols", this.resultCols);
 	}
 
 	public collectSCOMP(scomp: object): SectionEntry[] {
