@@ -8,10 +8,11 @@ import {
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
 import {folderTest} from "@ubccpsc310/folder-test";
-import {expect, use} from "chai";
 import * as chai from "chai";
+import {expect} from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../TestUtil";
+
 chai.use(chaiAsPromised);
 describe("InsightFacade", function () {
 	this.timeout(10000);
@@ -232,6 +233,16 @@ describe("InsightFacade", function () {
 					let result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 					return expect(result).to.deep.equals(["ubc"]);
 				});
+				it(
+					"should reject after a crash if a duplicate id is given",
+					async function () {
+						const result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+						let newFacade = new InsightFacade();
+						const result2 = newFacade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+						return expect(result2).to.eventually.be.rejectedWith(InsightError);
+
+					}
+				);
 			});
 
 			describe("test valid content", async function () {
@@ -389,6 +400,21 @@ describe("InsightFacade", function () {
 				console.info(`Before: ${this.test?.parent?.title}`);
 				sections = getContentFromArchives("smallpair.zip");
 			});
+			it("should succeed if tries to remove a dataset added before a crash", async function() {
+				const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+				let newFacade = new InsightFacade();
+				const resultRemove = newFacade.removeDataset("dataset1");
+				return expect(resultRemove).to.eventually.deep.equals("dataset1");
+			});
+			it("should succeed if tries to remove a dataset removed before a crash", async function() {
+				const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+				const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+				const result3 = await facade.addDataset("dataset3", sections, InsightDatasetKind.Sections);
+				const resultRemove1 = await facade.removeDataset("dataset1");
+				let newFacade = new InsightFacade();
+				const resultRemove = newFacade.removeDataset("dataset1");
+				return expect(resultRemove).to.eventually.be.rejectedWith(NotFoundError);
+			});
 			describe("test id parameter", function () {
 				it(
 					"should reject if attempts to remove a dataset that has not been added " + "with NotFoundError",
@@ -500,13 +526,11 @@ describe("InsightFacade", function () {
 					return expect(datasets).to.deep.equal([]);
 				});
 				it("should resolve if there has been a dataset added", async function () {
-					this.timeout(4000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();
 					return expect(datasets).to.deep.equal([{id: "dataset1", kind: "sections", numRows: 64612}]);
 				});
 				it("should resolve if there have been many datasets added", async function () {
-					this.timeout(4000); // A very long environment setup.
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
 					const datasets = await facade.listDatasets();

@@ -1,7 +1,7 @@
 import CourseEntry from "./CourseEntry";
 import JSZip from "jszip";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
-import * as fs from "fs";
+import fs from "fs-extra";
 
 export default class DatasetEntry implements InsightDataset{
 	public id: string = "";
@@ -60,9 +60,13 @@ export default class DatasetEntry implements InsightDataset{
 	}
 
 	public async save_dataset(): Promise<void> {
-		let path = this.path + this.get_id() + ".txt";
+		let path = this.path + this.get_id() + ".json";
 		let content = JSON.stringify(this);
-		fs.writeFileSync(path, content, "utf-8");
+		try {
+			await fs.writeJSON(path, content, "utf-8"); // TODO
+		} catch(err) {
+			return Promise.reject(new InsightError("Could not write to file."));
+		}
 		return Promise.resolve();
 	}
 
@@ -73,44 +77,25 @@ export default class DatasetEntry implements InsightDataset{
 			numRows: this.numRows,
 		};
 	}
-	public async load_dataset(path: string): Promise<InsightDataset> {
-		// fs.readFile(path, 'utf8', (err, data): Promise<InsightDataset> => {
-		// 	let datasetJSON = JSON.parse(data);
-		// 	let courses: CourseEntry[] = [];
-		// 	for (const course of datasetJSON["courses"]) {
-		// 		let parsedCourse = new CourseEntry();
-		// 		parsedCourse.courseFromObject(course);
-		// 		courses.push(parsedCourse);
-		// 	}
-		// 	this.set_courses(courses);
-		// 	this.set_id(datasetJSON['id']);
-		// 	this.set_path(datasetJSON['path']);
-		// 	this.set_numRows(parseInt(datasetJSON["numRows"]));
-		// 	const insightDataset = this.dataset_entry_to_insight_dataset();
-		// 	return Promise.resolve(insightDataset);
-		// });
-		let fileContent: string;
-		fileContent = await new Promise((resolve, reject) => {
-			return fs.readFile(path, "utf8", (error, data) => {
-				if (error) {
-					return reject(error);
-				}
-				return resolve(data);
-			});
-		});
-		let courses: CourseEntry[] = [];
-		let datasetObject = JSON.parse(fileContent);
-		for (const course of datasetObject["courses"]) {
-			let parsedCourse = new CourseEntry();
-			parsedCourse.courseFromObject(course);
-			courses.push(parsedCourse);
+	public async load_dataset(path: string): Promise<DatasetEntry> {
+		try {
+			const fileContents = await fs.readJSON(path);
+			let datasetJSON = JSON.parse(fileContents);
+			let courses: CourseEntry[] = [];
+			for (const course of datasetJSON["courses"]) {
+				let parsedCourse = new CourseEntry();
+				parsedCourse.courseFromObject(course);
+				courses.push(parsedCourse);
+			}
+			this.set_courses(courses);
+			this.set_id(datasetJSON["id"]);
+			this.set_path(datasetJSON["path"]);
+			this.set_numRows(parseInt(datasetJSON["numRows"], 10));
+			// const insightDataset = this.dataset_entry_to_insight_dataset();
+			return Promise.resolve(this);
+		} catch (err) {
+			return Promise.reject("Unable to load dataset: " + path);
 		}
-		this.set_courses(courses);
-		this.set_id(datasetObject["id"]);
-		this.set_path(datasetObject["path"]);
-		this.set_numRows(parseInt(datasetObject["numRows"], 10));
-		const insightDataset = this.dataset_entry_to_insight_dataset();
-		return Promise.resolve(insightDataset);
 	}
 
 
