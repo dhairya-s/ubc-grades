@@ -5,12 +5,9 @@ import {log} from "util";
 
 export default class CollectLogicComp {
 	private datasetEntries: DatasetEntry[] = [];
-	private resultCols: Set<string>;
 
-	constructor(datasetEntries: DatasetEntry[], resultCols: Set<string>) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
-		this.resultCols = resultCols;
-		// console.log("Logic result cols", this.resultCols);
 	}
 
 	public collectLogicComp(logiccomp: object, key: string): SectionEntry[] {
@@ -22,7 +19,7 @@ export default class CollectLogicComp {
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
 			let collectComp: SectionEntry[];
-			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp], this.resultCols);
+			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp]);
 			// if (Object.keys(collectComp).length !== 0){
 			propertiesToLogic.push(collectComp);
 			// }
@@ -39,7 +36,7 @@ export default class CollectLogicComp {
 
 
 		if (key === "AND") {
-			propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
@@ -108,19 +105,6 @@ export default class CollectLogicComp {
 
 		return Array.from(set.values());
 	}
-
-
-	// private valueIsEq(obj: object ) {
-	//
-	// }
-	// private compareObjects(obj1: object, obj2:  object): boolean {
-	// 	for (let col of this.resultCols) {
-	// 		if (obj1[ as keyof typeof obj1] !== obj2[col as keyof typeof obj2]) {
-	// 			return false;
-	// 		}
-	// 	}
-	// 	return true;
-	// }
 
 	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
 
