@@ -54,7 +54,7 @@ export default class CollectLogicComp {
 
 		let lenProps = propertiesToLogic.length;
 		// console.log(lenProps);
-		let arrOfUuid: string[] = [];
+		let arrOfUuid = new Map<string, boolean>();
 		let hashMap = new Map<string, number>();
 
 		for (let section of propertiesToLogic) {
@@ -72,7 +72,7 @@ export default class CollectLogicComp {
 
 		for (let key of hashMap.keys()) {
 			if (hashMap.get(key) === lenProps) {
-				arrOfUuid.push(String(key));
+				arrOfUuid.set(String(key), true);
 			}
 		}
 		//
@@ -81,13 +81,10 @@ export default class CollectLogicComp {
 
 		let sections = propertiesToLogic[0];
 		for (let section of sections) {
-			for (let a of arrOfUuid) {
-				if (String(section.get_uuid()) === a) {
-					if (!map.has(String(section.get_uuid()))) {
-						map.set(section.get_uuid(), section);
-					}
+			if (arrOfUuid.has(String(section.get_uuid()))) {
+				if (!map.has(String(section.get_uuid()))) {
+					map.set(section.get_uuid(), section);
 				}
-
 			}
 		}
 		//

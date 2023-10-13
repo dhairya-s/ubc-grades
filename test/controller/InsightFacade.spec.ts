@@ -564,7 +564,7 @@ describe("InsightFacade", function () {
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
 			// "./test/resources/queries",
-			"./test/resources/queries/NOTtests",
+			"./test/resources/queries",
 
 			{
 				assertOnResult: async (actual, expected) => {
