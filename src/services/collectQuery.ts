@@ -1,5 +1,5 @@
 import InsightFacade from "../controller/InsightFacade";
-import {InsightError, InsightResult} from "../controller/IInsightFacade";
+import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import DatasetEntry from "../controller/DatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectMcomp from "./collectMcomp";
@@ -30,6 +30,9 @@ export default class CollectQuery {
 		let options = this.query["OPTIONS" as keyof typeof this.query];
 		let orderCol: string | undefined = options["ORDER" as keyof  typeof options];
 
+		if (r.length >= 5000) {
+			throw new ResultTooLargeError("Only queries with a maximum of 5000 results are supported");
+		}
 		if (orderCol !== undefined) {
 			r = this.orderBy(r, orderCol);
 		}

@@ -28,6 +28,16 @@ export default class CollectLogicComp {
 			// }
 		}
 
+		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		// for (let section of propertiesToLogic) {
+		// 	// console.log("section", section);
+		// 	for (let s of section) {
+		// 		// console.log("s", s);
+		// 		set.add(s);
+		// 	}
+		// }
+
+
 		if (key === "AND") {
 			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
@@ -65,6 +75,10 @@ export default class CollectLogicComp {
 		// 	}
 		// }
 		// return []
+
+		// for (let section of propertiesToLogic) {
+		//
+		// }
 
 		return propertiesToLogic.slice(1).reduce((prev, curr) => {
 			return prev.filter((obj1) => {
