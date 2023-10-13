@@ -36,7 +36,7 @@ export default class CollectLogicComp {
 
 
 		if (key === "AND") {
-			propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
