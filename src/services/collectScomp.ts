@@ -2,6 +2,7 @@ import DatasetEntry from "../controller/DatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import {collectInsightResult, convertArrayOfObjectToObject} from "./collectionHelpers";
 import {Property} from "./collectQuery";
+import {InsightError} from "../controller/IInsightFacade";
 
 export default class CollectScomp {
 	private datasetEntries: DatasetEntry[] = [];
@@ -14,21 +15,30 @@ export default class CollectScomp {
 		let propertiesToAdd: SectionEntry[] = [];
 
 		let localKey: string[] = Object.keys(scomp);
+		const datasetId = localKey[0].split("_")[0];
+		let isValidId = false;
 		const localKeyField = localKey[0].split("_")[1];
 		const value: string = scomp[localKey[0] as keyof typeof scomp];
 
 		for (let dataset of this.datasetEntries) {
-			for (let course of dataset.get_courses()) {
-				for (let section of course.getSections()) {
-					let sectionEntry: SectionEntry | null = this.handleSFields(section, localKeyField, value);
-					// if (Object.keys(obj).length !== 0) {
-					// 	propertiesToAdd.push(obj);
-					// }
-					if (sectionEntry !== null) {
-						propertiesToAdd.push(sectionEntry);
+			if (String(datasetId) === String(dataset.get_id())) {
+				isValidId = true;
+				for (let course of dataset.get_courses()) {
+					for (let section of course.getSections()) {
+						let sectionEntry: SectionEntry | null = this.handleSFields(section, localKeyField, value);
+						// if (Object.keys(obj).length !== 0) {
+						// 	propertiesToAdd.push(obj);
+						// }
+						if (sectionEntry !== null) {
+							propertiesToAdd.push(sectionEntry);
+						}
 					}
 				}
 			}
+		}
+
+		if (!isValidId) {
+			throw new InsightError("Invalid dataset id");
 		}
 		return propertiesToAdd;
 	}
