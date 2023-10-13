@@ -39,7 +39,7 @@ export default class CollectLogicComp {
 
 
 		if (key === "AND") {
-			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
@@ -64,16 +64,49 @@ export default class CollectLogicComp {
 		// ]
 
 		//
+		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		let lenProps = propertiesToLogic.length;
+		// console.log(lenProps);
+		let arrOfUuid: string[] = [];
+		let hashMap = new Map<string, number>();
+
+		for (let section of propertiesToLogic) {
+			for (let s of section) {
+				let numberOfOccurances = hashMap.get(String(s.get_uuid()));
+				if (numberOfOccurances !== undefined) {
+					hashMap.set(String(s.get_uuid()), numberOfOccurances + 1);
+				} else {
+					hashMap.set(String(s.get_uuid()), 1);
+				}
+			}
+		}
+
+		for (let key of hashMap.keys()) {
+			if (hashMap.get(key) === lenProps) {
+				arrOfUuid.push(String(key));
+			}
+		}
+
+		for (let section of propertiesToLogic) {
+			for (let s of section) {
+				for (let a of arrOfUuid) {
+					if (String(s.get_uuid()) === a) {
+						set.add(s);
+					}
+				}
+			}
+		}
 
 
-		return propertiesToLogic.slice(1).reduce((prev, curr) => {
-			return prev.filter((obj1) => {
-				return curr.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
-				);
-			});
-		},propertiesToLogic[0]);
+		//
+		// return propertiesToLogic.slice(1).reduce((prev, curr) => {
+		// 	return prev.filter((obj1) => {
+		// 		return curr.some((obj2) => (obj1.get_uuid() === obj2.get_uuid())
+		// 		);
+		// 	});
+		// },propertiesToLogic[0]);
 
-		// return temp;
+		return Array.from(set.values());
 	}
 
 
