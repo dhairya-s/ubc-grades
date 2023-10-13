@@ -8,7 +8,7 @@ export default class DatasetEntry implements InsightDataset{
 	public kind: InsightDatasetKind = InsightDatasetKind.Sections;
 	public courses: CourseEntry[] = [];
 	public numRows: number = 0;
-	public path: string = "test/resources/saved_data/"; // For on disk storage
+	public path: string = "src/saved_data/"; // For on disk storage
 
 	constructor(id: string, kind: InsightDatasetKind) {
 		this.id = id;
@@ -86,7 +86,6 @@ export default class DatasetEntry implements InsightDataset{
 		// 	this.set_id(datasetJSON['id']);
 		// 	this.set_path(datasetJSON['path']);
 		// 	this.set_numRows(parseInt(datasetJSON["numRows"]));
-		// 	console.log(this.numRows);
 		// 	const insightDataset = this.dataset_entry_to_insight_dataset();
 		// 	return Promise.resolve(insightDataset);
 		// });

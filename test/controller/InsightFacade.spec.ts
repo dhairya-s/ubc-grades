@@ -9,11 +9,10 @@ import {
 import InsightFacade from "../../src/controller/InsightFacade";
 import {folderTest} from "@ubccpsc310/folder-test";
 import {expect, use} from "chai";
+import * as chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../TestUtil";
-
-use(chaiAsPromised);
-
+chai.use(chaiAsPromised);
 describe("InsightFacade", function () {
 	this.timeout(10000);
 	let facade: IInsightFacade;
@@ -50,6 +49,144 @@ describe("InsightFacade", function () {
 			// This runs after each test, which should make each test independent of the previous one
 			console.info(`AfterTest: ${this.currentTest?.title}`);
 			clearDisk();
+		});
+
+		it("should reject with an empty dataset id", function () {
+			const result = facade.addDataset(
+				"",
+				sections,
+				InsightDatasetKind.Sections
+			);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with  an _ in dataset id", function () {
+			const result = facade.addDataset(
+				"ubc_",
+				sections,
+				InsightDatasetKind.Sections
+			);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with only whitespace dataset id (spaces)", function () {
+			const result = facade.addDataset(
+				" ",
+				sections,
+				InsightDatasetKind.Sections
+			);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+		it("should reject with only whitespace dataset id (tabs)", function () {
+			const result = facade.addDataset(
+				" 	",
+				sections,
+				InsightDatasetKind.Sections
+			);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should accept with the [ubc] sections dataset", function () {
+			const result = facade.addDataset(
+				"ubc",
+				sections,
+				InsightDatasetKind.Sections
+			);
+			return chai.expect(result).to.eventually.have.members(["ubc"]);
+		});
+
+		it("should reject with the [ubc] sections_tiny dataset twice", function () {
+			const result = facade
+				.addDataset("ubc", sections, InsightDatasetKind.Sections)
+				.then(() =>
+					facade.addDataset("ubc", sections, InsightDatasetKind.Sections)
+				);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with empty content", function () {
+			const result = facade.addDataset("ubc", "", InsightDatasetKind.Sections);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with the wrong kind", function () {
+			const result = facade.addDataset(
+				"ubc",
+				sections,
+				InsightDatasetKind.Rooms
+			);
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should accept with the id = [^]+ubc] sections_tiny dataset", function () {
+			const result = facade.addDataset(
+				"[^]+ubc]",
+				sections,
+				InsightDatasetKind.Sections
+			);
+			return chai.expect(result).to.eventually.have.members(["[^]+ubc]"]);
+		});
+		it("should reject with an InsightError for empty dataset id", function () {
+			const result = facade.removeDataset("");
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with an InsightError for _ in dataset id", function () {
+			const result = facade.removeDataset("ubc_");
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with an InsightError for whitespace as dataset id", function () {
+			const result = facade.removeDataset(" ");
+			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it("should reject with an NotFoundError for valid dataset id", function () {
+			const result = facade.removeDataset("ubc");
+			return chai.expect(result).to.eventually.be.rejectedWith(NotFoundError);
+		});
+
+		it("should accept for valid dataset id", function () {
+			const result = facade
+				.addDataset("ubc", sections, InsightDatasetKind.Sections)
+				.then(() => facade.removeDataset("ubc"));
+			return chai.expect(result).to.eventually.equals("ubc");
+		});
+
+		it("should accept for valid dataset id = [^]+ubc]", function () {
+			const result = facade
+				.addDataset("[^]+ubc]", sections, InsightDatasetKind.Sections)
+				.then(() => facade.removeDataset("[^]+ubc]"));
+
+			return chai.expect(result).to.eventually.equals("[^]+ubc]");
+		});
+
+		it("should reject for double delete for valid dataset id", function () {
+			const result = facade
+				.addDataset("ubc", sections, InsightDatasetKind.Sections)
+				.then(() => facade.removeDataset("ubc"))
+				.then(() => facade.removeDataset("ubc"));
+			return chai.expect(result).to.eventually.be.rejectedWith(NotFoundError);
+		});
+
+		it("should accept for empty dataset", function () {
+			const result = facade.listDatasets();
+			return chai.expect(result).to.eventually.be.an("array").that.is.empty;
+		});
+
+		it("should accept for add then remove valid datasets", function () {
+			const result = facade
+				.addDataset("ubc", sections, InsightDatasetKind.Sections)
+				.then(() => facade.removeDataset("ubc"))
+				.then(() => facade.listDatasets());
+			return chai.expect(result).to.eventually.be.an("array").that.is.empty;
+		});
+
+		it("should accept for add -> list len", function () {
+			const result = facade
+				.addDataset("ubc", sections, InsightDatasetKind.Sections)
+				.then(() => facade.listDatasets());
+			return chai.expect(result).to.eventually.have.lengthOf(1);
 		});
 
 		describe("in addDataset, ", async function () {
@@ -278,7 +415,7 @@ describe("InsightFacade", function () {
 					);
 					it(
 						"remove - should reject with an idstring containing an underscore " +
-							"in the middle of the idstring",
+						"in the middle of the idstring",
 						async function () {
 							const result1 = facade.removeDataset("id_string");
 							return expect(result1).to.eventually.be.rejectedWith(InsightError);
@@ -286,7 +423,7 @@ describe("InsightFacade", function () {
 					);
 					it(
 						"remove - should reject with an idstring containing an underscore at " +
-							"the beginning of the idstring",
+						"the beginning of the idstring",
 						async function () {
 							const result1 = facade.removeDataset("_idstring");
 							return expect(result1).to.eventually.be.rejectedWith(InsightError);
@@ -294,7 +431,7 @@ describe("InsightFacade", function () {
 					);
 					it(
 						"remove - should reject with an idstring containing an underscore at " +
-							"the end of the idstring",
+						"the end of the idstring",
 						async function () {
 							const result1 = facade.removeDataset("idstring_");
 							return expect(result1).to.eventually.be.rejectedWith(InsightError);
