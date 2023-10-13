@@ -38,7 +38,7 @@ export default class CollectLogicComp {
 		// let end1 = performance.now();
 		// console.log("LogicComp", (end1 - start) / 1000);
 		if (key === "AND") {
-			propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
