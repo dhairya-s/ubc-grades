@@ -15,7 +15,7 @@ import {clearDisk, getContentFromArchives} from "../TestUtil";
 
 chai.use(chaiAsPromised);
 describe("InsightFacade", function () {
-	this.timeout(10000);
+	this.timeout(10000 * 6);
 	let facade: IInsightFacade;
 
 	// Declare datasets used in tests. You should add more datasets like this!
@@ -53,55 +53,33 @@ describe("InsightFacade", function () {
 		});
 
 		it("should reject with an empty dataset id", function () {
-			const result = facade.addDataset(
-				"",
-				sections,
-				InsightDatasetKind.Sections
-			);
+			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
 			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("should reject with  an _ in dataset id", function () {
-			const result = facade.addDataset(
-				"ubc_",
-				sections,
-				InsightDatasetKind.Sections
-			);
+			const result = facade.addDataset("ubc_", sections, InsightDatasetKind.Sections);
 			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("should reject with only whitespace dataset id (spaces)", function () {
-			const result = facade.addDataset(
-				" ",
-				sections,
-				InsightDatasetKind.Sections
-			);
+			const result = facade.addDataset(" ", sections, InsightDatasetKind.Sections);
 			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 		it("should reject with only whitespace dataset id (tabs)", function () {
-			const result = facade.addDataset(
-				" 	",
-				sections,
-				InsightDatasetKind.Sections
-			);
+			const result = facade.addDataset(" 	", sections, InsightDatasetKind.Sections);
 			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("should accept with the [ubc] sections dataset", function () {
-			const result = facade.addDataset(
-				"ubc",
-				sections,
-				InsightDatasetKind.Sections
-			);
+			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			return chai.expect(result).to.eventually.have.members(["ubc"]);
 		});
 
 		it("should reject with the [ubc] sections_tiny dataset twice", function () {
 			const result = facade
 				.addDataset("ubc", sections, InsightDatasetKind.Sections)
-				.then(() =>
-					facade.addDataset("ubc", sections, InsightDatasetKind.Sections)
-				);
+				.then(() => facade.addDataset("ubc", sections, InsightDatasetKind.Sections));
 			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
@@ -111,20 +89,12 @@ describe("InsightFacade", function () {
 		});
 
 		it("should reject with the wrong kind", function () {
-			const result = facade.addDataset(
-				"ubc",
-				sections,
-				InsightDatasetKind.Rooms
-			);
+			const result = facade.addDataset("ubc", sections, InsightDatasetKind.Rooms);
 			return chai.expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("should accept with the id = [^]+ubc] sections_tiny dataset", function () {
-			const result = facade.addDataset(
-				"[^]+ubc]",
-				sections,
-				InsightDatasetKind.Sections
-			);
+			const result = facade.addDataset("[^]+ubc]", sections, InsightDatasetKind.Sections);
 			return chai.expect(result).to.eventually.have.members(["[^]+ubc]"]);
 		});
 		it("should reject with an InsightError for empty dataset id", function () {
@@ -233,16 +203,12 @@ describe("InsightFacade", function () {
 					let result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 					return expect(result).to.deep.equals(["ubc"]);
 				});
-				it(
-					"should reject after a crash if a duplicate id is given",
-					async function () {
-						const result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-						let newFacade = new InsightFacade();
-						const result2 = newFacade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-						return expect(result2).to.eventually.be.rejectedWith(InsightError);
-
-					}
-				);
+				it("should reject after a crash if a duplicate id is given", async function () {
+					const result = await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+					let newFacade = new InsightFacade();
+					const result2 = newFacade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+					return expect(result2).to.eventually.be.rejectedWith(InsightError);
+				});
 			});
 
 			describe("test valid content", async function () {
@@ -400,13 +366,13 @@ describe("InsightFacade", function () {
 				console.info(`Before: ${this.test?.parent?.title}`);
 				sections = getContentFromArchives("smallpair.zip");
 			});
-			it("should succeed if tries to remove a dataset added before a crash", async function() {
+			it("should succeed if tries to remove a dataset added before a crash", async function () {
 				const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 				let newFacade = new InsightFacade();
 				const resultRemove = newFacade.removeDataset("dataset1");
 				return expect(resultRemove).to.eventually.deep.equals("dataset1");
 			});
-			it("should succeed if tries to remove a dataset removed before a crash", async function() {
+			it("should succeed if tries to remove a dataset removed before a crash", async function () {
 				const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 				const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
 				const result3 = await facade.addDataset("dataset3", sections, InsightDatasetKind.Sections);
@@ -441,7 +407,7 @@ describe("InsightFacade", function () {
 					);
 					it(
 						"remove - should reject with an idstring containing an underscore " +
-						"in the middle of the idstring",
+							"in the middle of the idstring",
 						async function () {
 							const result1 = facade.removeDataset("id_string");
 							return expect(result1).to.eventually.be.rejectedWith(InsightError);
@@ -449,7 +415,7 @@ describe("InsightFacade", function () {
 					);
 					it(
 						"remove - should reject with an idstring containing an underscore at " +
-						"the beginning of the idstring",
+							"the beginning of the idstring",
 						async function () {
 							const result1 = facade.removeDataset("_idstring");
 							return expect(result1).to.eventually.be.rejectedWith(InsightError);
@@ -457,7 +423,7 @@ describe("InsightFacade", function () {
 					);
 					it(
 						"remove - should reject with an idstring containing an underscore at " +
-						"the end of the idstring",
+							"the end of the idstring",
 						async function () {
 							const result1 = facade.removeDataset("idstring_");
 							return expect(result1).to.eventually.be.rejectedWith(InsightError);
@@ -598,12 +564,44 @@ describe("InsightFacade", function () {
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
 			// "./test/resources/queries",
-			"./test/resources/queries/tests",
+			"./test/resources/queries",
 
 			{
 				assertOnResult: async (actual, expected) => {
 					// expect(actual).to.have.deep.members(await expected);
 					expect(actual).to.have.deep.members(await expected);
+				},
+				errorValidator: (error): error is PQErrorKind =>
+					error === "ResultTooLargeError" || error === "InsightError",
+				assertOnError: (actual, expected) => {
+					if (expected === "InsightError") {
+						expect(actual).to.be.instanceof(InsightError);
+					} else if (expected === "ResultTooLargeError") {
+						expect(actual).to.be.instanceof(ResultTooLargeError);
+					} else {
+						// this should be unreachable
+						expect.fail("UNEXPECTED ERROR");
+					}
+				},
+			}
+		);
+
+		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
+			"Dynamic InsightFacade PerformQuery tests",
+			(input) => facade.performQuery(input),
+			// "./test/resources/queries",
+			"./test/resources/ordered_queries",
+
+			{
+				assertOnResult: async (actual, expected) => {
+					// expect(actual).to.have.deep.members(await expected);
+					let expectedLoaded = await expected;
+					if (expectedLoaded.length === 1 || expectedLoaded.length === 0) {
+						expect(actual).to.have.deep.members(await expected);
+					} else {
+						expect(actual).to.have.deep.equals(await expected);
+					}
+
 				},
 				errorValidator: (error): error is PQErrorKind =>
 					error === "ResultTooLargeError" || error === "InsightError",

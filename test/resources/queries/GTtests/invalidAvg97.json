@@ -1,0 +1,19 @@
+{
+	"title": "invalidAvg97",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

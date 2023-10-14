@@ -11,6 +11,7 @@ export default class CollectLogicComp {
 	}
 
 	public collectLogicComp(logiccomp: object, key: string): SectionEntry[] {
+		// let start = performance.now();
 		// console.log("key logic", key);
 		let propertiesToAdd: SectionEntry[] = [];
 		let propertiesToLogic: SectionEntry[][] = [];
@@ -34,9 +35,10 @@ export default class CollectLogicComp {
 		// 	}
 		// }
 
-
+		// let end1 = performance.now();
+		// console.log("LogicComp", (end1 - start) / 1000);
 		if (key === "AND") {
-			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
@@ -45,26 +47,14 @@ export default class CollectLogicComp {
 	}
 
 	private handleAndComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
-		// [
-		// 		[
-		// 			{"section_id":"id", "section_num": 31},
-		// 			{"section_id":"id2", "section_num": 89}
-		// 		],
-		// 		[
-		// 			{section_id:"id2", "section_num": 89}
-		// 		]
-		// ]
-		//
-		// return value
-		// [
-		// 			{"section_id":"id2", "section_num": 89}
-		// ]
+		// let start = performance.now();
 
-		//
-		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		let map = new Map<string, SectionEntry>();
+
 		let lenProps = propertiesToLogic.length;
 		// console.log(lenProps);
-		let arrOfUuid: string[] = [];
+		let arrOfUuid = new Map<string, boolean>();
 		let hashMap = new Map<string, number>();
 
 		for (let section of propertiesToLogic) {
@@ -77,22 +67,39 @@ export default class CollectLogicComp {
 				}
 			}
 		}
+		// let end1 = performance.now();
+		// console.log((end1 - start) / 1000);
 
 		for (let key of hashMap.keys()) {
 			if (hashMap.get(key) === lenProps) {
-				arrOfUuid.push(String(key));
+				arrOfUuid.set(String(key), true);
 			}
 		}
+		//
+		// let end2 = performance.now();
+		// console.log((end2 - end1) / 1000);
 
-		for (let section of propertiesToLogic) {
-			for (let s of section) {
-				for (let a of arrOfUuid) {
-					if (String(s.get_uuid()) === a) {
-						set.add(s);
-					}
+		let sections = propertiesToLogic[0];
+		for (let section of sections) {
+			if (arrOfUuid.has(String(section.get_uuid()))) {
+				if (!map.has(String(section.get_uuid()))) {
+					map.set(section.get_uuid(), section);
 				}
 			}
 		}
+		//
+		// for (let section of propertiesToLogic) {
+		// 	for (let s of section) {
+		// 		for (let a of arrOfUuid) {
+		// 			if (String(s.get_uuid()) === a) {
+		// 				set.add(s);
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// let end3 = performance.now();
+		// console.log((end3 - end2) / 1000);
 
 
 		//
@@ -103,20 +110,33 @@ export default class CollectLogicComp {
 		// 	});
 		// },propertiesToLogic[0]);
 
-		return Array.from(set.values());
+		return Array.from(map.values());
 	}
 
 	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
+		// let start = performance.now();
 
-		let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
+		//
+		// for (let section of propertiesToLogic) {
+		// 	for (let s of section) {
+		// 		set.add(s);
+		// 	}
+		// }
 
-		for (let section of propertiesToLogic) {
-			for (let s of section) {
-				set.add(s);
+		let map = new Map<string, SectionEntry>();
+		for (const sections of propertiesToLogic) {
+			for (const s of sections) {
+				if (!map.has(String(s.get_uuid()))) {
+					map.set(s.get_uuid(), s);
+				}
 			}
 		}
 
-		return Array.from(set.values());
+		// let end1 = performance.now();
+		// console.log("OR:", (end1 - start) / 1000);
+
+		return Array.from(map.values());
 	}
 
 

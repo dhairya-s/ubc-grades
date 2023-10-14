@@ -1,5 +1,5 @@
 {
-	"title": "avg between 90 and 85",
+	"title": "avg gt 90 not eq 91 wild j wild",
 	"input": {
 		"WHERE": {
 			"OR": [
@@ -12,13 +12,13 @@
 						},
 						{
 							"IS": {
-								"sections_dept": "adhe"
+								"sections_dept": "*j*"
 							}
 						},
 						{
 							"NOT": {
-								"GT": {
-									"sections_avg": 85
+								"EQ": {
+									"sections_avg": 91
 								}
 							}
 						}

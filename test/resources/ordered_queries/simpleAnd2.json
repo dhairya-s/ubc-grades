@@ -1,0 +1,47 @@
+{
+	"title": "simpleAnd2",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 99
+					}
+				},
+				{
+					"IS": {
+						"sections_uuid": "26777"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_uuid",
+				"sections_id",
+				"sections_title",
+				"sections_instructor",
+				"sections_dept",
+				"sections_avg",
+				"sections_pass",
+				"sections_fail",
+				"sections_audit"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_avg": 99.19,
+			"sections_uuid": "26777",
+			"sections_id": "574",
+			"sections_title": "career planning",
+			"sections_instructor": "cox, daniel",
+			"sections_dept": "cnps",
+			"sections_pass": 16,
+			"sections_fail": 0,
+			"sections_audit": 0
+		}
+	]
+}

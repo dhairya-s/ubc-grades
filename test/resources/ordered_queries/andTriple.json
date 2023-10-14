@@ -1,0 +1,195 @@
+{
+	"title": "andTriple",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 91
+					}
+				},
+				{
+					"IS": {
+						"sections_dept": "de*"
+					}
+				},
+				{
+					"LT": {
+						"sections_fail": 10
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_uuid",
+				"sections_id",
+				"sections_title",
+				"sections_instructor",
+				"sections_dept",
+				"sections_avg",
+				"sections_pass",
+				"sections_fail",
+				"sections_audit"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_uuid": "2341",
+			"sections_id": "575",
+			"sections_title": "implant therapy",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.09,
+			"sections_pass": 11,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "36057",
+			"sections_id": "540",
+			"sections_title": "rs mth&sem orbi",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.13,
+			"sections_pass": 8,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "36058",
+			"sections_id": "540",
+			"sections_title": "rs mth&sem orbi",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.13,
+			"sections_pass": 8,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "2339",
+			"sections_id": "575",
+			"sections_title": "implant therapy",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.25,
+			"sections_pass": 4,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "64962",
+			"sections_id": "584",
+			"sections_title": "endo lit rev ii",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.25,
+			"sections_pass": 4,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "64963",
+			"sections_id": "584",
+			"sections_title": "endo lit rev ii",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.25,
+			"sections_pass": 4,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "2311",
+			"sections_id": "504",
+			"sections_title": "endo micro-surg",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.5,
+			"sections_pass": 6,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "2312",
+			"sections_id": "504",
+			"sections_title": "endo micro-surg",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.5,
+			"sections_pass": 6,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "64937",
+			"sections_id": "539",
+			"sections_title": "stats methods",
+			"sections_instructor": "von bergmann, hsingchi",
+			"sections_dept": "dent",
+			"sections_avg": 91.82,
+			"sections_pass": 28,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "64938",
+			"sections_id": "539",
+			"sections_title": "stats methods",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 91.82,
+			"sections_pass": 28,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "12450",
+			"sections_id": "540",
+			"sections_title": "rs mth&sem orbi",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 92.4,
+			"sections_pass": 5,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "12451",
+			"sections_id": "540",
+			"sections_title": "rs mth&sem orbi",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 92.4,
+			"sections_pass": 5,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "72503",
+			"sections_id": "524",
+			"sections_title": "cr-fc grwth&dev",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 94.33,
+			"sections_pass": 6,
+			"sections_fail": 0,
+			"sections_audit": 0
+		},
+		{
+			"sections_uuid": "72504",
+			"sections_id": "524",
+			"sections_title": "cr-fc grwth&dev",
+			"sections_instructor": "",
+			"sections_dept": "dent",
+			"sections_avg": 94.33,
+			"sections_pass": 6,
+			"sections_fail": 0,
+			"sections_audit": 0
+		}
+	]
+}

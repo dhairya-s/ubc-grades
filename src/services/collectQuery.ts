@@ -98,7 +98,7 @@ export default class CollectQuery {
 			} else if (key === "IS") { // SCOMP
 				propertiesToAdd = collectS.collectSCOMP(body[key as keyof typeof body]);
 			} else if (key === "NOT") { // NEGATION
-				// propertiesToAdd = collectNeg.collectNegComp(body[key as keyof typeof body]);
+				propertiesToAdd = collectNeg.collectNegComp(body[key as keyof typeof body]);
 			} else {
 				throw new InsightError("Invalid Query - Failed in Body");
 			}
