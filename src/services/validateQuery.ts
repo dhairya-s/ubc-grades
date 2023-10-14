@@ -207,15 +207,19 @@ export default class ValidateQuery {
 	}
 
 	private validateIdString(idString: string): boolean {
-		const regEx = /[a-zA-Z0-9[\]^]+/;
-		if (!regEx.test(idString)) {
+		// const regEx = /[a-zA-Z0-9[\]^]+/;
+		if (idString.length === 0 ) {
+			throw new InsightError("Invalid id string");
+		}
+		if (idString.includes("_")) {
 			throw new InsightError("Invalid id string");
 		}
 		return true;
 	}
 
 	private validateInputString(inputString: string): boolean  { // implement
-		const regEx = /^ *$|^([* A-Za-z0-9[^\]][ A-Za-z0-9[^\]]*[* A-Za-z0-9[^\]]|[* A-Za-z0-9[^\]])$/;
+		// const regEx = /^ *$|^([* A-Za-z0-9[^\]][ A-Za-z0-9[^\]]*[* A-Za-z0-9[^\]]|[* A-Za-z0-9[^\]])$/;
+		const regEx = /^[*]?[^*]*[*]?$/;
 		if (!regEx.test(inputString)) {
 			throw new InsightError("Invalid input string");
 		}
