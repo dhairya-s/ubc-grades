@@ -521,7 +521,7 @@ describe("InsightFacade", function () {
 					this.timeout(4000);
 					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
 					const result2 = await facade.addDataset("dataset2", validSections, InsightDatasetKind.Sections);
-					const datasets = await facade.listDatasets();
+					await facade.listDatasets();
 					// console.log(datasets);
 					let newFacade = new InsightFacade();
 					const loadedDatasets = await newFacade.listDatasets();
