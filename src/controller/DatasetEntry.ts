@@ -14,6 +14,7 @@ export default class DatasetEntry implements InsightDataset{
 		this.id = id;
 		this.kind = kind;
 	}
+
 	public async parse_dataset_entry(zip: JSZip, unzipped_content: JSZip): Promise<void> {
 		let filenames = Object.keys(unzipped_content.files);
 
@@ -77,6 +78,7 @@ export default class DatasetEntry implements InsightDataset{
 			numRows: this.numRows,
 		};
 	}
+
 	public async load_dataset(path: string): Promise<DatasetEntry> {
 		try {
 			const fileContents = await fs.readJSON(path);
@@ -102,6 +104,7 @@ export default class DatasetEntry implements InsightDataset{
 	public get_id(): string {
 		return this.id;
 	}
+
 	public get_courses(): CourseEntry[]{
 		return this.courses;
 	}
@@ -126,6 +129,7 @@ export default class DatasetEntry implements InsightDataset{
 	public set_id(id: string) {
 		this.id = id;
 	}
+
 	public set_courses(courses: CourseEntry[]){
 		this.courses = courses;
 	}
