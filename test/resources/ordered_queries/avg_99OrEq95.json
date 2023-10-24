@@ -1,0 +1,164 @@
+{
+	"title": "avg > 99 or eq95",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"AND": [
+						{
+							"GT": {
+								"sections_avg": 99
+							}
+						}
+					]
+				},
+				{
+					"EQ": {
+						"sections_avg": 95
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 95
+		},
+		{
+			"sections_avg": 99.19
+		},
+		{
+			"sections_avg": 99.78
+		},
+		{
+			"sections_avg": 99.78
+		}
+	]
+}
