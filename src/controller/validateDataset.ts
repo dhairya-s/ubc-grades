@@ -17,10 +17,13 @@ export default class ValidateDataset {
 		- True if ID is valid
 		- False if ID is invalid
 		 */
-		let regexp = new RegExp("[^_]+");
-		let test = regexp.test(id);
+		let underscoreTest = !id.includes("_");
+		let whitespaceExp = new RegExp("(?=[^\\s]+)");
+		let whitespaceTest = whitespaceExp.test(id);
+		let duplicateTest = !datasetIds.includes(id);
+		let emptyStringTest = id.length > 0;
 
-		return test && !datasetIds.includes(id);
+		return underscoreTest && whitespaceTest && duplicateTest && emptyStringTest;
 
 	}
 

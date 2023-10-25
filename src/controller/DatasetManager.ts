@@ -30,28 +30,34 @@ export default class DatasetManager {
 
 	public async removeDataset(id: string) {
 		/*
-		Remove dataset from saved datasets
+		Remove dataset from saved datasets.
 		 */
+		const datasetIds = await this.getDatasetIds();
+		if (!datasetIds.includes(id)) {
+			// try {
+			//
+			// } catch {
+			//
+			// }
+		} else {
+			return Promise.reject("Cannot remove nonexistent ID.");
+		}
 	}
 
 	private async addDatasetEntry(dataset: DatasetEntry) {
 
 		let datasets: any[] = [];
-		if (fs.existsSync(this.ledgerPath)) {
-			try {
-				const fileContents = await fs.readJSON(this.ledgerPath);
-				let ledgerJSON = JSON.parse(fileContents);
-				for (const ledgerEntry of ledgerJSON) {
-					datasets.push(ledgerEntry);
-				}
-				datasets.push(dataset.createInsightDataset());
-			} catch {
-				return Promise.reject("Could not load ledger. ");
-			}
-		} else {
-			datasets = [dataset.createInsightDataset()];
-		}
 
+		try {
+			const file = await fs.readJSON(this.ledgerPath);
+			let ledgerJSON = JSON.parse(file);
+			for (const ledgerEntry of ledgerJSON) {
+				datasets.push(ledgerEntry);
+			}
+			datasets.push(dataset.createInsightDataset());
+		} catch {
+			datasets.push(dataset.createInsightDataset());
+		}
 		let content = JSON.stringify(datasets);
 		try {
 			await fs.writeJSON(this.ledgerPath, content, "utf-8");
@@ -65,8 +71,22 @@ export default class DatasetManager {
 
 	}
 
-	private async readDatasetLedger(): Promise<InsightDataset[]> {
-		return Promise.reject(new InsightError("Could not get dataset ledger"));
+	public async readDatasetLedger(): Promise<InsightDataset[]> {
+		let datasets: any[] = [];
+		if (fs.existsSync(this.ledgerPath)) {
+			try {
+				const fileContents = await fs.readJSON(this.ledgerPath);
+				let ledgerJSON = JSON.parse(fileContents);
+				for (const dataset of ledgerJSON) {
+					datasets.push(dataset);
+				}
+				return Promise.resolve(datasets);
+			} catch {
+				return Promise.resolve([]);
+			}
+		} else {
+			return Promise.resolve([]);
+		}
 	}
 
 	public async getDatasetIds(): Promise<string[]>{
@@ -86,7 +106,6 @@ export default class DatasetManager {
 		} else {
 			return Promise.resolve([]);
 		}
-		return Promise.resolve([]);
 	}
 
 	public async loadDatasetsFromDisk(): Promise<DatasetEntry[]> {
