@@ -1,13 +1,13 @@
-import DatasetEntry from "../controller/DatasetEntry";
+import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import {collectInsightResult, convertArrayOfObjectToObject} from "./collectionHelpers";
 import {Property} from "./collectQuery";
 import {InsightError} from "../controller/IInsightFacade";
 
 export default class CollectScomp {
-	private datasetEntries: DatasetEntry[] = [];
+	private datasetEntries: SectionsDatasetEntry[] = [];
 
-	constructor(datasetEntries: DatasetEntry[]) {
+	constructor(datasetEntries: SectionsDatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 

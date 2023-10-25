@@ -1,10 +1,10 @@
-import DatasetEntry from "../controller/DatasetEntry";
+import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 
 export default class CollectAll	{
-	private datasetEntries: DatasetEntry[];
+	private datasetEntries: SectionsDatasetEntry[];
 
-	constructor(datasetEntries: DatasetEntry[]) {
+	constructor(datasetEntries: SectionsDatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 

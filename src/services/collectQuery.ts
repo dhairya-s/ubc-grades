@@ -1,6 +1,6 @@
 import InsightFacade from "../controller/InsightFacade";
 import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
-import DatasetEntry from "../controller/DatasetEntry";
+import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectMcomp from "./collectMcomp";
 import CollectScomp from "./collectScomp";
@@ -15,10 +15,10 @@ export interface Property {
 }
 export default class CollectQuery {
 	private query: object;
-	private datasetEntries: DatasetEntry[] = [];
+	private datasetEntries: SectionsDatasetEntry[] = [];
 	// private resultCols = new Set<string>();
 
-	constructor(query: object, datasetEntries: DatasetEntry[]) {
+	constructor(query: object, datasetEntries: SectionsDatasetEntry[]) {
 		this.query = query;
 		this.datasetEntries = datasetEntries;
 	}
