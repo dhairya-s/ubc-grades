@@ -67,9 +67,9 @@ export default class DatasetManager {
 		return Promise.resolve();
 	}
 
-	private async removeDatasetEntry(dataset: DatasetEntry) {
-
-	}
+	// private async removeDatasetEntry(dataset: DatasetEntry) {
+	//
+	// }
 
 	public async readDatasetLedger(): Promise<InsightDataset[]> {
 		let datasets: any[] = [];
