@@ -12,7 +12,7 @@ export default class SectionEntry {
 	private fail: number = -100;
 	private audit: number = -100;
 
-	public section_from_zip_json(jsonSection: any) {
+	public sectionFromJSON(jsonSection: any) {
 		let keys = Object.keys(jsonSection);
 		let expectedKeys = ["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 		const hasAllElems = expectedKeys.every((elem) => keys.includes(elem));
