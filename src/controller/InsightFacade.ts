@@ -47,7 +47,8 @@ export default class InsightFacade implements IInsightFacade {
 				if (dataset) {
 					await this.datasetManager.saveDataset(dataset);
 				}
-				return await this.datasetManager.getDatasetIds();
+				let result = await this.datasetManager.getDatasetIds();
+				return Promise.resolve(result);
 			} else {
 				return Promise.reject(new InsightError("Invalid content."));
 			}

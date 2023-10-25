@@ -77,7 +77,7 @@ export default class DatasetManager {
 				const fileContents = await fs.readJSON(this.ledgerPath);
 				let ledgerJSON = JSON.parse(fileContents);
 				for (const dataset of ledgerJSON) {
-					datasetIds.push(dataset.get_id());
+					datasetIds.push(dataset["id"]);
 				}
 				return Promise.resolve(datasetIds);
 			} catch {

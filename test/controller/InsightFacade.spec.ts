@@ -88,7 +88,7 @@ describe("InsightFacade", function () {
 			});
 			it("should accept a valid string", () => {
 				const result = facade.addDataset("abc", sections, InsightDatasetKind.Sections);
-				return chai.expect(result).to.eventually.deep.equals(["ubc"]);
+				return chai.expect(result).to.eventually.deep.equals(["abc"]);
 			});
 		});
 	});
