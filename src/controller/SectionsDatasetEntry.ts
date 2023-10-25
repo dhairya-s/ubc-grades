@@ -1,7 +1,8 @@
 import {DatasetEntry} from "./DatasetEntry";
 import CourseEntry from "./CourseEntry";
-import {InsightDatasetKind,InsightError} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import JSZip from "jszip";
+import fs from "fs-extra";
 
 
 export default class SectionsDatasetEntry implements DatasetEntry {
@@ -30,6 +31,11 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		- True if the sections dataset is valid
 		- False otherwise
 		 */
+		for (const course of this.courses) {
+			if (course.findValidSection()) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -90,6 +96,14 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		this.courses = courses;
 	}
 
+	public setId(id: string) {
+		this.id = id;
+	}
+
+	public setKind(kind: InsightDatasetKind) {
+		this.kind = kind;
+	}
+
 	public async createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
 		/*
 		Creates a SectionsDatasetEntry using the content given.
@@ -100,14 +114,15 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 
 		 */
 		try {
+			this.setId(id);
+			this.setKind(kind);
 			let courses = await this.parseZip(content);
-			console.log(courses);
+			this.set_courses(courses);
 		} catch {
 			return Promise.reject("Could not parse zip file.");
 		}
 		return Promise.resolve(this);
 	}
-
 
 	public get_courses() {
 		return this.courses;
@@ -115,5 +130,41 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 
 	public get_id() {
 		return this.id;
+	}
+
+	public async saveDataset(path: string): Promise<void> {
+		let saveDir = path + this.get_id() + ".json";
+		let content = JSON.stringify(this);
+		try {
+			await fs.writeJSON(saveDir, content, "utf-8");
+		} catch(err) {
+			return Promise.reject(new InsightError("Could not write new dataset to file."));
+		}
+		return Promise.resolve();
+	}
+
+	public createInsightDataset(): InsightDataset {
+		return {
+			id: this.get_id(),
+			kind: this.get_kind(),
+			numRows: this.get_numRows(),
+		};
+	}
+
+	private set_numRows(num_rows: number){
+		this.numRows = num_rows;
+	}
+
+	private get_numRows() {
+		let numSections = this.get_courses().map(function(course) {
+			return course.getSections().length;
+		}).reduce((sum, current) => sum + current, 0);
+		this.set_numRows(numSections);
+
+		return this.numRows;
+	}
+
+	private get_kind() {
+		return this.kind;
 	}
 }

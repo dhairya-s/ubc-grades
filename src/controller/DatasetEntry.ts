@@ -1,4 +1,4 @@
-import {InsightDatasetKind} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind} from "./IInsightFacade";
 
 export interface DatasetEntry {
 	id: string;
@@ -16,4 +16,8 @@ export interface DatasetEntry {
 
 
 	get_courses(): any;
+
+	saveDataset(path: string): void;
+
+	createInsightDataset(): InsightDataset;
 }

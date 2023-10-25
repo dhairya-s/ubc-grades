@@ -41,7 +41,8 @@ export default class InsightFacade implements IInsightFacade {
 		let dataset: DatasetEntry | undefined;
 		let datasetIds = await this.datasetManager.getDatasetIds();
 		if (validator.validateId(id, datasetIds)) {
-			if (await validator.validateContent(id, content, kind)) {
+			let valid = await validator.validateContent(id, content, kind);
+			if (valid) {
 				dataset = validator.getValidDataset();
 				if (dataset) {
 					await this.datasetManager.saveDataset(dataset);

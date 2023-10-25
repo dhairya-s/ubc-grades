@@ -34,8 +34,7 @@ export default class CourseEntry {
 		- True if a valid section can be found
 		- False otherwise.
 		 */
-		// TODO: Implementation
-		return false;
+		return this.sections.length > 0;
 	}
 
 	private courseFromJSON(sectionData: any, courseName: string) {
