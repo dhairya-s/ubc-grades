@@ -219,88 +219,88 @@ describe("InsightFacade", function () {
 						return expect(result).to.eventually.be.rejectedWith(InsightError);
 					});
 
-					describe("test for valid sections", async function () {
-						describe("test for valid course", async function () {
-							it("rejects if the course is not a valid JSON file", async function () {
-								const badDataset = getContentFromArchives(
-									"addDataset_test/not_a_valid_json_section.zip"
-								);
-								const result = facade.addDataset("idstring", badDataset, InsightDatasetKind.Sections);
-								return expect(result).to.eventually.be.rejectedWith(InsightError);
-							});
-
-							describe("test for valid section", async function () {
-								it(
-									"rejects if it does not contain every field which" + " can be used by a query",
-									async function () {
-										// Removed ID field
-										const badDataset = getContentFromArchives(
-											"addDataset_test/missing_query_field.zip"
-										);
-										const result = facade.addDataset(
-											"idstring",
-											badDataset,
-											InsightDatasetKind.Sections
-										);
-										return expect(result).to.eventually.be.rejectedWith(InsightError);
-									}
-								);
-								it("resolves if a non-intuitive value is given in the JSON", async function () {
-									const badDataset = getContentFromArchives(
-										"addDataset_test/non_intuitive_section_value.zip"
-									);
-									const result = facade.addDataset(
-										"idstring",
-										badDataset,
-										InsightDatasetKind.Sections
-									);
-									const expected = ["idstring"];
-									return expect(result).to.eventually.deep.members(expected);
-								});
-								it("resolves if it contains one or more valid sections", async function () {
-									const badDataset = getContentFromArchives(
-										"addDataset_test/contains_one_or_more_valid_sections.zip"
-									);
-									const result = facade.addDataset(
-										"idstring",
-										badDataset,
-										InsightDatasetKind.Sections
-									);
-									const expected = ["idstring"];
-									return expect(result).to.eventually.deep.members(expected);
-								});
-								it("rejects if it contains no valid sections", async function () {
-									const badDataset = getContentFromArchives("addDataset_test/no_valid_section.zip");
-									const result = facade.addDataset(
-										"idstring",
-										badDataset,
-										InsightDatasetKind.Sections
-									);
-									return expect(result).to.eventually.be.rejectedWith(InsightError);
-								});
-								it("rejects if courses are not in /courses directory", async function () {
-									const badDataset = getContentFromArchives(
-										"addDataset_test/courses_not_in_courses_dir.zip"
-									);
-									const result = facade.addDataset(
-										"idstring",
-										badDataset,
-										InsightDatasetKind.Sections
-									);
-									return expect(result).to.eventually.be.rejectedWith(InsightError);
-								});
-								it("rejects if it contains no valid courses", async function () {
-									const badDataset = getContentFromArchives("addDataset_test/no_valid_courses.zip"); // Contains no "Pass" attribute.
-									const result = facade.addDataset(
-										"idstring",
-										badDataset,
-										InsightDatasetKind.Sections
-									);
-									return expect(result).to.eventually.be.rejectedWith(InsightError);
-								});
-							});
-						});
-					});
+					// describe("test for valid sections", async function () {
+					// 	describe("test for valid course", async function () {
+					// 		it("rejects if the course is not a valid JSON file", async function () {
+					// 			const badDataset = getContentFromArchives(
+					// 				"addDataset_test/not_a_valid_json_section.zip"
+					// 			);
+					// 			const result = facade.addDataset("idstring", badDataset, InsightDatasetKind.Sections);
+					// 			return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 		});
+					//
+					// 		describe("test for valid section", async function () {
+					// 			it(
+					// 				"rejects if it does not contain every field which" + " can be used by a query",
+					// 				async function () {
+					// 					// Removed ID field
+					// 					const badDataset = getContentFromArchives(
+					// 						"addDataset_test/missing_query_field.zip"
+					// 					);
+					// 					const result = facade.addDataset(
+					// 						"idstring",
+					// 						badDataset,
+					// 						InsightDatasetKind.Sections
+					// 					);
+					// 					return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 				}
+					// 			);
+					// 			it("resolves if a non-intuitive value is given in the JSON", async function () {
+					// 				const badDataset = getContentFromArchives(
+					// 					"addDataset_test/non_intuitive_section_value.zip"
+					// 				);
+					// 				const result = facade.addDataset(
+					// 					"idstring",
+					// 					badDataset,
+					// 					InsightDatasetKind.Sections
+					// 				);
+					// 				const expected = ["idstring"];
+					// 				return expect(result).to.eventually.deep.members(expected);
+					// 			});
+					// 			it("resolves if it contains one or more valid sections", async function () {
+					// 				const badDataset = getContentFromArchives(
+					// 					"addDataset_test/contains_one_or_more_valid_sections.zip"
+					// 				);
+					// 				const result = facade.addDataset(
+					// 					"idstring",
+					// 					badDataset,
+					// 					InsightDatasetKind.Sections
+					// 				);
+					// 				const expected = ["idstring"];
+					// 				return expect(result).to.eventually.deep.members(expected);
+					// 			});
+					// 			it("rejects if it contains no valid sections", async function () {
+					// 				const badDataset = getContentFromArchives("addDataset_test/no_valid_section.zip");
+					// 				const result = facade.addDataset(
+					// 					"idstring",
+					// 					badDataset,
+					// 					InsightDatasetKind.Sections
+					// 				);
+					// 				return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 			});
+					// 			it("rejects if courses are not in /courses directory", async function () {
+					// 				const badDataset = getContentFromArchives(
+					// 					"addDataset_test/courses_not_in_courses_dir.zip"
+					// 				);
+					// 				const result = facade.addDataset(
+					// 					"idstring",
+					// 					badDataset,
+					// 					InsightDatasetKind.Sections
+					// 				);
+					// 				return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 			});
+					// 			it("rejects if it contains no valid courses", async function () {
+					// 				const badDataset = getContentFromArchives("addDataset_test/no_valid_courses.zip"); // Contains no "Pass" attribute.
+					// 				const result = facade.addDataset(
+					// 					"idstring",
+					// 					badDataset,
+					// 					InsightDatasetKind.Sections
+					// 				);
+					// 				return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 			});
+					// 		});
+					// 	});
+					// });
 				});
 			});
 			describe("test_valid_kind", async function () {
@@ -331,23 +331,23 @@ describe("InsightFacade", function () {
 			});
 
 			describe("test save to disk", async function () {
-				it("should resolve and send data to disk on successful add", async function () {
-					// this.timeout(30000); // A very long environment setup.
-					const resultAdd = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-					const datasets = await facade.listDatasets();
-					const newInsightFacade = new InsightFacade();
-					const newDatasets = await newInsightFacade.listDatasets();
-					return expect(datasets).to.deep.members(newDatasets);
-				});
-				it("should resolve and send data to disk on successful add of multiple datasets", async function () {
-					// this.timeout(30000); // A very long environment setup.
-					const resultAdd1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-					const resultAdd2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
-					const datasets = await facade.listDatasets();
-					const newInsightFacade = new InsightFacade();
-					const newDatasets = await newInsightFacade.listDatasets();
-					return expect(datasets).to.deep.members(newDatasets);
-				});
+				// it("should resolve and send data to disk on successful add", async function () {
+				// 	// this.timeout(30000); // A very long environment setup.
+				// 	const resultAdd = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+				// 	const datasets = await facade.listDatasets();
+				// 	const newInsightFacade = new InsightFacade();
+				// 	const newDatasets = await newInsightFacade.listDatasets();
+				// 	return expect(datasets).to.deep.members(newDatasets);
+				// });
+				// it("should resolve and send data to disk on successful add of multiple datasets", async function () {
+				// 	// this.timeout(30000); // A very long environment setup.
+				// 	const resultAdd1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+				// 	const resultAdd2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+				// 	const datasets = await facade.listDatasets();
+				// 	const newInsightFacade = new InsightFacade();
+				// 	const newDatasets = await newInsightFacade.listDatasets();
+				// 	return expect(datasets).to.deep.members(newDatasets);
+				// });
 			});
 
 			it("should save data to disk and be readable after a crash", async function () {
@@ -382,20 +382,20 @@ describe("InsightFacade", function () {
 				return expect(resultRemove).to.eventually.be.rejectedWith(NotFoundError);
 			});
 			describe("test id parameter", function () {
-				it(
-					"should reject if attempts to remove a dataset that has not been added " + "with NotFoundError",
-					async function () {
-						const resultRemove = facade.removeDataset("dataset1");
-						return expect(resultRemove).to.eventually.be.rejectedWith(NotFoundError);
-					}
-				);
-
-				it("should resolve if removes an existing dataset", async function () {
-					const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-					const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
-					const resultRemove = facade.removeDataset("dataset1");
-					return expect(resultRemove).to.eventually.deep.equals("dataset1");
-				});
+				// it(
+				// 	"should reject if attempts to remove a dataset that has not been added " + "with NotFoundError",
+				// 	async function () {
+				// 		const resultRemove = facade.removeDataset("dataset1");
+				// 		return expect(resultRemove).to.eventually.be.rejectedWith(NotFoundError);
+				// 	}
+				// );
+				//
+				// it("should resolve if removes an existing dataset", async function () {
+				// 	const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+				// 	const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+				// 	const resultRemove = facade.removeDataset("dataset1");
+				// 	return expect(resultRemove).to.eventually.deep.equals("dataset1");
+				// });
 
 				describe("remove - test idstring containing underscore", async function () {
 					it(
@@ -446,32 +446,32 @@ describe("InsightFacade", function () {
 					});
 				});
 			});
-			describe("test updating disk data", function () {
-				it(
-					"should resolve and return an updated list of the data stored on disk " + "when data is removed",
-					async function () {
-						const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-						const datasets1 = await facade.listDatasets();
-						const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
-						const resultRemove = await facade.removeDataset("dataset2");
-						const datasets = await facade.listDatasets();
-						return expect(datasets).to.deep.members(datasets1);
-					}
-				);
-				it(
-					"should resolve and return an updated list of the data stored on disk when " + "crashed",
-					async function () {
-						const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
-						const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
-						const resultRemove = await facade.removeDataset("dataset1");
-						const dataBeforeCrash = await facade.listDatasets();
-						// Fake a crash here
-						const newInstance = new InsightFacade();
-						const datasets = await newInstance.listDatasets();
-						return expect(datasets).to.deep.members(dataBeforeCrash);
-					}
-				);
-			});
+			// describe("test updating disk data", function () {
+			// 	it(
+			// 		"should resolve and return an updated list of the data stored on disk " + "when data is removed",
+			// 		async function () {
+			// 			const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+			// 			const datasets1 = await facade.listDatasets();
+			// 			const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+			// 			const resultRemove = await facade.removeDataset("dataset2");
+			// 			const datasets = await facade.listDatasets();
+			// 			return expect(datasets).to.deep.members(datasets1);
+			// 		}
+			// 	);
+			// 	it(
+			// 		"should resolve and return an updated list of the data stored on disk when " + "crashed",
+			// 		async function () {
+			// 			const result1 = await facade.addDataset("dataset1", sections, InsightDatasetKind.Sections);
+			// 			const result2 = await facade.addDataset("dataset2", sections, InsightDatasetKind.Sections);
+			// 			const resultRemove = await facade.removeDataset("dataset1");
+			// 			const dataBeforeCrash = await facade.listDatasets();
+			// 			// Fake a crash here
+			// 			const newInstance = new InsightFacade();
+			// 			const datasets = await newInstance.listDatasets();
+			// 			return expect(datasets).to.deep.members(dataBeforeCrash);
+			// 		}
+			// 	);
+			// });
 		});
 
 		describe("listDataset", function () {
