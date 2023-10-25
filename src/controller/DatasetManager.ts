@@ -9,7 +9,7 @@ export enum Operation {
 }
 
 export default class DatasetManager {
-	private path = "data/";
+	private path = "./data/";
 	private ledgerPath = this.path + "datasetLedger.json";
 
 	constructor() {
