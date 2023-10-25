@@ -1,6 +1,7 @@
 import {InsightDatasetKind,} from "./IInsightFacade";
 import {DatasetEntry} from "./DatasetEntry";
 import SectionsDatasetEntry from "./SectionsDatasetEntry";
+import DatasetManager from "./DatasetManager";
 
 export default class ValidateDataset {
 	public dataset: DatasetEntry | undefined;
@@ -41,7 +42,9 @@ export default class ValidateDataset {
 			let sectionsDataset = new SectionsDatasetEntry();
 			try {
 				await sectionsDataset.createDatasetEntry(id, content, kind);
-				return Promise.resolve(sectionsDataset.validateDatasetEntry());
+				let valid = sectionsDataset.validateDatasetEntry();
+				this.setDataset(sectionsDataset);
+				return Promise.resolve(valid);
 			} catch {
 				return Promise.resolve(false);
 			}
@@ -50,6 +53,10 @@ export default class ValidateDataset {
 			return Promise.resolve(false);
 		}
 		return Promise.resolve(false);
+	}
+
+	public setDataset(dataset: DatasetEntry): void {
+		this.dataset = dataset;
 	}
 
 	public getValidDataset(): DatasetEntry | undefined {
