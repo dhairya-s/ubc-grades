@@ -98,7 +98,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	private async parseZip(content: string, id: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
 		let zip = new JSZip();
-		let path = "test/resources/archives/saved_data/";
+		let path = "data/";
 		let entry = new DatasetEntry(id, kind);
 		await zip.loadAsync(content, {base64: true}).then(async function (unzipped_contents) {
 			try {
@@ -120,7 +120,7 @@ export default class InsightFacade implements IInsightFacade {
 		this.datasets = [];
 		// Load datasets from folder
 		// List key properties
-		let dir = "test/resources/archives/saved_data/";
+		let dir = "data/";
 		try {
 			let dirFiles = fs.readdirSync(dir);
 			dirFiles = dirFiles.filter(function (value) {
@@ -168,7 +168,7 @@ export default class InsightFacade implements IInsightFacade {
 			this.datasets = this.datasets.filter(function (dataset) {
 				return dataset.get_id() !== id;
 			});
-			let fileDir = "test/resources/archives/saved_data/" + id + ".json";
+			let fileDir = "data/" + id + ".json";
 			fs_extra.removeSync(fileDir);
 		} catch {
 			return Promise.reject(new InsightError("Unable to remove dataset."));
