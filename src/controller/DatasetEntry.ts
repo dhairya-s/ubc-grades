@@ -8,7 +8,7 @@ export default class DatasetEntry implements InsightDataset{
 	public kind: InsightDatasetKind = InsightDatasetKind.Sections;
 	public courses: CourseEntry[] = [];
 	public numRows: number = 0;
-	public path: string = "data/"; // For on disk storage
+	public path: string = "data/"; // For on disk storage - gitkeep added
 
 	constructor(id: string, kind: InsightDatasetKind) {
 		this.id = id;
