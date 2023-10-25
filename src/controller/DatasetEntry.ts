@@ -20,4 +20,6 @@ export interface DatasetEntry {
 	saveDataset(path: string): void;
 
 	createInsightDataset(): InsightDataset;
+
+	get_id(): string;
 }

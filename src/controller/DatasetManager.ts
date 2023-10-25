@@ -1,6 +1,7 @@
 import {DatasetEntry} from "./DatasetEntry";
-import {InsightDataset,InsightError} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import fs from "fs-extra";
+import SectionsDatasetEntry from "./SectionsDatasetEntry";
 
 
 export enum Operation {
@@ -108,7 +109,30 @@ export default class DatasetManager {
 		}
 	}
 
-	public async loadDatasetsFromDisk(): Promise<DatasetEntry[]> {
-		return Promise.reject("Could not load datasets from disk.");
+	public async loadSectionsDatasetsFromDisk(): Promise<SectionsDatasetEntry[]> {
+		// return Promise.reject("Could not load datasets from disk.");
+		try {
+			let dirFiles = fs.readdirSync(this.path);
+			dirFiles = dirFiles.filter(function(value) {
+				return value !== ".gitkeep";
+			});
+
+			let loadedDatasetPromises: Array<Promise<SectionsDatasetEntry>> = [];
+
+			for (const dir of dirFiles) {
+				const dataset = this.loadDataset(dir);
+				loadedDatasetPromises.push(dataset);
+			}
+
+			let datasetEntries = await Promise.all(loadedDatasetPromises);
+			return Promise.resolve(datasetEntries);
+
+		} catch {
+			return Promise.reject(new InsightError("Could not load datasets."));
+		}
+	}
+
+	public async loadDataset(datasetDir: string): Promise<SectionsDatasetEntry> {
+		return Promise.resolve(new SectionsDatasetEntry());
 	}
 }

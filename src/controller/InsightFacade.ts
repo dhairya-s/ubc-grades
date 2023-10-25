@@ -15,6 +15,7 @@ import * as fs_extra from "fs-extra";
 import ValidateDataset from "./validateDataset";
 import {DatasetEntry} from "./DatasetEntry";
 import DatasetManager from "./DatasetManager";
+import SectionsDatasetEntry from "./SectionsDatasetEntry";
 
 export default class InsightFacade implements IInsightFacade {
 	private datasetManager: DatasetManager = new DatasetManager();
@@ -58,30 +59,30 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		// await this.listDatasets();
-		// let isValid: boolean = false;
-		// let validate = new ValidateQuery(query as typeof Object);
-		// let collect = new CollectQuery(query as typeof Object, this.datasets);
-		// let results: InsightResult[] = [];
-		// try {
-		// 	isValid = validate.validateQuery();
-		//
-		// 	if (!isValid) {
-		// 		throw new InsightError("Invalid Query");
-		// 	}
-		//
-		// 	results = await collect.CollectQuery();
-		// } catch (e) {
-		// 	if (e instanceof InsightError) {
-		// 		throw e;
-		// 	} else if (e instanceof ResultTooLargeError) {
-		// 		throw e;
-		// 	} else {
-		// 		throw new InsightError(String(e instanceof Error));
-		// 	}
-		// }
-		//
-		// return Promise.resolve(results);
+		let datasets: SectionsDatasetEntry[] = await this.datasetManager.loadSectionsDatasetsFromDisk();
+		let isValid: boolean = false;
+		let validate = new ValidateQuery(query as typeof Object);
+		let collect = new CollectQuery(query as typeof Object, datasets);
+		let results: InsightResult[] = [];
+		try {
+			isValid = validate.validateQuery();
+
+			if (!isValid) {
+				throw new InsightError("Invalid Query");
+			}
+
+			results = await collect.CollectQuery();
+		} catch (e) {
+			if (e instanceof InsightError) {
+				throw e;
+			} else if (e instanceof ResultTooLargeError) {
+				throw e;
+			} else {
+				throw new InsightError(String(e instanceof Error));
+			}
+		}
+
+		return Promise.resolve(results);
 		return Promise.reject("");
 	}
 
