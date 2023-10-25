@@ -94,7 +94,7 @@ export default class InsightFacade implements IInsightFacade {
 	public async removeDataset(id: string): Promise<string> {
 		try {
 			await this.datasetManager.removeDataset(id);
-			return Promise.reject(new InsightError("RemoveDataset failed."));
+			return Promise.reject(new NotFoundError("RemoveDataset failed."));
 		} catch {
 			return Promise.resolve(id);
 		}

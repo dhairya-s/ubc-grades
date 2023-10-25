@@ -1,5 +1,5 @@
 import {DatasetEntry} from "./DatasetEntry";
-import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
 import fs from "fs-extra";
 import SectionsDatasetEntry from "./SectionsDatasetEntry";
 
@@ -10,7 +10,7 @@ export enum Operation {
 }
 
 export default class DatasetManager {
-	private path = "./data/";
+	private path = "./data";
 	private ledgerPath = this.path + "datasetLedger.json";
 
 	constructor() {
@@ -35,13 +35,33 @@ export default class DatasetManager {
 		 */
 		const datasetIds = await this.getDatasetIds();
 		if (!datasetIds.includes(id)) {
-			// try {
-			//
-			// } catch {
-			//
-			// }
+			await this.removeDatasetFromDisk(id);
+			await this.removeDatasetFromLedger(id);
 		} else {
-			return Promise.reject("Cannot remove nonexistent ID.");
+			return Promise.reject(new NotFoundError("Cannot remove nonexistent ID."));
+		}
+	}
+
+	private async removeDatasetFromLedger(id: string) {
+		/*
+		Removes dataset from on ledger storage.
+		 */
+		return Promise.resolve();
+	}
+
+	private async removeDatasetFromDisk(id: string) {
+		/*
+		Removes dataset from on disk storage.
+		 */
+		try {
+			let dirFiles = fs.readdirSync(this.path);
+			let removeDir = dirFiles.filter(function(value) {
+				return value.includes(id);
+			})[0];
+			fs.removeSync(removeDir);
+			return Promise.resolve();
+		} catch {
+			return Promise.reject(new NotFoundError("File in disk not found."));
 		}
 	}
 
@@ -68,9 +88,7 @@ export default class DatasetManager {
 		return Promise.resolve();
 	}
 
-	// private async removeDatasetEntry(dataset: DatasetEntry) {
-	//
-	// }
+	// private async getLedgerContents()
 
 	public async readDatasetLedger(): Promise<InsightDataset[]> {
 		let datasets: any[] = [];
