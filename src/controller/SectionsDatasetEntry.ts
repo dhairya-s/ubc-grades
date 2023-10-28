@@ -133,9 +133,12 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 	}
 
 	public async saveDataset(path: string): Promise<void> {
-		let saveDir = path + this.get_id() + ".json";
+		let saveDir = path + "/" + this.get_id() + ".json";
 		let content = JSON.stringify(this);
 		try {
+			if (!fs.existsSync(path + "/")){
+				fs.mkdirSync(path + "/");
+			}
 			await fs.writeJSON(saveDir, content, "utf-8");
 		} catch(err) {
 			return Promise.reject(new InsightError("Could not write new dataset to file."));
