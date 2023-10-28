@@ -11,7 +11,7 @@ export enum Operation {
 
 export default class DatasetManager {
 	private path = "./data";
-	private ledgerPath = this.path + "datasetLedger.json";
+	private ledgerPath = this.path + "/datasetLedger.json";
 
 	constructor() {
 		/*
@@ -34,9 +34,10 @@ export default class DatasetManager {
 		Remove dataset from saved datasets.
 		 */
 		const datasetIds = await this.getDatasetIds();
-		if (!datasetIds.includes(id)) {
+		if (datasetIds.includes(id)) {
 			await this.removeDatasetFromDisk(id);
 			await this.removeDatasetFromLedger(id);
+			return Promise.resolve(id);
 		} else {
 			return Promise.reject(new NotFoundError("Cannot remove nonexistent ID."));
 		}
@@ -46,7 +47,23 @@ export default class DatasetManager {
 		/*
 		Removes dataset from on ledger storage.
 		 */
+		let datasets = await this.readDatasetLedger();
+		datasets = datasets.filter(function (dataset: any): boolean {
+			return dataset.id !== id;
+		});
+		console.log(datasets);
+		await this.saveDatasetLedger(datasets);
 		return Promise.resolve();
+	}
+
+	private async saveDatasetLedger(datasets: any[]) {
+		let content = JSON.stringify(datasets);
+		try {
+			await fs.writeJSON(this.ledgerPath, content, "utf-8");
+			return Promise.resolve();
+		} catch(err) {
+			return Promise.reject(new InsightError("Could not write to file."));
+		}
 	}
 
 	private async removeDatasetFromDisk(id: string) {
@@ -58,7 +75,7 @@ export default class DatasetManager {
 			let removeDir = dirFiles.filter(function(value) {
 				return value.includes(id);
 			})[0];
-			fs.removeSync(removeDir);
+			fs.removeSync(this.path + "/" + removeDir);
 			return Promise.resolve();
 		} catch {
 			return Promise.reject(new NotFoundError("File in disk not found."));
@@ -79,16 +96,9 @@ export default class DatasetManager {
 		} catch {
 			datasets.push(dataset.createInsightDataset());
 		}
-		let content = JSON.stringify(datasets);
-		try {
-			await fs.writeJSON(this.ledgerPath, content, "utf-8");
-		} catch(err) {
-			return Promise.reject(new InsightError("Could not write to file."));
-		}
+		await this.saveDatasetLedger(datasets);
 		return Promise.resolve();
 	}
-
-	// private async getLedgerContents()
 
 	public async readDatasetLedger(): Promise<InsightDataset[]> {
 		let datasets: any[] = [];

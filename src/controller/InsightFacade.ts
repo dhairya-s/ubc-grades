@@ -83,7 +83,6 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		return Promise.resolve(results);
-		return Promise.reject("");
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
@@ -93,10 +92,10 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async removeDataset(id: string): Promise<string> {
 		try {
-			await this.datasetManager.removeDataset(id);
-			return Promise.reject(new NotFoundError("RemoveDataset failed."));
+			let result = await this.datasetManager.removeDataset(id);
+			return Promise.resolve(result);
 		} catch {
-			return Promise.resolve(id);
+			return Promise.reject(new NotFoundError("RemoveDataset failed."));
 		}
 	}
 }

@@ -16,14 +16,26 @@ const getContentFromArchives = (name: string): string =>
  * Removes all files within the persistDir.
  */
 function clearDisk(): void {
-	let dirFiles = fs.readdirSync(persistDir);
-	dirFiles = dirFiles.filter(function(value) {
-		return value !== ".gitkeep";
-	});
-	for (const file of dirFiles) {
-		// console.log(persistDir + file);
-		fs.removeSync(persistDir + file);
+	let persistDirMod = persistDir + "/";
+	if (fs.existsSync(persistDirMod)) {
+		let dirFiles = fs.readdirSync(persistDirMod);
+		dirFiles = dirFiles.filter(function(value) {
+			return value !== ".gitkeep";
+		});
+		for (const file of dirFiles) {
+			// console.log(persistDir + file);
+			fs.removeSync(persistDirMod + file);
+		}
+		fs.removeSync(persistDirMod);
 	}
+	// let dirFiles = fs.readdirSync(persistDirMod);
+	// dirFiles = dirFiles.filter(function(value) {
+	// 	return value !== ".gitkeep";
+	// });
+	// for (const file of dirFiles) {
+	// 	// console.log(persistDir + file);
+	// 	fs.removeSync(persistDirMod + file);
+	// }
 }
 
 export {getContentFromArchives, clearDisk};
