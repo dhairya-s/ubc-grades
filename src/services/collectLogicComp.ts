@@ -38,7 +38,7 @@ export default class CollectLogicComp {
 		// let end1 = performance.now();
 		// console.log("LogicComp", (end1 - start) / 1000);
 		if (key === "AND") {
-			// propertiesToAdd = this.handleAndComp(propertiesToLogic);
+			propertiesToAdd = this.handleAndComp(propertiesToLogic);
 		} else if (key === "OR") {
 			propertiesToAdd = this.handleOrComp(propertiesToLogic);
 		}
@@ -148,15 +148,18 @@ class SetWithContentEquality<T> {
 	constructor(getKey: (item: T) => string) {
 		this.getKey = getKey;
 	}
+
 	public add(item: T): void {
 		const key = this.getKey(item);
 		if (!this.items.some((existing) => this.getKey(existing) === key)) {
 			this.items.push(item);
 		}
 	}
+
 	public has(item: T): boolean {
 		return this.items.some((existing) => this.getKey(existing) === this.getKey(item));
 	}
+
 	public values(): T[] {
 		return [...this.items];
 	}

@@ -1,0 +1,227 @@
+{
+	"title": "not(LOGIC-AND-GT-avg-60-LT-AVG-98)",
+	"input": {
+		"WHERE": {
+			"NOT": {
+				"AND": [
+					{
+						"GT": {
+							"sections_avg": 40
+						}
+					},
+					{
+						"LT": {
+							"sections_avg": 98
+						}
+					}
+				]
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_title",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "frst",
+			"sections_title": "forest ecology",
+			"sections_avg": 0
+		},
+		{
+			"sections_dept": "lfs",
+			"sections_title": "in land food com",
+			"sections_avg": 0
+		},
+		{
+			"sections_dept": "lfs",
+			"sections_title": "in land food com",
+			"sections_avg": 0
+		},
+		{
+			"sections_dept": "wood",
+			"sections_title": "prpty,ident&uses",
+			"sections_avg": 1
+		},
+		{
+			"sections_dept": "busi",
+			"sections_title": "found re apprai",
+			"sections_avg": 4
+		},
+		{
+			"sections_dept": "busi",
+			"sections_title": "found re apprai",
+			"sections_avg": 4
+		},
+		{
+			"sections_dept": "fopr",
+			"sections_title": "sustnbt&frst ops",
+			"sections_avg": 4.5
+		},
+		{
+			"sections_dept": "civl",
+			"sections_title": "engr econ anlys",
+			"sections_avg": 33
+		},
+		{
+			"sections_dept": "phil",
+			"sections_title": "log & crit think",
+			"sections_avg": 33.2
+		},
+		{
+			"sections_dept": "hist",
+			"sections_title": "hist 1500 - 20 c",
+			"sections_avg": 34
+		},
+		{
+			"sections_dept": "educ",
+			"sections_title": "language & curr",
+			"sections_avg": 39.03
+		},
+		{
+			"sections_dept": "educ",
+			"sections_title": "language & curr",
+			"sections_avg": 39.03
+		},
+		{
+			"sections_dept": "crwr",
+			"sections_title": "thesis",
+			"sections_avg": 98
+		},
+		{
+			"sections_dept": "crwr",
+			"sections_title": "thesis",
+			"sections_avg": 98
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "assess lrn diffi",
+			"sections_avg": 98.08
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "cl pro prim care",
+			"sections_avg": 98.21
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "cl pro prim care",
+			"sections_avg": 98.21
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "assess lrn diffi",
+			"sections_avg": 98.36
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "dev el sk df&hrd",
+			"sections_avg": 98.45
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "dev el sk df&hrd",
+			"sections_avg": 98.45
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "fam nrs pract",
+			"sections_avg": 98.5
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "fam nrs pract",
+			"sections_avg": 98.5
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "educ stds autism",
+			"sections_avg": 98.58
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "educ stds autism",
+			"sections_avg": 98.58
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "fam nrs pract",
+			"sections_avg": 98.58
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "fam nrs pract",
+			"sections_avg": 98.58
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "assess lrn diffi",
+			"sections_avg": 98.7
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "cl pro prim care",
+			"sections_avg": 98.71
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_title": "cl pro prim care",
+			"sections_avg": 98.71
+		},
+		{
+			"sections_dept": "eece",
+			"sections_title": "multimedia sys",
+			"sections_avg": 98.75
+		},
+		{
+			"sections_dept": "eece",
+			"sections_title": "multimedia sys",
+			"sections_avg": 98.75
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "educ stds autism",
+			"sections_avg": 98.76
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "educ stds autism",
+			"sections_avg": 98.76
+		},
+		{
+			"sections_dept": "epse",
+			"sections_title": "educ stds autism",
+			"sections_avg": 98.8
+		},
+		{
+			"sections_dept": "spph",
+			"sections_title": "work int health",
+			"sections_avg": 98.98
+		},
+		{
+			"sections_dept": "spph",
+			"sections_title": "work int health",
+			"sections_avg": 98.98
+		},
+		{
+			"sections_dept": "cnps",
+			"sections_title": "career planning",
+			"sections_avg": 99.19
+		},
+		{
+			"sections_dept": "math",
+			"sections_title": "algb topology i",
+			"sections_avg": 99.78
+		},
+		{
+			"sections_dept": "math",
+			"sections_title": "algb topology i",
+			"sections_avg": 99.78
+		}
+	]
+}

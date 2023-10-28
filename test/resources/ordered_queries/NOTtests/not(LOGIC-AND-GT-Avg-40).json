@@ -1,11 +1,15 @@
 {
-	"title": "not(MC-GT-pass-0)",
+	"title": "not(LOGIC-AND-GT-avg-40)",
 	"input": {
 		"WHERE": {
 			"NOT": {
-				"GT": {
-					"sections_pass": 0
-				}
+				"AND": [
+					{
+						"GT": {
+							"sections_avg": 40
+						}
+					}
+				]
 			}
 		},
 		"OPTIONS": {
@@ -53,6 +57,31 @@
 			"sections_dept": "fopr",
 			"sections_title": "sustnbt&frst ops",
 			"sections_avg": 4.5
+		},
+		{
+			"sections_dept": "civl",
+			"sections_title": "engr econ anlys",
+			"sections_avg": 33
+		},
+		{
+			"sections_dept": "phil",
+			"sections_title": "log & crit think",
+			"sections_avg": 33.2
+		},
+		{
+			"sections_dept": "hist",
+			"sections_title": "hist 1500 - 20 c",
+			"sections_avg": 34
+		},
+		{
+			"sections_dept": "educ",
+			"sections_title": "language & curr",
+			"sections_avg": 39.03
+		},
+		{
+			"sections_dept": "educ",
+			"sections_title": "language & curr",
+			"sections_avg": 39.03
 		}
 	]
 }
