@@ -325,23 +325,41 @@ describe("InsightFacade", function () {
 
 		type PQErrorKind = "ResultTooLargeError" | "InsightError";
 
+		// for queries with order
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery tests",
 			(input) => facade.performQuery(input),
-			// "./test/resources/queries",
 			"./test/resources/ordered_queries",
 
 			{
 				assertOnResult: async (actual, expected) => {
-					// expect(actual).to.have.deep.members(await expected);
-					// let expectedLoaded = await expected;
 					expect(actual).to.deep.equals(await expected);
-					// if (expectedLoaded.length === 1 || expectedLoaded.length === 0) {
-					// 	expect(actual).to.have.deep.members(await expected);
-					// } else {
-					// 	expect(actual).to.have.deep.equals(await expected);
-					// }
+				},
+				errorValidator: (error): error is PQErrorKind =>
+					error === "ResultTooLargeError" || error === "InsightError",
+				assertOnError: (actual, expected) => {
+					if (expected === "InsightError") {
+						expect(actual).to.be.instanceof(InsightError);
+					} else if (expected === "ResultTooLargeError") {
+						expect(actual).to.be.instanceof(ResultTooLargeError);
+					} else {
+						// this should be unreachable
+						expect.fail("UNEXPECTED ERROR");
+					}
+				},
+			}
+		);
 
+		// for queries without order
+		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
+			"Dynamic InsightFacade PerformQuery tests",
+			(input) => facade.performQuery(input),
+			// "./test/resources/queries",
+			"./test/resources/unordered_queries",
+
+			{
+				assertOnResult: async (actual, expected) => {
+					expect(actual).to.have.deep.members(await expected);
 				},
 				errorValidator: (error): error is PQErrorKind =>
 					error === "ResultTooLargeError" || error === "InsightError",
