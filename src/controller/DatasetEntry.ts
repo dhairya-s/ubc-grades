@@ -14,9 +14,6 @@ export interface DatasetEntry {
 	 */
 	createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): void;
 
-
-	get_courses(): any;
-
 	saveDataset(path: string): void;
 
 	createInsightDataset(): InsightDataset;
