@@ -1,63 +1,90 @@
 import SectionEntry from "./SectionEntry";
+import JSZip from "jszip";
 import {InsightError} from "./IInsightFacade";
-export default class CourseEntry {
-	private sections: SectionEntry[] = [];
-	private courseName: string = "";
-	// Needs a path :)
 
-	public courseFromObject(course: any) {
-		this.courseName = course["courseName"];
-		for (const section of course["sections"]){
-			try {
-				let sectionEntry = new SectionEntry();
-				sectionEntry.section_from_dataset(section);
-				this.addSection(sectionEntry);
-			} catch {
-				// Don't add the section
-			}
+export default class CourseEntry {
+
+	public sections: SectionEntry[] = [];
+	public courseName: string = "";
+
+	public async parseCourse(file: JSZip.JSZipObject | null, filename: string): Promise<CourseEntry> {
+		/*
+		Parses a course from a JSZip representation.
+
+		Iterate through sections in the file and attempts to create sectionEntries if
+		they can be created. Else throw error and skip to the next one.
+		 */
+		if (file != null) {
+			await file.async("text").then((body: any) => {
+				try {
+					this.courseFromJSON(body, filename.substring(8));
+				} catch {
+					throw new InsightError("Course is invalid");
+				}
+			});
 		}
+		return Promise.resolve(this);
 	}
 
-	public courseFromJSON(sectionData: string, courseName: string) {
-		try{
-			this.courseName = courseName;
+	public findValidSection(): boolean {
+		/*
+		Iterate through all sections to find a valid section.
+
+		RETURNS:
+		- True if a valid section can be found
+		- False otherwise.
+		 */
+		return this.sections.length > 0;
+	}
+
+	private courseFromJSON(sectionData: any, courseName: string) {
+		try {
+			this.setCourseName(courseName);
 			let sectionJSON = JSON.parse(sectionData);
 			for (const result of sectionJSON["result"]){
-				try{
+				try {
 					let section = new SectionEntry();
-					section.section_from_zip_json(result);
+					section.sectionFromJSON(result);
 					this.addSection(section);
 				} catch {
-					// Don't add the section.
+					// continue
 				}
 			}
 		} catch {
-			throw new InsightError("An invalid JSON was passed");
-		}
-		if (this.getSections().length <= 0) {
-			throw new InsightError("Course " + courseName + " is invalid.");
+			throw new InsightError("An invalid JSON was passed.");
 		}
 	}
 
-	public saveCourse(path: string) {
-		return;
-
-	};
-
-	public removeCourse(path: string) {
-		return;
-	};
-
-	public loadSections(directory: string) {
-		return;
+	private setCourseName(courseName: string) {
+		this.courseName = courseName;
 	}
 
-	public addSection(section: SectionEntry){
+	private addSection(section: SectionEntry) {
 		this.sections.push(section);
 		return;
 	}
 
-	public getSections(): SectionEntry[] {
+	public getSections() {
 		return this.sections;
+	}
+
+	public setSections(sections: SectionEntry[]) {
+		this.sections = sections;
+	}
+
+	public JSONToEntry(json: any): CourseEntry {
+		this.setCourseName(json["name"]);
+
+		let sections = json["sections"];
+		let sectionEntries = [];
+		for (const section of sections) {
+			const sectionEntry = new SectionEntry();
+			sectionEntry.sectionFromDisk(section);
+			sectionEntries.push(sectionEntry);
+		}
+
+		this.setSections(sectionEntries);
+
+		return this;
 	}
 }

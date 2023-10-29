@@ -1,12 +1,12 @@
-import DatasetEntry from "../controller/DatasetEntry";
+import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectQuery from "./collectQuery";
 import CollectAll from "./collectAll";
 
 export default class CollectNegComp {
-	private datasetEntries: DatasetEntry[] = [];
+	private datasetEntries: SectionsDatasetEntry[] = [];
 
-	constructor(datasetEntries: DatasetEntry[]) {
+	constructor(datasetEntries: SectionsDatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 

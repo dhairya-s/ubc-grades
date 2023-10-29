@@ -7,73 +7,62 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import DatasetEntry from "../../src/controller/DatasetEntry";
 import JSZip from "jszip";
 import ValidateQuery from "../services/validateQuery";
 import * as fs from "fs";
 import CollectQuery from "../services/collectQuery";
 import * as fs_extra from "fs-extra";
+import ValidateDataset from "./validateDataset";
+import {DatasetEntry} from "./DatasetEntry";
+import DatasetManager from "./DatasetManager";
+import SectionsDatasetEntry from "./SectionsDatasetEntry";
 
 export default class InsightFacade implements IInsightFacade {
+	private datasetManager: DatasetManager = new DatasetManager();
 
-	private datasets: DatasetEntry[] = [];
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// Need to load datasets that have previously been in the system
-		await this.listDatasets(); // in case there is a crash
-		if (!this.validateIdAdd(id)) {
-			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
-                "Try an ID without an underscore or non duplicate id."));
-
-		} else if (!this.validateKind(kind)) {
-			return Promise.reject(
-				new InsightError("addDataset was given a 'rooms' kind when it only accepts " + "'sections'.")
-			);
-		}
-		try {
-			let parsedContent = await this.parseContent(content, id, kind);
-			parsedContent.get_numRows();
-			await parsedContent.save_dataset();
-			this.datasets.push(parsedContent);
-			let names = this.get_dataset_names();
-			return Promise.resolve(names);
-		} catch {
-			return Promise.reject(new InsightError("Invalid content was provided."));
-		}
-	}
-
-	private duplicate_id_check(id: string): boolean {
-		// Returns true if this is duplicated
-		let existingIds = this.get_dataset_names();
-		return existingIds.includes(id);
-	}
-
-	private get_dataset_names(): string[] {
-		return this.datasets.map(function (dataset) {
-			return dataset.get_id();
-		});
-	}
-
-	private validateIdAdd(id: string): boolean {
-		return !(id.trim().length < 1 || id.includes("_")) && !this.duplicate_id_check(id);
-	}
-
-	private async parseContent(content: string, id: string, kind: InsightDatasetKind): Promise<Awaited<DatasetEntry>> {
 		/*
-		Parses content into a readable Dataset object.
+			The promise should fulfill on a successful add, reject for any failures.
+			The promise should fulfill with a string array,
+			containing the ids of all currently added datasets upon a successful add.
+			The promise should reject with an InsightError describing the error.
+
+			An id is invalid if it contains an underscore, or is only whitespace characters.
+			If id is the same as the id of an already added dataset, the dataset should be rejected and not saved.
+
+			After receiving the dataset, it should be processed into a data structure of
+			your design. The processed data structure should be persisted to disk; your
+			system should be able to load this persisted value into memory for answering
+			queries.
+
+			Ultimately, a dataset must be added or loaded from disk before queries can
+			be successfully answered.
 		 */
-		try {
-			let entry = await this.parseZip(content, id, kind); // TODO: Does this need to return anything at all?
-			return Promise.resolve(entry);
-		} catch {
-			return Promise.reject(new InsightError("Content could not be parsed"));
+		const validator = new ValidateDataset();
+		let dataset: DatasetEntry | undefined;
+		let datasetIds = await this.datasetManager.getDatasetIds();
+		if (validator.validateId(id, datasetIds)) {
+			let valid = await validator.validateContent(id, content, kind);
+			if (valid) {
+				dataset = validator.getValidDataset();
+				if (dataset) {
+					await this.datasetManager.saveDataset(dataset);
+				}
+				let result = await this.datasetManager.getDatasetIds();
+				return Promise.resolve(result);
+			} else {
+				return Promise.reject(new InsightError("Invalid content."));
+			}
+		} else {
+			return Promise.reject(new InsightError("Invalid id."));
 		}
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		await this.listDatasets();
+		let datasets: SectionsDatasetEntry[] = await this.datasetManager.loadSectionsDatasetsFromDisk();
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
-		let collect = new CollectQuery(query as typeof Object, this.datasets);
+		let collect = new CollectQuery(query as typeof Object, datasets);
 		let results: InsightResult[] = [];
 		try {
 			isValid = validate.validateQuery();
@@ -96,85 +85,17 @@ export default class InsightFacade implements IInsightFacade {
 		return Promise.resolve(results);
 	}
 
-	private async parseZip(content: string, id: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
-		let zip = new JSZip();
-		let path = "data/";
-		let entry = new DatasetEntry(id, kind);
-		await zip.loadAsync(content, {base64: true}).then(async function (unzipped_contents) {
-			try {
-				await entry.parse_dataset_entry(zip, unzipped_contents);
-				// console.log(entry);
-				return entry;
-			} catch {
-				throw new InsightError("Unable to parse course");
-			}
-		});
-		return entry;
-	}
-
-	private validateKind(kind: InsightDatasetKind): boolean {
-		return kind !== InsightDatasetKind.Rooms;
-	}
-
 	public async listDatasets(): Promise<InsightDataset[]> {
-		this.datasets = [];
-		// Load datasets from folder
-		// List key properties
-		let dir = "data/";
-		try {
-			let dirFiles = fs.readdirSync(dir);
-			dirFiles = dirFiles.filter(function (value) {
-				return value !== ".gitkeep";
-			});
-
-			let loadedDatasetPromises: Array<Promise<DatasetEntry>> = [];
-			let datasetIds = dirFiles.map((x) => x.substring(0, x.length - 4));
-
-			for (const i in datasetIds) {
-				let newContent = new DatasetEntry(datasetIds[i], InsightDatasetKind.Sections);
-				let result = newContent.load_dataset(dir + dirFiles[i]);
-				loadedDatasetPromises.push(result);
-			}
-
-			let datasetEntries = await Promise.all(loadedDatasetPromises);
-			this.datasets = datasetEntries;
-
-			let loadedDatasets: InsightDataset[] = [];
-			for (const dataset of datasetEntries) {
-				loadedDatasets.push(dataset.dataset_entry_to_insight_dataset());
-			}
-			return Promise.resolve(loadedDatasets);
-		} catch {
-			return Promise.reject(new InsightError("Could not load datasets."));
-		}
-	}
-
-	private validateIdRemove(id: string): boolean {
-		return !(id.trim().length < 1 || id.includes("_"));
+		const result = await this.datasetManager.readDatasetLedger();
+		return Promise.resolve(result);
 	}
 
 	public async removeDataset(id: string): Promise<string> {
-		await this.listDatasets(); // in case there is a crash
-		if (!this.validateIdRemove(id)) {
-			return Promise.reject(new InsightError("Invalid ID was given to addDataset. " +
-				"Try an ID without an underscore or not all whitespace."));
-		}
-
-		let datasetNames = this.get_dataset_names();
-		if (!datasetNames.includes(id)) {
-			return Promise.reject(new NotFoundError("Dataset not found"));
-		}
 		try {
-			this.datasets = this.datasets.filter(function (dataset) {
-				return dataset.get_id() !== id;
-			});
-			let fileDir = "data/" + id + ".json";
-			fs_extra.removeSync(fileDir);
+			let result = await this.datasetManager.removeDataset(id);
+			return Promise.resolve(result);
 		} catch {
-			return Promise.reject(new InsightError("Unable to remove dataset."));
+			return Promise.reject(new NotFoundError("RemoveDataset failed."));
 		}
-
-		return Promise.resolve(id);
-		// return Promise.reject(new InsightError("Could not remove dataset"));
 	}
 }

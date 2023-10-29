@@ -1,12 +1,12 @@
-import DatasetEntry from "../controller/DatasetEntry";
+import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
 import CollectQuery from "./collectQuery";
 import {log} from "util";
 
 export default class CollectLogicComp {
-	private datasetEntries: DatasetEntry[] = [];
+	private datasetEntries: SectionsDatasetEntry[] = [];
 
-	constructor(datasetEntries: DatasetEntry[]) {
+	constructor(datasetEntries: SectionsDatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 

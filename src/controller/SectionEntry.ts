@@ -12,7 +12,7 @@ export default class SectionEntry {
 	private fail: number = -100;
 	private audit: number = -100;
 
-	public section_from_zip_json(jsonSection: any) {
+	public sectionFromJSON(jsonSection: any) {
 		let keys = Object.keys(jsonSection);
 		let expectedKeys = ["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 		const hasAllElems = expectedKeys.every((elem) => keys.includes(elem));
@@ -31,7 +31,7 @@ export default class SectionEntry {
 		this.set_audit(jsonSection["Audit"]);
 	}
 
-	public section_from_dataset(sectionObject: any) {
+	public sectionFromDisk(sectionObject: any) {
 		this.set_uuid(sectionObject["uuid"]);
 		this.set_id(sectionObject["id"]);
 		this.set_title(sectionObject["title"]);
