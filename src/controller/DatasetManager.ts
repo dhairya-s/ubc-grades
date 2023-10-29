@@ -142,7 +142,7 @@ export default class DatasetManager {
 		try {
 			let dirFiles = fs.readdirSync(this.path);
 			dirFiles = dirFiles.filter(function(value) {
-				return value !== ".gitkeep";
+				return value !== "datasetLedger.json";
 			});
 
 			let loadedDatasetPromises: Array<Promise<SectionsDatasetEntry>> = [];
@@ -161,6 +161,11 @@ export default class DatasetManager {
 	}
 
 	public async loadDataset(datasetDir: string): Promise<SectionsDatasetEntry> {
-		return Promise.resolve(new SectionsDatasetEntry());
+		// let dataset = new SectionsDatasetEntry();
+		const fileContents = await fs.readJSON(this.path + "/" + datasetDir);
+		let objectJSON = JSON.parse(fileContents);
+		let dataset = new SectionsDatasetEntry();
+		dataset.JSONToDatasetEntry(objectJSON);
+		return Promise.resolve(dataset);
 	}
 }

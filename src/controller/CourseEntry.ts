@@ -67,4 +67,24 @@ export default class CourseEntry {
 	public getSections() {
 		return this.sections;
 	}
+
+	public setSections(sections: SectionEntry[]) {
+		this.sections = sections;
+	}
+
+	public JSONToEntry(json: any): CourseEntry {
+		this.setCourseName(json["name"]);
+
+		let sections = json["sections"];
+		let sectionEntries = [];
+		for (const section of sections) {
+			const sectionEntry = new SectionEntry();
+			sectionEntry.sectionFromDisk(section);
+			sectionEntries.push(sectionEntry);
+		}
+
+		this.setSections(sectionEntries);
+
+		return this;
+	}
 }

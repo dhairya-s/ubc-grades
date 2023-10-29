@@ -39,15 +39,25 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		return false;
 	}
 
-	private findValidCourse(content: string): boolean {
+	public JSONToDatasetEntry(json: any): SectionsDatasetEntry {
 		/*
-		Iterate through all courses to find a valid course.
-
-		RETURNS:
-		- True if a valid course can be found
-		- False otherwise
+		Returns a SectionsDatasetEntry from the JSON.
 		 */
-		return false;
+		this.setId(json["id"]);
+		this.set_numRows(json["numRows"]);
+		this.setKind(json["kind"]);
+
+		let courses = json["courses"];
+		let courseEntries: CourseEntry[] = [];
+		for (const course of courses){
+			const courseEntry = new CourseEntry();
+			courseEntry.JSONToEntry(course);
+			courseEntries.push(courseEntry);
+		}
+
+		this.setCourses(courseEntries);
+
+		return this;
 	}
 
 	private async parseZip(content: string): Promise<CourseEntry[]> {
@@ -92,7 +102,7 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		return Promise.resolve(courseList);
 	}
 
-	public set_courses(courses: CourseEntry[]){
+	public setCourses(courses: CourseEntry[]){
 		this.courses = courses;
 	}
 
@@ -117,7 +127,7 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 			this.setId(id);
 			this.setKind(kind);
 			let courses = await this.parseZip(content);
-			this.set_courses(courses);
+			this.setCourses(courses);
 		} catch {
 			return Promise.reject("Could not parse zip file.");
 		}
