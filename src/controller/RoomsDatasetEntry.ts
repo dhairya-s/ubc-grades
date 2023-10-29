@@ -10,6 +10,7 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 	public buildings: BuildingEntry[] = [];
 
 	public createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): void {
+		console.log("Created dataset entry");
 	}
 
 	public createInsightDataset(): InsightDataset {
@@ -26,6 +27,7 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 	}
 
 	public saveDataset(path: string): void {
+		console.log("Dataset saved");
 	}
 
 	public validateDatasetEntry(): boolean {
