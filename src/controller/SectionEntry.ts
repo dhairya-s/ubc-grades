@@ -31,7 +31,7 @@ export default class SectionEntry {
 		this.set_audit(jsonSection["Audit"]);
 	}
 
-	public section_from_dataset(sectionObject: any) {
+	public sectionFromDisk(sectionObject: any) {
 		this.set_uuid(sectionObject["uuid"]);
 		this.set_id(sectionObject["id"]);
 		this.set_title(sectionObject["title"]);
