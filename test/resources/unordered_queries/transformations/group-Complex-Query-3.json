@@ -1,0 +1,122 @@
+{
+	"title": "group-complex-query-3",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 98
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_instructor",
+				"sections_id"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_instructor",
+				"sections_dept",
+				"sections_id"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "cnps",
+			"sections_instructor": "cox, daniel",
+			"sections_id": "574"
+		},
+		{
+			"sections_dept": "eece",
+			"sections_instructor": "coria, lino",
+			"sections_id": "541"
+		},
+		{
+			"sections_dept": "eece",
+			"sections_instructor": "",
+			"sections_id": "541"
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "cole, kenneth",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "grow, laura",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "cannon, joanna",
+			"sections_id": "519"
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "",
+			"sections_id": "519"
+		},
+		{
+			"sections_dept": "math",
+			"sections_instructor": "gomez, jose",
+			"sections_id": "527"
+		},
+		{
+			"sections_dept": "math",
+			"sections_instructor": "",
+			"sections_id": "527"
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_instructor": "brew, nancy",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_instructor": "",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_instructor": "krist, jennifer",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_instructor": "burrows, marlene;harding, jillian;krist, jennifer;mccuaig, fairleth",
+			"sections_id": "578"
+		},
+		{
+			"sections_dept": "nurs",
+			"sections_instructor": "",
+			"sections_id": "578"
+		},
+		{
+			"sections_dept": "spph",
+			"sections_instructor": "frank, erica",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "spph",
+			"sections_instructor": "",
+			"sections_id": "300"
+		}
+	]
+}

@@ -50,6 +50,6 @@ export default class CollectNegComp {
 		// let end5 = performance.now();
 		// console.log((end5 - end4) / 1000);
 
-		return Array.from(propertiesToAdd.values());;
+		return Array.from(propertiesToAdd.values());
 	}
 }

@@ -1,0 +1,1318 @@
+{
+	"title": "apply-avg-group-id-instructor",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "cpsc"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_id",
+				"sections_instructor",
+				"avgAvg"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"APPLY": [
+				{
+					"avgAvg": {
+						"AVG": "sections_avg"
+					}
+				}
+			],
+			"GROUP": [
+				"sections_id",
+				"sections_instructor"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_id": "110",
+			"sections_instructor": "kiczales, gregor",
+			"avgAvg": 75.12
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "allen, meghan",
+			"avgAvg": 72.47
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "garcia, ronald",
+			"avgAvg": 74.33
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "aiello, william",
+			"avgAvg": 71.02
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "carter, paul martin",
+			"avgAvg": 75.4
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "",
+			"avgAvg": 74.06
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "little, james joseph",
+			"avgAvg": 69.98
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "mcgrenere, joanna",
+			"avgAvg": 76.81
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "greif, chen",
+			"avgAvg": 80.2
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 74.79
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "berg, celina",
+			"avgAvg": 72.72
+		},
+		{
+			"sections_id": "110",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 76.87
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 79.15
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "cooper, kendra",
+			"avgAvg": 74.15
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "belleville, patrice",
+			"avgAvg": 75.35
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "",
+			"avgAvg": 74.71
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "allen, meghan",
+			"avgAvg": 73.06
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 73.93
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "voll, kimberly",
+			"avgAvg": 76.18
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "woodham, robert",
+			"avgAvg": 75.5
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "dulat, margaret",
+			"avgAvg": 78.45
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "gao, xi",
+			"avgAvg": 72.03
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "tompkins, david a d",
+			"avgAvg": 76.46
+		},
+		{
+			"sections_id": "121",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 84.56
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "baniassad, elisa",
+			"avgAvg": 77.48
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "carter, paul martin",
+			"avgAvg": 73.95
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "murphy, gail",
+			"avgAvg": 72.88
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "",
+			"avgAvg": 73.86
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "allen, meghan",
+			"avgAvg": 74.16
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "beschastnikh, ivan",
+			"avgAvg": 72.16
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 75.81
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "hutchinson, norman",
+			"avgAvg": 71.02
+		},
+		{
+			"sections_id": "210",
+			"sections_instructor": "feeley, michael",
+			"avgAvg": 74.45
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "feeley, michael",
+			"avgAvg": 74.49
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "",
+			"avgAvg": 74.51
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "warfield, andrew",
+			"avgAvg": 71.99
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "goldberg, murray",
+			"avgAvg": 69.25
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 77.17
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "munzner, tamara",
+			"avgAvg": 67.81
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "darwish, mohammad mostafa",
+			"avgAvg": 68.77
+		},
+		{
+			"sections_id": "213",
+			"sections_instructor": "acton, donald",
+			"avgAvg": 69.53
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 72.8
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "cooper, kendra",
+			"avgAvg": 76.6
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "hu, alan",
+			"avgAvg": 70.91
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "khosravi, hassan",
+			"avgAvg": 73.5
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "",
+			"avgAvg": 75.08
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "voll, kimberly",
+			"avgAvg": 75.67
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "knorr, edwin max",
+			"avgAvg": 73.23
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "evans, william",
+			"avgAvg": 75.47
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 86.47
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "kotthoff, lars",
+			"avgAvg": 72.53
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "harvey, nicholas",
+			"avgAvg": 85.87
+		},
+		{
+			"sections_id": "221",
+			"sections_instructor": "sheffer, alla",
+			"avgAvg": 67.62
+		},
+		{
+			"sections_id": "259",
+			"sections_instructor": "khosravi, hassan",
+			"avgAvg": 74.11
+		},
+		{
+			"sections_id": "259",
+			"sections_instructor": "",
+			"avgAvg": 74.46
+		},
+		{
+			"sections_id": "259",
+			"sections_instructor": "knorr, edwin max",
+			"avgAvg": 74.7
+		},
+		{
+			"sections_id": "261",
+			"sections_instructor": "belleville, patrice",
+			"avgAvg": 69.83
+		},
+		{
+			"sections_id": "261",
+			"sections_instructor": "",
+			"avgAvg": 69.17
+		},
+		{
+			"sections_id": "261",
+			"sections_instructor": "hutchinson, norman",
+			"avgAvg": 68.5
+		},
+		{
+			"sections_id": "301",
+			"sections_instructor": "mitchell, ian",
+			"avgAvg": 77.83
+		},
+		{
+			"sections_id": "301",
+			"sections_instructor": "",
+			"avgAvg": 81.84
+		},
+		{
+			"sections_id": "301",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 84.84
+		},
+		{
+			"sections_id": "302",
+			"sections_instructor": "ascher, uri michael",
+			"avgAvg": 76.8
+		},
+		{
+			"sections_id": "302",
+			"sections_instructor": "",
+			"avgAvg": 74.82
+		},
+		{
+			"sections_id": "302",
+			"sections_instructor": "ascher, uri michael;greif, chen",
+			"avgAvg": 76.32
+		},
+		{
+			"sections_id": "302",
+			"sections_instructor": "rees, tyrone",
+			"avgAvg": 73.18
+		},
+		{
+			"sections_id": "302",
+			"sections_instructor": "greif, chen",
+			"avgAvg": 77.95
+		},
+		{
+			"sections_id": "303",
+			"sections_instructor": "greif, chen",
+			"avgAvg": 75.05
+		},
+		{
+			"sections_id": "303",
+			"sections_instructor": "",
+			"avgAvg": 72.58
+		},
+		{
+			"sections_id": "303",
+			"sections_instructor": "ascher, uri michael",
+			"avgAvg": 74.27
+		},
+		{
+			"sections_id": "303",
+			"sections_instructor": "mitchell, ian",
+			"avgAvg": 70.34
+		},
+		{
+			"sections_id": "303",
+			"sections_instructor": "gelbart, michael",
+			"avgAvg": 74.23
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 77.87
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "lakshmanan, laks",
+			"avgAvg": 78.07
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "",
+			"avgAvg": 76.19
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "ng, raymond tak-yan",
+			"avgAvg": 72.93
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "knorr, edwin max",
+			"avgAvg": 76.91
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "pottinger, rachel",
+			"avgAvg": 73.83
+		},
+		{
+			"sections_id": "304",
+			"sections_instructor": "khosravi, hassan",
+			"avgAvg": 76.43
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "palyart-lamarche, marc",
+			"avgAvg": 78.69
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "baniassad, elisa",
+			"avgAvg": 79.44
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "",
+			"avgAvg": 78.7
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "holmes, reid",
+			"avgAvg": 81.17
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "allen, meghan",
+			"avgAvg": 77.5
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "wohlstadter, eric",
+			"avgAvg": 80.24
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "ernst, neil",
+			"avgAvg": 77.05
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "fritz, thomas",
+			"avgAvg": 75.57
+		},
+		{
+			"sections_id": "310",
+			"sections_instructor": "shepherd, david",
+			"avgAvg": 75.08
+		},
+		{
+			"sections_id": "311",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 77.67
+		},
+		{
+			"sections_id": "311",
+			"sections_instructor": "",
+			"avgAvg": 76.8
+		},
+		{
+			"sections_id": "311",
+			"sections_instructor": "de volder, kris",
+			"avgAvg": 74.06
+		},
+		{
+			"sections_id": "311",
+			"sections_instructor": "dunfield, joshua",
+			"avgAvg": 84.39
+		},
+		{
+			"sections_id": "311",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 78.24
+		},
+		{
+			"sections_id": "311",
+			"sections_instructor": "hutchinson, norman",
+			"avgAvg": 75
+		},
+		{
+			"sections_id": "312",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 82.13
+		},
+		{
+			"sections_id": "312",
+			"sections_instructor": "",
+			"avgAvg": 81.01
+		},
+		{
+			"sections_id": "312",
+			"sections_instructor": "poole, david",
+			"avgAvg": 76.52
+		},
+		{
+			"sections_id": "312",
+			"sections_instructor": "voll, kimberly",
+			"avgAvg": 76.84
+		},
+		{
+			"sections_id": "312",
+			"sections_instructor": "sagaii, sara mahboubeh",
+			"avgAvg": 76.93
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "belleville, patrice",
+			"avgAvg": 72.5
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "acton, donald",
+			"avgAvg": 71.34
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "",
+			"avgAvg": 74.61
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "feeley, michael",
+			"avgAvg": 76.86
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 76.17
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "warfield, andrew",
+			"avgAvg": 70.46
+		},
+		{
+			"sections_id": "313",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 71.44
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "van de panne, michiel",
+			"avgAvg": 70.94
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "pai, dinesh",
+			"avgAvg": 76.72
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "",
+			"avgAvg": 77.17
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "bridson, robert",
+			"avgAvg": 80.81
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "munzner, tamara",
+			"avgAvg": 74.64
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "sheffer, alla",
+			"avgAvg": 79.8
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "bessmeltsev, mikhail",
+			"avgAvg": 78.7
+		},
+		{
+			"sections_id": "314",
+			"sections_instructor": "heidrich, wolfgang",
+			"avgAvg": 75.27
+		},
+		{
+			"sections_id": "317",
+			"sections_instructor": "acton, donald",
+			"avgAvg": 70.65
+		},
+		{
+			"sections_id": "317",
+			"sections_instructor": "hutchinson, norman",
+			"avgAvg": 73.55
+		},
+		{
+			"sections_id": "317",
+			"sections_instructor": "",
+			"avgAvg": 73.01
+		},
+		{
+			"sections_id": "317",
+			"sections_instructor": "krasic, charles",
+			"avgAvg": 74.58
+		},
+		{
+			"sections_id": "317",
+			"sections_instructor": "vuong, son",
+			"avgAvg": 70.29
+		},
+		{
+			"sections_id": "317",
+			"sections_instructor": "aiello, william",
+			"avgAvg": 74.81
+		},
+		{
+			"sections_id": "319",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 83.9
+		},
+		{
+			"sections_id": "319",
+			"sections_instructor": "",
+			"avgAvg": 84.23
+		},
+		{
+			"sections_id": "319",
+			"sections_instructor": "voll, kimberly",
+			"avgAvg": 85.76
+		},
+		{
+			"sections_id": "319",
+			"sections_instructor": "awad, ahmed",
+			"avgAvg": 87.93
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "belleville, patrice",
+			"avgAvg": 69.89
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 69.49
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "",
+			"avgAvg": 69.96
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "evans, william",
+			"avgAvg": 69.59
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "meyer, irmtraud margret",
+			"avgAvg": 70.27
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "manuch, jan",
+			"avgAvg": 70.73
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "schroeder, jonatan",
+			"avgAvg": 72.78
+		},
+		{
+			"sections_id": "320",
+			"sections_instructor": "malka, lior",
+			"avgAvg": 71.02
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "little, james joseph",
+			"avgAvg": 74.88
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "conati, cristina",
+			"avgAvg": 71.66
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "",
+			"avgAvg": 72.58
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "carenini, giuseppe",
+			"avgAvg": 73.17
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "leyton-brown, kevin",
+			"avgAvg": 76.6
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "mackworth, alan",
+			"avgAvg": 75.03
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "poole, david",
+			"avgAvg": 75.23
+		},
+		{
+			"sections_id": "322",
+			"sections_instructor": "hutter, frank",
+			"avgAvg": 73.79
+		},
+		{
+			"sections_id": "340",
+			"sections_instructor": "ng, raymond tak-yan",
+			"avgAvg": 75.44
+		},
+		{
+			"sections_id": "340",
+			"sections_instructor": "",
+			"avgAvg": 75.71
+		},
+		{
+			"sections_id": "340",
+			"sections_instructor": "schmidt, mark",
+			"avgAvg": 81.47
+		},
+		{
+			"sections_id": "340",
+			"sections_instructor": "de freitas, joao",
+			"avgAvg": 74.01
+		},
+		{
+			"sections_id": "340",
+			"sections_instructor": "doucet, arnaud",
+			"avgAvg": 68.4
+		},
+		{
+			"sections_id": "340",
+			"sections_instructor": "murphy, kevin",
+			"avgAvg": 76.75
+		},
+		{
+			"sections_id": "344",
+			"sections_instructor": "dawson, jessica",
+			"avgAvg": 81.18
+		},
+		{
+			"sections_id": "344",
+			"sections_instructor": "",
+			"avgAvg": 77.86
+		},
+		{
+			"sections_id": "344",
+			"sections_instructor": "maclean, karon",
+			"avgAvg": 78.48
+		},
+		{
+			"sections_id": "344",
+			"sections_instructor": "dawson, jessica;maclean, karon",
+			"avgAvg": 80.24
+		},
+		{
+			"sections_id": "344",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 80.11
+		},
+		{
+			"sections_id": "404",
+			"sections_instructor": "knorr, edwin max",
+			"avgAvg": 72.48
+		},
+		{
+			"sections_id": "404",
+			"sections_instructor": "",
+			"avgAvg": 74.81
+		},
+		{
+			"sections_id": "404",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 80.18
+		},
+		{
+			"sections_id": "404",
+			"sections_instructor": "lakshmanan, laks",
+			"avgAvg": 72.84
+		},
+		{
+			"sections_id": "410",
+			"sections_instructor": "baniassad, elisa",
+			"avgAvg": 79.5
+		},
+		{
+			"sections_id": "410",
+			"sections_instructor": "",
+			"avgAvg": 76.8
+		},
+		{
+			"sections_id": "410",
+			"sections_instructor": "murphy-hill, emerson",
+			"avgAvg": 80.18
+		},
+		{
+			"sections_id": "410",
+			"sections_instructor": "wohlstadter, eric",
+			"avgAvg": 75.5
+		},
+		{
+			"sections_id": "410",
+			"sections_instructor": "holmes, reid",
+			"avgAvg": 79
+		},
+		{
+			"sections_id": "410",
+			"sections_instructor": "ernst, neil",
+			"avgAvg": 75.28
+		},
+		{
+			"sections_id": "411",
+			"sections_instructor": "hutchinson, norman",
+			"avgAvg": 79.54
+		},
+		{
+			"sections_id": "411",
+			"sections_instructor": "",
+			"avgAvg": 80.65
+		},
+		{
+			"sections_id": "411",
+			"sections_instructor": "de volder, kris",
+			"avgAvg": 76.53
+		},
+		{
+			"sections_id": "411",
+			"sections_instructor": "garcia, ronald",
+			"avgAvg": 86
+		},
+		{
+			"sections_id": "415",
+			"sections_instructor": "acton, donald",
+			"avgAvg": 71.16
+		},
+		{
+			"sections_id": "415",
+			"sections_instructor": "",
+			"avgAvg": 70.74
+		},
+		{
+			"sections_id": "416",
+			"sections_instructor": "acton, donald",
+			"avgAvg": 73.35
+		},
+		{
+			"sections_id": "416",
+			"sections_instructor": "",
+			"avgAvg": 74.65
+		},
+		{
+			"sections_id": "416",
+			"sections_instructor": "wagner, alan",
+			"avgAvg": 75.12
+		},
+		{
+			"sections_id": "416",
+			"sections_instructor": "beschastnikh, ivan",
+			"avgAvg": 81.18
+		},
+		{
+			"sections_id": "418",
+			"sections_instructor": "greenstreet, mark",
+			"avgAvg": 80.51
+		},
+		{
+			"sections_id": "418",
+			"sections_instructor": "",
+			"avgAvg": 80.51
+		},
+		{
+			"sections_id": "420",
+			"sections_instructor": "kirkpatrick, david",
+			"avgAvg": 71.57
+		},
+		{
+			"sections_id": "420",
+			"sections_instructor": "",
+			"avgAvg": 72.32
+		},
+		{
+			"sections_id": "420",
+			"sections_instructor": "evans, william",
+			"avgAvg": 73.64
+		},
+		{
+			"sections_id": "420",
+			"sections_instructor": "belleville, patrice",
+			"avgAvg": 74.06
+		},
+		{
+			"sections_id": "421",
+			"sections_instructor": "friedman, joel",
+			"avgAvg": 75.17
+		},
+		{
+			"sections_id": "421",
+			"sections_instructor": "",
+			"avgAvg": 74.36
+		},
+		{
+			"sections_id": "421",
+			"sections_instructor": "harvey, nicholas",
+			"avgAvg": 76.86
+		},
+		{
+			"sections_id": "422",
+			"sections_instructor": "carenini, giuseppe",
+			"avgAvg": 73.59
+		},
+		{
+			"sections_id": "422",
+			"sections_instructor": "",
+			"avgAvg": 72.32
+		},
+		{
+			"sections_id": "422",
+			"sections_instructor": "conati, cristina",
+			"avgAvg": 70.18
+		},
+		{
+			"sections_id": "422",
+			"sections_instructor": "poole, david",
+			"avgAvg": 76.61
+		},
+		{
+			"sections_id": "425",
+			"sections_instructor": "woodham, robert",
+			"avgAvg": 74.4
+		},
+		{
+			"sections_id": "425",
+			"sections_instructor": "",
+			"avgAvg": 73.72
+		},
+		{
+			"sections_id": "425",
+			"sections_instructor": "little, james joseph",
+			"avgAvg": 73.8
+		},
+		{
+			"sections_id": "425",
+			"sections_instructor": "tung, frederick",
+			"avgAvg": 73.95
+		},
+		{
+			"sections_id": "430",
+			"sections_instructor": "leyton-brown, kevin",
+			"avgAvg": 77.1
+		},
+		{
+			"sections_id": "430",
+			"sections_instructor": "",
+			"avgAvg": 77.38
+		},
+		{
+			"sections_id": "430",
+			"sections_instructor": "luk, joseph",
+			"avgAvg": 79.14
+		},
+		{
+			"sections_id": "430",
+			"sections_instructor": "voll, kimberly",
+			"avgAvg": 76.34
+		},
+		{
+			"sections_id": "430",
+			"sections_instructor": "dawson, jessica",
+			"avgAvg": 79.13
+		},
+		{
+			"sections_id": "430",
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 72.75
+		},
+		{
+			"sections_id": "444",
+			"sections_instructor": "mcgrenere, joanna",
+			"avgAvg": 79.19
+		},
+		{
+			"sections_id": "444",
+			"sections_instructor": "",
+			"avgAvg": 78.84
+		},
+		{
+			"sections_id": "444",
+			"sections_instructor": "dawson, jessica",
+			"avgAvg": 77.43
+		},
+		{
+			"sections_id": "445",
+			"sections_instructor": "manuch, jan",
+			"avgAvg": 82.91
+		},
+		{
+			"sections_id": "445",
+			"sections_instructor": "",
+			"avgAvg": 80.09
+		},
+		{
+			"sections_id": "445",
+			"sections_instructor": "meyer, irmtraud margret",
+			"avgAvg": 79.36
+		},
+		{
+			"sections_id": "445",
+			"sections_instructor": "hoos, holger",
+			"avgAvg": 85.37
+		},
+		{
+			"sections_id": "445",
+			"sections_instructor": "kirkpatrick, bonnie;manuch, jan",
+			"avgAvg": 73.88
+		},
+		{
+			"sections_id": "449",
+			"sections_instructor": "knorr, edwin max",
+			"avgAvg": 91.54
+		},
+		{
+			"sections_id": "449",
+			"sections_instructor": "",
+			"avgAvg": 89.53
+		},
+		{
+			"sections_id": "449",
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 92.04
+		},
+		{
+			"sections_id": "490",
+			"sections_instructor": "",
+			"avgAvg": 89.66
+		},
+		{
+			"sections_id": "490",
+			"sections_instructor": "allen, meghan",
+			"avgAvg": 89
+		},
+		{
+			"sections_id": "490",
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 92
+		},
+		{
+			"sections_id": "500",
+			"sections_instructor": "kirkpatrick, david",
+			"avgAvg": 80.06
+		},
+		{
+			"sections_id": "500",
+			"sections_instructor": "",
+			"avgAvg": 84.14
+		},
+		{
+			"sections_id": "500",
+			"sections_instructor": "evans, william",
+			"avgAvg": 84.67
+		},
+		{
+			"sections_id": "500",
+			"sections_instructor": "friedman, joel",
+			"avgAvg": 86.33
+		},
+		{
+			"sections_id": "501",
+			"sections_instructor": "friedman, joel",
+			"avgAvg": 89.18
+		},
+		{
+			"sections_id": "501",
+			"sections_instructor": "",
+			"avgAvg": 89.77
+		},
+		{
+			"sections_id": "501",
+			"sections_instructor": "harvey, nicholas",
+			"avgAvg": 92.75
+		},
+		{
+			"sections_id": "502",
+			"sections_instructor": "mackworth, alan",
+			"avgAvg": 81.94
+		},
+		{
+			"sections_id": "502",
+			"sections_instructor": "",
+			"avgAvg": 82.95
+		},
+		{
+			"sections_id": "502",
+			"sections_instructor": "poole, david",
+			"avgAvg": 83.32
+		},
+		{
+			"sections_id": "502",
+			"sections_instructor": "carenini, giuseppe",
+			"avgAvg": 86.2
+		},
+		{
+			"sections_id": "502",
+			"sections_instructor": "conati, cristina",
+			"avgAvg": 82.25
+		},
+		{
+			"sections_id": "503",
+			"sections_instructor": "carenini, giuseppe",
+			"avgAvg": 89.85
+		},
+		{
+			"sections_id": "503",
+			"sections_instructor": "",
+			"avgAvg": 86.82
+		},
+		{
+			"sections_id": "507",
+			"sections_instructor": "wohlstadter, eric",
+			"avgAvg": 88.57
+		},
+		{
+			"sections_id": "507",
+			"sections_instructor": "",
+			"avgAvg": 86.62
+		},
+		{
+			"sections_id": "507",
+			"sections_instructor": "holmes, reid",
+			"avgAvg": 89
+		},
+		{
+			"sections_id": "509",
+			"sections_instructor": "garcia, ronald",
+			"avgAvg": 86.02
+		},
+		{
+			"sections_id": "509",
+			"sections_instructor": "",
+			"avgAvg": 86.02
+		},
+		{
+			"sections_id": "513",
+			"sections_instructor": "hu, alan",
+			"avgAvg": 85.13
+		},
+		{
+			"sections_id": "513",
+			"sections_instructor": "",
+			"avgAvg": 82.88
+		},
+		{
+			"sections_id": "513",
+			"sections_instructor": "mitchell, ian",
+			"avgAvg": 64
+		},
+		{
+			"sections_id": "513",
+			"sections_instructor": "greenstreet, mark",
+			"avgAvg": 87.58
+		},
+		{
+			"sections_id": "515",
+			"sections_instructor": "mitchell, ian",
+			"avgAvg": 81.8
+		},
+		{
+			"sections_id": "515",
+			"sections_instructor": "",
+			"avgAvg": 81.8
+		},
+		{
+			"sections_id": "521",
+			"sections_instructor": "wagner, alan",
+			"avgAvg": 84.13
+		},
+		{
+			"sections_id": "521",
+			"sections_instructor": "",
+			"avgAvg": 85.3
+		},
+		{
+			"sections_id": "521",
+			"sections_instructor": "greenstreet, mark",
+			"avgAvg": 85.95
+		},
+		{
+			"sections_id": "522",
+			"sections_instructor": "poole, david",
+			"avgAvg": 85.16
+		},
+		{
+			"sections_id": "522",
+			"sections_instructor": "",
+			"avgAvg": 85.16
+		},
+		{
+			"sections_id": "527",
+			"sections_instructor": "vuong, son",
+			"avgAvg": 83.78
+		},
+		{
+			"sections_id": "527",
+			"sections_instructor": "",
+			"avgAvg": 86.95
+		},
+		{
+			"sections_id": "527",
+			"sections_instructor": "beschastnikh, ivan",
+			"avgAvg": 91.22
+		},
+		{
+			"sections_id": "527",
+			"sections_instructor": "krasic, charles",
+			"avgAvg": 90.11
+		},
+		{
+			"sections_id": "540",
+			"sections_instructor": "schmidt, mark",
+			"avgAvg": 90.88
+		},
+		{
+			"sections_id": "540",
+			"sections_instructor": "",
+			"avgAvg": 85.34
+		},
+		{
+			"sections_id": "540",
+			"sections_instructor": "murphy, kevin",
+			"avgAvg": 82.82
+		},
+		{
+			"sections_id": "540",
+			"sections_instructor": "de freitas, joao",
+			"avgAvg": 86.09
+		},
+		{
+			"sections_id": "540",
+			"sections_instructor": "doucet, arnaud",
+			"avgAvg": 83
+		},
+		{
+			"sections_id": "543",
+			"sections_instructor": "maclean, karon",
+			"avgAvg": 86.27
+		},
+		{
+			"sections_id": "543",
+			"sections_instructor": "",
+			"avgAvg": 85.44
+		},
+		{
+			"sections_id": "544",
+			"sections_instructor": "dawson, jessica",
+			"avgAvg": 85.27
+		},
+		{
+			"sections_id": "544",
+			"sections_instructor": "",
+			"avgAvg": 84.68
+		},
+		{
+			"sections_id": "544",
+			"sections_instructor": "mcgrenere, joanna",
+			"avgAvg": 83.41
+		},
+		{
+			"sections_id": "544",
+			"sections_instructor": "maclean, karon",
+			"avgAvg": 83.69
+		},
+		{
+			"sections_id": "544",
+			"sections_instructor": "booth, kellogg",
+			"avgAvg": 83.67
+		},
+		{
+			"sections_id": "547",
+			"sections_instructor": "munzner, tamara",
+			"avgAvg": 88.58
+		},
+		{
+			"sections_id": "547",
+			"sections_instructor": "",
+			"avgAvg": 88.58
+		},
+		{
+			"sections_id": "589",
+			"sections_instructor": "",
+			"avgAvg": 85.75
+		}
+	]
+}

@@ -1,0 +1,32 @@
+{
+	"title": "group-incorrect-dataset",
+	"input": {
+		"WHERE": {
+			"NOT": {
+				"IS": {
+					"sections_dept": "cpsc"
+				}
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"section_id",
+				"avgAvg"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"section_id"
+			],
+			"APPLY": [
+				{
+					"avgAvg": {
+						"AVG": "sections_avg"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
