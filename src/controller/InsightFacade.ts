@@ -65,7 +65,7 @@ export default class InsightFacade implements IInsightFacade {
 		let collect = new CollectQuery(query as typeof Object, datasets);
 		let results: InsightResult[] = [];
 		try {
-			isValid = validate.validateQuery();
+			isValid = validate.ValidateQuery();
 
 			if (!isValid) {
 				throw new InsightError("Invalid Query");

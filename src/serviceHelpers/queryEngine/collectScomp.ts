@@ -1,8 +1,8 @@
-import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
-import SectionEntry from "../controller/SectionEntry";
-import {collectInsightResult, convertArrayOfObjectToObject} from "./collectionHelpers";
-import {Property} from "./collectQuery";
-import {InsightError} from "../controller/IInsightFacade";
+import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
+import SectionEntry from "../../controller/SectionEntry";
+import {collectInsightResult, convertArrayOfObjectToObject} from "../helpers/collectionHelpers";
+import {Property} from "../../services/collectQuery";
+import {InsightError} from "../../controller/IInsightFacade";
 
 export default class CollectScomp {
 	private datasetEntries: SectionsDatasetEntry[] = [];

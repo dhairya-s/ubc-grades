@@ -1,5 +1,5 @@
-import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
-import SectionEntry from "../controller/SectionEntry";
+import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
+import SectionEntry from "../../controller/SectionEntry";
 
 export default class CollectAll	{
 	private datasetEntries: SectionsDatasetEntry[];
