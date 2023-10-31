@@ -1,5 +1,5 @@
-import SectionEntry from "../controller/SectionEntry";
-import {Property} from "./collectQuery";
+import SectionEntry from "../../controller/SectionEntry";
+import {Property} from "../../services/collectQuery";
 
 export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): object {
 	let propertiesToAdd: Property[] = [];

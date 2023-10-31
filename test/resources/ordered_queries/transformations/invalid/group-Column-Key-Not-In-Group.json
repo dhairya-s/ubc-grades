@@ -1,0 +1,39 @@
+{
+	"title": "group-column-key-not-in-group",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 98
+					}
+				},
+				{
+					"LT": {
+						"sections_avg": 99
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_id",
+				"sections_dept",
+				"sections_instructor",
+				"sections_year",
+				"sections_fail"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_instructor",
+				"sections_dept",
+				"sections_id",
+				"sections_year"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
