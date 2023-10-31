@@ -25,8 +25,6 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		- Populate rest of fields
 		- Save to disk
 
-		// TODO: Section validator
-
 		RETURNS:
 		- True if the sections dataset is valid
 		- False otherwise

@@ -2,6 +2,7 @@ import {InsightDatasetKind,} from "../controller/IInsightFacade";
 import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
 import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import DatasetManager from "./DatasetManager";
+import RoomsDatasetEntry from "../serviceHelpers/datasetConstruction/roomsDataset/RoomsDatasetEntry";
 
 export default class ValidateDataset {
 	public dataset: DatasetEntry | undefined;
@@ -52,8 +53,15 @@ export default class ValidateDataset {
 				return Promise.resolve(false);
 			}
 		} else if (kind === InsightDatasetKind.Rooms) {
-			// TODO: Implementation
-			return Promise.resolve(false);
+			let roomsDataset = new RoomsDatasetEntry();
+			try {
+				await roomsDataset.createDatasetEntry(id, content, kind);
+				let valid = roomsDataset.validateDatasetEntry();
+				this.setDataset(roomsDataset);
+				return Promise.resolve(valid);
+			} catch {
+				return Promise.resolve(false);
+			}
 		}
 		return Promise.resolve(false);
 	}
