@@ -18,5 +18,10 @@ export interface DatasetEntry {
 
 	createInsightDataset(): InsightDataset;
 
-	get_id(): string;
+	getId(): string;
+
+	getNumRows(): number;
+
+	getKind(): string;
+
 }

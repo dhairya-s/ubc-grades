@@ -136,12 +136,12 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		return this.courses;
 	}
 
-	public get_id() {
+	public getId() {
 		return this.id;
 	}
 
 	public async saveDataset(path: string): Promise<void> {
-		let saveDir = path + "/" + this.get_id() + ".json";
+		let saveDir = path + "/" + this.getId() + ".json";
 		let content = JSON.stringify(this);
 		try {
 			if (!fs.existsSync(path + "/")){
@@ -156,17 +156,17 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 
 	public createInsightDataset(): InsightDataset {
 		return {
-			id: this.get_id(),
-			kind: this.get_kind(),
-			numRows: this.get_numRows(),
+			id: this.getId(),
+			kind: this.getKind(),
+			numRows: this.getNumRows(),
 		};
 	}
 
-	private set_numRows(num_rows: number){
+	public set_numRows(num_rows: number){
 		this.numRows = num_rows;
 	}
 
-	private get_numRows() {
+	public getNumRows() {
 		let numSections = this.get_courses().map(function(course) {
 			return course.getSections().length;
 		}).reduce((sum, current) => sum + current, 0);
@@ -175,7 +175,8 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		return this.numRows;
 	}
 
-	private get_kind() {
+	public getKind() {
 		return this.kind;
 	}
+
 }

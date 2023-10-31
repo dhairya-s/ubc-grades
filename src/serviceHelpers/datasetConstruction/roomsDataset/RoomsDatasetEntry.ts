@@ -32,14 +32,14 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 
 	public createInsightDataset(): InsightDataset {
 		return {
-			id: this.get_id(),
-			kind: this.get_kind(),
-			numRows: this.get_numRows(),
+			id: this.getId(),
+			kind: this.getKind(),
+			numRows: this.getNumRows(),
 		};
 	}
 
 
-	public get_id(): string {
+	public getId(): string {
 		return "";
 	}
 
@@ -84,11 +84,11 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		return Promise.resolve(false);
 	}
 
-	private get_kind() {
+	public getKind() {
 		return InsightDatasetKind.Rooms;
 	}
 
-	private get_numRows() {
+	public getNumRows() {
 		return 0;
 	}
 
