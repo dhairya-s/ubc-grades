@@ -1,6 +1,5 @@
-import {DatasetEntry} from "./DatasetEntry";
-import {InsightDataset, InsightDatasetKind} from "./IInsightFacade";
-import CourseEntry from "./CourseEntry";
+import {DatasetEntry} from "../DatasetEntry";
+import {InsightDataset, InsightDatasetKind} from "../../../controller/IInsightFacade";
 import BuildingEntry from "./BuildingEntry";
 
 export default class RoomsDatasetEntry implements DatasetEntry {

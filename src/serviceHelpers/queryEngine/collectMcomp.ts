@@ -1,5 +1,5 @@
-import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
-import SectionEntry from "../../controller/SectionEntry";
+import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
+import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {Property} from "../../services/collectQuery";
 import {collectInsightResult, convertArrayOfObjectToObject} from "../helpers/collectionHelpers";
 import {InsightError} from "../../controller/IInsightFacade";

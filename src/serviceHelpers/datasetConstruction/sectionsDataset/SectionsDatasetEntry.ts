@@ -1,6 +1,6 @@
-import {DatasetEntry} from "./DatasetEntry";
+import {DatasetEntry} from "../DatasetEntry";
 import CourseEntry from "./CourseEntry";
-import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "../../../controller/IInsightFacade";
 import JSZip from "jszip";
 import fs from "fs-extra";
 

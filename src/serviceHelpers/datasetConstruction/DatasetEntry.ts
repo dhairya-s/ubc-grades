@@ -1,4 +1,4 @@
-import {InsightDataset, InsightDatasetKind} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind} from "../../controller/IInsightFacade";
 
 export interface DatasetEntry {
 	id: string;

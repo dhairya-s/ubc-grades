@@ -7,15 +7,12 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import JSZip from "jszip";
 import ValidateQuery from "../services/validateQuery";
-import * as fs from "fs";
 import CollectQuery from "../services/collectQuery";
-import * as fs_extra from "fs-extra";
-import ValidateDataset from "./validateDataset";
-import {DatasetEntry} from "./DatasetEntry";
-import DatasetManager from "./DatasetManager";
-import SectionsDatasetEntry from "./SectionsDatasetEntry";
+import ValidateDataset from "../services/validateDataset";
+import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
+import DatasetManager from "../services/DatasetManager";
+import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 
 export default class InsightFacade implements IInsightFacade {
 	private datasetManager: DatasetManager = new DatasetManager();

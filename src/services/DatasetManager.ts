@@ -1,7 +1,7 @@
-import {DatasetEntry} from "./DatasetEntry";
-import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
+import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
+import {InsightDataset, InsightError, NotFoundError} from "../controller/IInsightFacade";
 import fs from "fs-extra";
-import SectionsDatasetEntry from "./SectionsDatasetEntry";
+import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 
 
 export enum Operation {

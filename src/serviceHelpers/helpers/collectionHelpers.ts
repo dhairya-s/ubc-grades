@@ -1,4 +1,4 @@
-import SectionEntry from "../../controller/SectionEntry";
+import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {Property} from "../../services/collectQuery";
 
 export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): object {

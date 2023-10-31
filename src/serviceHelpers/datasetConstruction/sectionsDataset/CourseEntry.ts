@@ -1,6 +1,6 @@
 import SectionEntry from "./SectionEntry";
 import JSZip from "jszip";
-import {InsightError} from "./IInsightFacade";
+import {InsightError} from "../../../controller/IInsightFacade";
 
 export default class CourseEntry {
 

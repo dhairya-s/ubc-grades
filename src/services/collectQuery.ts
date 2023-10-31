@@ -1,7 +1,6 @@
-import InsightFacade from "../controller/InsightFacade";
 import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
-import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
-import SectionEntry from "../controller/SectionEntry";
+import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
+import SectionEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionEntry";
 import CollectMcomp from "../serviceHelpers/queryEngine/collectMcomp";
 import CollectScomp from "../serviceHelpers/queryEngine/collectScomp";
 import CollectLogicComp from "../serviceHelpers/queryEngine/collectLogicComp";

@@ -1,4 +1,4 @@
-import {InsightError} from "./IInsightFacade";
+import {InsightError} from "../../../controller/IInsightFacade";
 
 export default class SectionEntry {
 	private uuid: string = "";

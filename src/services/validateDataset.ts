@@ -1,6 +1,6 @@
-import {InsightDatasetKind,} from "./IInsightFacade";
-import {DatasetEntry} from "./DatasetEntry";
-import SectionsDatasetEntry from "./SectionsDatasetEntry";
+import {InsightDatasetKind,} from "../controller/IInsightFacade";
+import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
+import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import DatasetManager from "./DatasetManager";
 
 export default class ValidateDataset {
