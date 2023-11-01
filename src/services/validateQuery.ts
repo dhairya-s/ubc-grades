@@ -1,65 +1,104 @@
-import InsightFacade from "../controller/InsightFacade";
-import {InsightError} from "../controller/IInsightFacade";
+import {InsightDatasetKind, InsightError} from "../controller/IInsightFacade";
+import {
+	checkMfieldsBasedOnKind,
+	checkSfieldsBasedOnKind,
+	validateIdString
+} from "../serviceHelpers/helpers/collectionHelpers";
+import ValidateTransformations from "../serviceHelpers/queryEngine/validators/validateTransformations";
+import ValidateOptions from "../serviceHelpers/queryEngine/validators/validateOptions";
 
+// Use sections kind instead of dataset id
+//
+//
+//
 export default class ValidateQuery {
 	private query: object;
-	private sfield = ["dept", "id", "instructor", "title", "uuid"];
-	private mfield = ["avg", "pass", "fail", "audit", "year"];
+	private datasetId: string = "";
+	private expectedKeys = ["WHERE", "OPTIONS", "TRANSFORMATIONS"];
+
+	private allowedColumns: string[] = [];
 
 	constructor(query: object) {
 		this.query = query;
 	}
 
-	public validateQuery(): boolean {
-		let hasBody: boolean = false;
-		let hasOptions: boolean = false;
+	public ValidateQuery(datasetKind: InsightDatasetKind): boolean {
+		let hasTransformations: boolean = false;
 		let isValid = false;
 		let keys: string[];
 
 		keys = Object.keys(this.query);
 
-		for (let key of keys) {
-			if (key === "WHERE") {
-				hasBody = true;
-				isValid = this.validateBody(this.query[key as keyof typeof this.query]);
-			} else if (key === "OPTIONS") {
-				hasOptions = true;
-				isValid = this.validateOptions(this.query[key as keyof typeof this.query]);
-			} else {
-				if (!hasBody) {
-					throw new InsightError("WHERE not found");
-				} else if (!hasOptions) {
-					throw new InsightError("OPTIONS not found");
-				} else {
-					throw new InsightError("Invalid Query");
-				}
-			}
+		isValid = keys.every((key)=> this.expectedKeys.includes(key));
+		if (!isValid) {
+			return isValid;
 		}
 
-		if (!hasBody) {
-			throw new InsightError("WHERE not found");
-		} else if (!hasOptions) {
-			throw new InsightError("OPTIONS not found");
+		if (keys.includes("TRANSFORMATIONS")) { // need to add allowedColumns
+			// check transformations
+			let validateTransformations =
+				new ValidateTransformations(this.query["TRANSFORMATIONS" as keyof typeof this.query], datasetKind);
+			isValid = validateTransformations.Validate();
+
+			if (!isValid) {
+				return isValid;
+			}
+
+			this.setAllowedColumns(validateTransformations.getAllowedColumns());
+			this.setDatasetId(validateTransformations.getDatasetId());
+			hasTransformations = true;
 		}
+
+		console.log("Valid Transform");
+
+		// check options
+		let validateOptions = new ValidateOptions(this.query["OPTIONS" as keyof typeof this.query],
+			hasTransformations, datasetKind, this.getAllowedColumns(), this.getDatasetId());
+		isValid = validateOptions.Validate();
+		if (!isValid) {
+			return isValid;
+		}
+
+		console.log("Valid Options");
+
+		// check where
+		isValid = this.validateBody(this.query["WHERE" as keyof typeof this.query], datasetKind);
+		if (!isValid) {
+			return isValid;
+		}
+
+		console.log("Valid Body");
 
 		return isValid;
 	}
 
-	private validateBody(body: object): boolean {
-		let isValid = false;
+	private validateBody(body: object, datasetKind: InsightDatasetKind): boolean {
+		let isValid = true;
 		let keys: string[];
 		keys = Object.keys(body);
 		// console.log("Body", keys);
 
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
-				isValid = this.validateMCOMP(body[key as keyof typeof body]);
+				isValid = this.validateMCOMP(body[key as keyof typeof body], datasetKind);
+				if (!isValid) {
+					return isValid;
+				}
 			} else if (key === "AND" || key === "OR") { // LOGICCOMP
-				isValid = this.validateLOGICCOMP(body[key as keyof typeof body]);
+				isValid = this.validateLOGICCOMP(body[key as keyof typeof body], datasetKind);
+				if (!isValid) {
+					return isValid;
+				}
 			} else if (key === "IS") { // SCOMP
-				isValid = this.validateSCOMP(body[key as keyof typeof body]);
+				isValid = this.validateSCOMP(body[key as keyof typeof body], datasetKind);
+				if (!isValid) {
+					return isValid;
+				}
 			} else if (key === "NOT") { // NEGATION
-				isValid = this.validateNEGATION(body[key as keyof typeof body]);
+				isValid = this.validateNEGATION(body[key as keyof typeof body], datasetKind);
+				if (!isValid) {
+					return isValid;
+				}
 			} else {
 				throw new InsightError("Invalid Query");
 			}
@@ -68,7 +107,7 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateMCOMP(mcomp: object): boolean {
+	private validateMCOMP(mcomp: object, datasetKind: InsightDatasetKind): boolean {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(mcomp);
@@ -81,8 +120,8 @@ export default class ValidateQuery {
 			if (mkey.length !== 2) {
 				throw new InsightError("Invalid Query");
 			}
-			let isValidString = this.validateIdString(mkey[0]);
-			if (!isValidString || !this.mfield.includes(mkey[1])) {
+			let isValidString = validateIdString(mkey[0]);
+			if (!isValidString || !checkMfieldsBasedOnKind(datasetKind, mkey[1])) {
 				throw new InsightError("Invalid Query");
 			}
 
@@ -93,6 +132,9 @@ export default class ValidateQuery {
 				}
 				// console.log("MCOMP val", value);
 				isValid = true;
+				if (!isValid) {
+					return isValid;
+				}
 			} catch (e) {
 				throw new InsightError("Invalid Query");
 			}
@@ -100,19 +142,22 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateLOGICCOMP(logiccomp: object): boolean {
+	private validateLOGICCOMP(logiccomp: object, datasetKind: InsightDatasetKind): boolean {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(logiccomp);
-		// console.log("Logic Comp", keys);
+
 		for (let key of keys) {
-			isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp]);
+			isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp], datasetKind);
+			if (!isValid) {
+				return isValid;
+			}
 		}
 
 		return isValid;
 	}
 
-	private validateSCOMP(scomp: object): boolean {
+	private validateSCOMP(scomp: object, datasetKind: InsightDatasetKind): boolean {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(scomp);
@@ -123,8 +168,8 @@ export default class ValidateQuery {
 			if (skey.length !== 2) {
 				throw new InsightError("Invalid Query");
 			}
-			let isValidString = this.validateIdString(skey[0]);
-			if (!isValidString || !this.sfield.includes(skey[1])) {
+			let isValidString = validateIdString(skey[0]);
+			if (!isValidString || !checkSfieldsBasedOnKind(datasetKind,skey[1])) {
 				throw new InsightError("Invalid Query");
 			}
 			try {
@@ -133,7 +178,9 @@ export default class ValidateQuery {
 					throw new InsightError("Invalid Query");
 				}
 				isValid = this.validateInputString(value);
-				// console.log("scomp val", value);
+				if (!isValid) {
+					return isValid;
+				}
 			} catch (e) {
 				throw new InsightError("Invalid Query");
 			}
@@ -141,7 +188,7 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateNEGATION(neg: object): boolean  {
+	private validateNEGATION(neg: object, datasetKind: InsightDatasetKind): boolean  {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(neg);
@@ -150,71 +197,9 @@ export default class ValidateQuery {
 		if (keys.length > 1) {
 			throw new InsightError("Invalid Query");
 		}
-		isValid = this.validateBody(neg);
+		isValid = this.validateBody(neg, datasetKind);
 
 		return isValid;
-	}
-
-	private validateOptions(options: object): boolean  {
-		let isValid: boolean = false;
-		let keys: string[];
-		keys = Object.keys(options);
-		let hasCols: boolean = false;
-		// console.log(keys);
-		for (let key of keys) {
-			if (key === "COLUMNS") {
-				hasCols = true;
-				isValid = this.validateColumns(options[key as keyof typeof options]);
-			} else if (key === "ORDER") {
-				isValid = this.validateOrder(options[key as keyof typeof options]);
-			} else {
-				throw new InsightError("Incorrect Options");
-			}
-		}
-
-		if (!hasCols) {
-			throw new InsightError("Options missing columns");
-		}
-
-		return isValid;
-	}
-
-	private validateColumns(cols: string[]): boolean {
-		let isValid = false;
-		for (let col of cols) {
-			let val = col.split("_");
-			let isValidId = this.validateIdString(val[0]);
-
-			if (!isValidId || (!this.mfield.includes(val[1]) && !this.sfield.includes(val[1]))) {
-				throw new InsightError("Invalid Query");
-			}
-		}
-
-		isValid = true;
-		return isValid;
-	}
-
-	private validateOrder(order: string) {
-		let isValid = false;
-		let val = order.split("_");
-		let isValidId = this.validateIdString(val[0]);
-
-		if (!isValidId || (!this.mfield.includes(val[1]) && !this.sfield.includes(val[1]))) {
-			throw new InsightError("Invalid Query");
-		}
-		isValid = true;
-		return isValid;
-	}
-
-	private validateIdString(idString: string): boolean {
-		// const regEx = /[a-zA-Z0-9[\]^]+/;
-		if (idString.length === 0 ) {
-			throw new InsightError("Invalid id string");
-		}
-		if (idString.includes("_")) {
-			throw new InsightError("Invalid id string");
-		}
-		return true;
 	}
 
 	private validateInputString(inputString: string): boolean  { // implement
@@ -226,7 +211,19 @@ export default class ValidateQuery {
 		return true;
 	}
 
-	public getCols(): string[] {
-		return [];
+	public getDatasetId(): string {
+		return this.datasetId;
+	}
+
+	private setDatasetId(id: string) {
+		this.datasetId = id;
+	}
+
+	private getAllowedColumns(): string [] {
+		return this.allowedColumns;
+	}
+
+	private setAllowedColumns(cols: string[]) {
+		this.allowedColumns = cols;
 	}
 }

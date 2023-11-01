@@ -1,6 +1,6 @@
-import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
-import SectionEntry from "../controller/SectionEntry";
-import CollectQuery from "./collectQuery";
+import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
+import SectionEntry from "../../controller/SectionEntry";
+import CollectQuery from "../../services/collectQuery";
 import CollectAll from "./collectAll";
 
 export default class CollectNegComp {

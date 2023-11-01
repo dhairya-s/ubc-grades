@@ -1,6 +1,6 @@
-import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
-import SectionEntry from "../controller/SectionEntry";
-import CollectQuery from "./collectQuery";
+import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
+import SectionEntry from "../../controller/SectionEntry";
+import CollectQuery from "../../services/collectQuery";
 import {log} from "util";
 
 export default class CollectLogicComp {

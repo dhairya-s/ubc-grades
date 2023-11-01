@@ -327,9 +327,9 @@ describe("InsightFacade", function () {
 
 		// for queries with order
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
-			"Dynamic InsightFacade PerformQuery tests",
+			"Dynamic InsightFacade PerformQuery Ordered tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/ordered_queries",
+			"./test/resources/ordered_queries/inTesting",
 
 			{
 				assertOnResult: async (actual, expected) => {
@@ -352,10 +352,9 @@ describe("InsightFacade", function () {
 
 		// for queries without order
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
-			"Dynamic InsightFacade PerformQuery tests",
+			"Dynamic InsightFacade PerformQuery Unordered tests",
 			(input) => facade.performQuery(input),
-			// "./test/resources/queries",
-			"./test/resources/unordered_queries",
+			"./test/resources/unordered_queries/inTesting",
 
 			{
 				assertOnResult: async (actual, expected) => {

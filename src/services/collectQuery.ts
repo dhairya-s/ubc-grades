@@ -2,12 +2,12 @@ import InsightFacade from "../controller/InsightFacade";
 import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import SectionsDatasetEntry from "../controller/SectionsDatasetEntry";
 import SectionEntry from "../controller/SectionEntry";
-import CollectMcomp from "./collectMcomp";
-import CollectScomp from "./collectScomp";
-import CollectLogicComp from "./collectLogicComp";
-import {collectInsightResult, compare} from "./collectionHelpers";
-import CollectAll from "./collectAll";
-import CollectNegComp from "./collectNegComp";
+import CollectMcomp from "../serviceHelpers/queryEngine/collectMcomp";
+import CollectScomp from "../serviceHelpers/queryEngine/collectScomp";
+import CollectLogicComp from "../serviceHelpers/queryEngine/collectLogicComp";
+import {collectInsightResult, compare} from "../serviceHelpers/helpers/collectionHelpers";
+import CollectAll from "../serviceHelpers/queryEngine/collectAll";
+import CollectNegComp from "../serviceHelpers/queryEngine/collectNegComp";
 
 export interface Property {
 	key: string,

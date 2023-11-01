@@ -7,11 +7,8 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import JSZip from "jszip";
 import ValidateQuery from "../services/validateQuery";
-import * as fs from "fs";
 import CollectQuery from "../services/collectQuery";
-import * as fs_extra from "fs-extra";
 import ValidateDataset from "./validateDataset";
 import {DatasetEntry} from "./DatasetEntry";
 import DatasetManager from "./DatasetManager";
@@ -63,9 +60,12 @@ export default class InsightFacade implements IInsightFacade {
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
 		let collect = new CollectQuery(query as typeof Object, datasets);
+
 		let results: InsightResult[] = [];
 		try {
-			isValid = validate.validateQuery();
+
+			// pass the actual dataset kind based on dataset id from query
+			isValid = validate.ValidateQuery(InsightDatasetKind.Sections);
 
 			if (!isValid) {
 				throw new InsightError("Invalid Query");
