@@ -503,7 +503,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery Unordered tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/unordered_queries/",
+			"./test/resources/unordered_queries/inTesting",
 
 			{
 				assertOnResult: async (actual, expected) => {

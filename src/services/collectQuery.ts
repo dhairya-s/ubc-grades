@@ -8,6 +8,7 @@ import CollectLogicComp from "../serviceHelpers/queryEngine/collectLogicComp";
 import {collectInsightResult, compare} from "../serviceHelpers/helpers/collectionHelpers";
 import CollectAll from "../serviceHelpers/queryEngine/collectAll";
 import CollectNegComp from "../serviceHelpers/queryEngine/collectNegComp";
+import {TransformQuery} from "../serviceHelpers/queryEngine/transformQuery";
 
 export interface Property {
 	key: string,
@@ -26,15 +27,14 @@ export default class CollectQuery {
 	public async CollectQuery(datasetId: string): Promise<InsightResult[]> {
 		let final: object[] = [];
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
-
+		console.log(resultCols);
 		// we collect the body
 		let r: SectionEntry[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId);
 
-		// if (Object.keys(this.query).includes("TRANSFORMATIONS")) {
-		//
-		// } else {
-		//
-		// }
+		if (Object.keys(this.query).includes("TRANSFORMATIONS")) {
+			let transform = new TransformQuery(r);
+			r = transform.TransformQuery(this.query["TRANSFORMATIONS" as keyof typeof this.query]);
+		}
 
 		// based on the options and the order, we create a final array
 		let options = this.query["OPTIONS" as keyof typeof this.query];
