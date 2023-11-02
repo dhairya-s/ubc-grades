@@ -49,7 +49,7 @@ export default class BuildingEntry {
 	}
 
 	public generateRoomInformation() {
-
+		return;
 	}
 
 	public validateBuildingEntry() {
