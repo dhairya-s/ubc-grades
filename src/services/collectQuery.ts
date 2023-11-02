@@ -30,6 +30,12 @@ export default class CollectQuery {
 		// we collect the body
 		let r: SectionEntry[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId);
 
+		// if (Object.keys(this.query).includes("TRANSFORMATIONS")) {
+		//
+		// } else {
+		//
+		// }
+
 		// based on the options and the order, we create a final array
 		let options = this.query["OPTIONS" as keyof typeof this.query];
 		let orderCol: string | undefined = options["ORDER" as keyof  typeof options];
