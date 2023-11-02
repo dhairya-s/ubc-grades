@@ -309,6 +309,24 @@ describe("InsightFacade", function () {
 					const newDatasets = await newInsightFacade.listDatasets();
 					return expect(datasets).to.deep.members(newDatasets);
 				});
+				it("should resolve and send rooms data to disk on successful add after a crash", async function () {
+					const resultAdd = await facade.addDataset("ubc", campus, InsightDatasetKind.Rooms);
+					const datasets = await facade.listDatasets();
+					// Fake a crash
+					const newInsightFacade = new InsightFacade();
+					const newDatasets = await newInsightFacade.listDatasets();
+					return expect(datasets).to.deep.members(newDatasets);
+				});
+				it("should resolve and send rooms data to disk on successful add of multiple datasets",
+					async function () {
+						const resultAdd1 = await facade.addDataset("dataset1", campus, InsightDatasetKind.Rooms);
+						const resultAdd2 = await facade.addDataset("dataset2", campus, InsightDatasetKind.Rooms);
+						const datasets = await facade.listDatasets();
+					// Fake a crash
+						const newInsightFacade = new InsightFacade();
+						const newDatasets = await newInsightFacade.listDatasets();
+						return expect(datasets).to.deep.members(newDatasets);
+					});
 			});
 			it("should resolve with valid arguments", async () => {
 				const result = await facade.addDataset("abc", sections, InsightDatasetKind.Sections);
@@ -317,6 +335,15 @@ describe("InsightFacade", function () {
 			it("should resolve with multiple datasets", async () => {
 				const result1 = await facade.addDataset("abc", sections, InsightDatasetKind.Sections);
 				const result2 = await facade.addDataset("def", sections, InsightDatasetKind.Sections);
+				return chai.expect(result2).to.deep.equals(["abc", "def"]);
+			});
+			it("should resolve rooms with valid arguments", async () => {
+				const result = await facade.addDataset("abc", campus, InsightDatasetKind.Rooms);
+				return chai.expect(result).to.deep.equals(["abc"]);
+			});
+			it("should resolve rooms with multiple datasets", async () => {
+				const result1 = await facade.addDataset("abc", campus, InsightDatasetKind.Rooms);
+				const result2 = await facade.addDataset("def", campus, InsightDatasetKind.Rooms);
 				return chai.expect(result2).to.deep.equals(["abc", "def"]);
 			});
 		});

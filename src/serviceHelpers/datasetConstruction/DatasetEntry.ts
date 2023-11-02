@@ -1,4 +1,5 @@
-import {InsightDataset, InsightDatasetKind} from "../../controller/IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
+import fs from "fs-extra";
 
 export interface DatasetEntry {
 	id: string;

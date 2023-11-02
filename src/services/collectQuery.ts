@@ -1,3 +1,4 @@
+import InsightFacade from "../controller/InsightFacade";
 import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import SectionEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionEntry";

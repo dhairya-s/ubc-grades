@@ -4,7 +4,6 @@ import RoomsDatasetEntry from "./RoomsDatasetEntry";
 import {InsightError} from "../../../controller/IInsightFacade";
 import {parse} from "parse5";
 
-
 export default class BuildingEntry {
 
 	public rooms: RoomEntry[] = [];
@@ -12,7 +11,7 @@ export default class BuildingEntry {
 	public link: string = "";
 	public address: string = "";
 	public buildingCode: string = "";
-	public valid: boolean = false;
+	public valid: boolean = true;
 
 	public setRooms(rooms: RoomEntry[]) {
 		this.rooms = rooms;
@@ -73,6 +72,11 @@ export default class BuildingEntry {
 			if (file != null) {
 				await this.parseBuildingFile(file);
 			}
+			let roomPromises: Array<Promise<void>> = [];
+			for (const room of this.getRooms()) {
+				roomPromises.push(room.setLocation());
+			}
+			await Promise.all(roomPromises);
 		} catch {
 			this.setValid(false);
 			return Promise.resolve(this);
@@ -147,36 +151,27 @@ export default class BuildingEntry {
 								let href = this.getHrefFromHTML(node);
 								roomEntry.setNumber(number);
 								roomEntry.setHref(href);
-							} else{
-								roomEntry.setValid(false);
 							}
 							if (attr.name.includes("class") &&
 								(attr.value.includes("views-field-field-room-capacity"))) {
 								let capacity = this.getCapacityFromHTML(node);
 								roomEntry.setSeats(capacity);
-							} else{
-								roomEntry.setValid(false);
 							}
 							if (attr.name.includes("class") &&
 								(attr.value.includes("views-field-field-room-furniture"))) {
 								let furniture = this.getFurnitureFromHTML(node);
 								roomEntry.setFurniture(furniture);
-							} else{
-								roomEntry.setValid(false);
 							}
 							if (attr.name.includes("class") &&
 								(attr.value.includes("views-field-field-room-type"))) {
 								let type = this.getTypeFromHTML(node);
 								roomEntry.setType(type);
-							} else{
-								roomEntry.setValid(false);
 							}
 
 							roomEntry.setFullname(this.getBuildingName());
 							roomEntry.setShortname(this.getBuildingCode());
 							roomEntry.setName(roomEntry.getShortname() + "_" + roomEntry.getNumber());
 							roomEntry.setAddress(this.getAddress());
-							roomEntry.setLocation();
 						}
 					}
 				}
@@ -216,6 +211,25 @@ export default class BuildingEntry {
 	}
 
 	public validateBuildingEntry() {
-		return true;
+		let filtered = this.getRooms().filter(function(room) {
+			return room.getValid();
+		});
+		return filtered.length > 0;
+	}
+
+	public JSONToEntry(json: any): BuildingEntry {
+		this.setBuildingName(json["buildingName"]);
+
+		let rooms = json["rooms"];
+		let roomEntries = [];
+		for (const room of rooms) {
+			const roomEntry = new RoomEntry();
+			roomEntry.sectionFromDisk(room);
+			roomEntries.push(roomEntry);
+		}
+
+		this.setRooms(roomEntries);
+
+		return this;
 	}
 }
