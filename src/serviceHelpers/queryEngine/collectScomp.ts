@@ -9,11 +9,11 @@ export default class CollectScomp {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectSCOMP(scomp: object): SectionEntry[] {
+	public collectSCOMP(scomp: object, datasetId: string): SectionEntry[] {
 		let propertiesToAdd: SectionEntry[] = [];
 
 		let localKey: string[] = Object.keys(scomp);
-		const datasetId = localKey[0].split("_")[0];
+		// const datasetId = localKey[0].split("_")[0];
 		let isValidId = false;
 		const localKeyField = localKey[0].split("_")[1];
 		const value: string = scomp[localKey[0] as keyof typeof scomp];

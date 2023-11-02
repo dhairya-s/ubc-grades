@@ -1,5 +1,6 @@
 import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {Property} from "../../services/collectQuery";
+import {InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
 
 export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): object {
 	let propertiesToAdd: Property[] = [];
@@ -49,3 +50,85 @@ export function convertArrayOfObjectToObject(properties: Property[]): object {
 	}
 	return result;
 }
+
+export function checkFieldsBasedOnDatasetKind(datasetKind: InsightDatasetKind, field: string): boolean {
+	if (datasetKind === InsightDatasetKind.Sections) {
+		let sfieldSections = ["dept", "id", "instructor", "title", "uuid"];
+		let mfieldSection = ["avg", "pass", "fail", "audit", "year"];
+
+		if (!sfieldSections.includes(field) && !mfieldSection.includes(field)) {
+			return false;
+		}
+
+	} else if (datasetKind === InsightDatasetKind.Rooms) {
+		let mfieldRooms = ["lat", "lon", "seats"];
+		let sfieldRooms = ["fullname", "shortname", "number" , "name" , "address" ,
+			"type" , "furniture" , "href"];
+
+		if (!sfieldRooms.includes(field) && !mfieldRooms.includes(field)) {
+			return false;
+		}
+
+	} else {
+		return false;
+	}
+
+	return true;
+}
+
+export function checkMfieldsBasedOnKind(datasetKind: InsightDatasetKind, mfield: string): boolean {
+	if (datasetKind === InsightDatasetKind.Sections) {
+		let mfieldSection = ["avg", "pass", "fail", "audit", "year"];
+
+		if (!mfieldSection.includes(mfield)) {
+			return false;
+		}
+
+	} else if (datasetKind === InsightDatasetKind.Rooms) {
+		let mfieldRooms = ["lat", "lon", "seats"];
+
+		if (!mfieldRooms.includes(mfield)) {
+			return false;
+		}
+
+	} else {
+		return false;
+	}
+	return true;
+}
+
+export function checkSfieldsBasedOnKind(datasetKind: InsightDatasetKind, sfield: string): boolean {
+	if (datasetKind === InsightDatasetKind.Sections) {
+		let sfieldSections = ["dept", "id", "instructor", "title", "uuid"];
+
+		if (!sfieldSections.includes(sfield)) {
+			return false;
+		}
+
+	} else if (datasetKind === InsightDatasetKind.Rooms) {
+		let sfieldRooms = ["fullname", "shortname", "number" , "name" , "address" ,
+			"type" , "furniture" , "href"];
+
+		if (!sfieldRooms.includes(sfield)) {
+			return false;
+		}
+
+	} else {
+		return false;
+	}
+
+	return true;
+}
+
+
+export function validateIdString(idString: string): boolean {
+	// const regEx = /[a-zA-Z0-9[\]^]+/;
+	if (idString.length === 0 ) {
+		throw new InsightError("Invalid id string");
+	}
+	if (idString.includes("_")) {
+		throw new InsightError("Invalid id string");
+	}
+	return true;
+}
+

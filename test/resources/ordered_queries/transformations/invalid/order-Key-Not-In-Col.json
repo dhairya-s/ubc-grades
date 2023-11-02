@@ -1,0 +1,29 @@
+{
+	"title": "order-key-not-in-col",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "cpsc"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sections_dept"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": []
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

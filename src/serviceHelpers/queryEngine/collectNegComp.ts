@@ -10,20 +10,20 @@ export default class CollectNegComp {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectNegComp(negComp: object): SectionEntry[] {
+	public collectNegComp(negComp: object, datasetId: string): SectionEntry[] {
 		let start = performance.now();
 
 		let propertyToNegate: SectionEntry[] = [];
 		let allProperties: SectionEntry[] = [];
 
 		let collectQuery = new CollectQuery(negComp, this.datasetEntries);
-		propertyToNegate = collectQuery.collectBody(negComp);
+		propertyToNegate = collectQuery.collectBody(negComp, datasetId);
 
 		// let end1 = performance.now();
 		// console.log((end1 - start) / 1000);
 
 		let collect = new CollectAll(this.datasetEntries);
-		allProperties = collect.collectAllQueries();
+		allProperties = collect.collectAllQueries(datasetId);
 		//
 		// let end2 = performance.now();
 		// console.log((end2 - end1) / 1000);
