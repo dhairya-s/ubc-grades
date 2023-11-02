@@ -151,6 +151,7 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 			if (indexFilenameContained){
 				let file = zip.file("index.htm");
 				await this.parseIndex(file, "index.htm");
+				await this.validateBuildings(zip, unzipped_contents);
 			}
 		} catch {
 			return Promise.reject(new InsightError());
@@ -158,7 +159,7 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		return Promise.resolve("Could not find index.htm");
 	}
 
-	private async parseIndex(file: JSZip.JSZipObject | null, filename: string): Promise<string> {
+	private async parseIndex(file: JSZip.JSZipObject | null, filename: string): Promise<void> {
 		/*
 		Parses index file and returns table.
 		 */
@@ -168,14 +169,28 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 					// console.log(body)
 					const document = parse(body);
 					this.findTable(document);
-					console.log(this.getBuildings());
+					// console.log(this.getBuildings());
 				} catch {
 					return Promise.reject(new InsightError("Could not parse index.htm."));
 				}
 			});
 		}
 
-		return Promise.resolve("");
+		return Promise.resolve();
+	}
+
+	private async validateBuildings(zip: JSZip, unzipped_contents: JSZip) {
+		let filledBuildings: Array<Promise<BuildingEntry>> = [];
+		for (const building of this.getBuildings()) {
+			let result = building.generateRoomInformation(zip, unzipped_contents);
+			filledBuildings.push(result);
+		}
+		this.setBuildings(await Promise.all(filledBuildings));
+		let buildings = this.getBuildings().filter(function(building) {
+			return building.validateBuildingEntry();
+		});
+
+		this.setBuildings(buildings);
 	}
 
 	private findTable(document: any): any {
@@ -229,27 +244,30 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 								(attr.value.includes("views-field-field-building-code"))) {
 								let code = this.getBuildingCodeFromHTML(node);
 								buildingEntry.setBuildingCode(code);
+							} else{
+								buildingEntry.setValid(false);
 							}
 							if (attr.name.includes("class") && (attr.value.includes("views-field-title"))) {
 								let link = this.getBuildingLinkFromHTML(node);
 								let name = this.getBuildingNameFromHTML(node);
 								buildingEntry.setLink(link);
 								buildingEntry.setBuildingName(name);
+							} else{
+								buildingEntry.setValid(false);
 							}
 							if (attr.name.includes("class") &&
 								(attr.value.includes("views-field-field-building-address"))) {
 								let address = this.getBuildingAddressFromHTML(node);
 								buildingEntry.setAddress(address);
+							} else{
+								buildingEntry.setValid(false);
 							}
 						}
 					}
 				}
 			}
 		}
-		buildingEntry.generateRoomInformation();
-		if (buildingEntry.validateBuildingEntry()) {
-			this.addBuilding(buildingEntry);
-		}
+		this.addBuilding(buildingEntry);
 	}
 
 	private getBuildingCodeFromHTML(node: any): string {
