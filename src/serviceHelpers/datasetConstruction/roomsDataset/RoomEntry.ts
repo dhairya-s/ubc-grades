@@ -1,3 +1,5 @@
+import * as http from "http";
+
 interface GeoResponse {
 
 	lat?: number;

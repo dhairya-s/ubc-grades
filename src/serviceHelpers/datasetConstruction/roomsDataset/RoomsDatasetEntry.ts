@@ -129,7 +129,6 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		await zip.loadAsync(content, {base64: true}).then(async (unzipped_contents) => {
 			try {
 				let filenames = Object.keys(unzipped_contents.files);
-				console.log(filenames);
 				let filenameBuildingContent: boolean[] = [];
 				let index = await this.findAndParseIndex(zip, unzipped_contents, filenames);
 			} catch {

@@ -72,7 +72,6 @@ export default class BuildingEntry {
 			let file = zip.file(this.getLink().slice(2));
 			if (file != null) {
 				await this.parseBuildingFile(file);
-				console.log(this.getRooms());
 			}
 		} catch {
 			this.setValid(false);
