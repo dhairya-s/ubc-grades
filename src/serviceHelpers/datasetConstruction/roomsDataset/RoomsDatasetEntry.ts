@@ -2,7 +2,7 @@ import {DatasetEntry} from "../DatasetEntry";
 import {InsightDataset, InsightDatasetKind, InsightError} from "../../../controller/IInsightFacade";
 import BuildingEntry from "./BuildingEntry";
 import JSZip from "jszip";
-import {unzip} from "zlib";
+import {parse} from "parse5";
 
 export default class RoomsDatasetEntry implements DatasetEntry {
 	public id: string = "";
@@ -100,6 +100,10 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		this.buildings = buildings;
 	}
 
+	public addBuilding(building: BuildingEntry) {
+		this.buildings.push(building);
+	}
+
 	private setId(id: string) {
 		this.id = id;
 	}
@@ -125,10 +129,9 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		await zip.loadAsync(content, {base64: true}).then(async (unzipped_contents) => {
 			try {
 				let filenames = Object.keys(unzipped_contents.files);
+				console.log(filenames);
 				let filenameBuildingContent: boolean[] = [];
-
-				let index = await this.findAndParseIndex(unzipped_contents, filenames);
-
+				let index = await this.findAndParseIndex(zip, unzipped_contents, filenames);
 			} catch {
 				throw new InsightError("Unable to parse dataset entry.");
 			}
@@ -136,8 +139,139 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		return Promise.resolve([]);
 	}
 
-	private async findAndParseIndex(unzipped_contents: JSZip, filenames: string[]): Promise<string> {
+	private async findAndParseIndex(zip: JSZip, unzipped_contents: JSZip, filenames: string[]): Promise<string> {
+		try {
+			let index = "";
+			let indexFilenameContained = true;
+			for (const filename of filenames) {
+				if (filename === "index.htm") {
+					indexFilenameContained = true;
+				}
+			}
+			if (indexFilenameContained){
+				let file = zip.file("index.htm");
+				await this.parseIndex(file, "index.htm");
+			}
+		} catch {
+			return Promise.reject(new InsightError());
+		}
+		return Promise.resolve("Could not find index.htm");
+	}
+
+	private async parseIndex(file: JSZip.JSZipObject | null, filename: string): Promise<string> {
+		/*
+		Parses index file and returns table.
+		 */
+		if (file != null) {
+			await file.async("text").then((body: any) => {
+				try {
+					// console.log(body)
+					const document = parse(body);
+					this.findTable(document);
+					console.log(this.getBuildings());
+				} catch {
+					return Promise.reject(new InsightError("Could not parse index.htm."));
+				}
+			});
+		}
 
 		return Promise.resolve("");
+	}
+
+	private findTable(document: any): any {
+
+		if (document.childNodes) {
+			for (const node of document.childNodes) {
+				if (node.nodeName.includes("table")) {
+					if (node.attrs){
+						for (const attr of node.attrs) {
+							if (attr.name && attr.value) {
+								if(attr.name.includes("class") && (attr.value.includes("views-table"))) {
+									this.parseTable(node);
+								}
+							}
+						}
+					}
+				}
+				this.findTable(node);
+			}
+		}
+	}
+
+	private parseTable(node: any): any {
+		if (node.childNodes) {
+			for (const tableNode of node.childNodes) {
+				if (tableNode.nodeName.includes("tbody")) {
+					this.parseTableRows(tableNode);
+				}
+			}
+		}
+	}
+
+	private parseTableRows(node: any): any {
+		if (node.childNodes) {
+			for (const tableNode of node.childNodes) {
+				if (tableNode.nodeName.includes("tr")) {
+					this.validateTableRow(tableNode);
+				}
+			}
+		}
+	}
+
+	private validateTableRow(row: any): any {
+		let buildingEntry = new BuildingEntry();
+		for (const node of row.childNodes) {
+			if (node.nodeName.includes("td")) {
+				if (node.attrs) {
+					for (const attr of node.attrs) {
+						if (attr.name && attr.value) {
+							if (attr.name.includes("class") &&
+								(attr.value.includes("views-field-field-building-code"))) {
+								let code = this.getBuildingCodeFromHTML(node);
+								buildingEntry.setBuildingCode(code);
+							}
+							if (attr.name.includes("class") && (attr.value.includes("views-field-title"))) {
+								let link = this.getBuildingLinkFromHTML(node);
+								let name = this.getBuildingNameFromHTML(node);
+								buildingEntry.setLink(link);
+								buildingEntry.setBuildingName(name);
+							}
+							if (attr.name.includes("class") &&
+								(attr.value.includes("views-field-field-building-address"))) {
+								let address = this.getBuildingAddressFromHTML(node);
+								buildingEntry.setAddress(address);
+							}
+						}
+					}
+				}
+			}
+		}
+		buildingEntry.generateRoomInformation();
+		if (buildingEntry.validateBuildingEntry()) {
+			this.addBuilding(buildingEntry);
+		}
+	}
+
+	private getBuildingCodeFromHTML(node: any): string {
+		let text = node.childNodes[0].value;
+		text = text.trim();
+		return text;
+	}
+
+	private getBuildingLinkFromHTML(node: any): string {
+		let text = node.childNodes[1].attrs[0].value;
+		return text;
+	}
+
+	private getBuildingNameFromHTML(node: any): string {
+		let text = node.childNodes[1].childNodes[0].value;
+		text = text.trim();
+		return text;
+	}
+
+	private getBuildingAddressFromHTML(node: any): string {
+		let text = node.childNodes[0].value;
+		text = text.trim();
+		return text;
 	}
 }
