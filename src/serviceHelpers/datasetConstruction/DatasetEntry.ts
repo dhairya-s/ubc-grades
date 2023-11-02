@@ -1,4 +1,5 @@
-import {InsightDataset, InsightDatasetKind} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
+import fs from "fs-extra";
 
 export interface DatasetEntry {
 	id: string;
@@ -18,5 +19,10 @@ export interface DatasetEntry {
 
 	createInsightDataset(): InsightDataset;
 
-	get_id(): string;
+	getId(): string;
+
+	getNumRows(): number;
+
+	getKind(): string;
+
 }

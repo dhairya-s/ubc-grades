@@ -1,5 +1,5 @@
-import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
-import SectionEntry from "../../controller/SectionEntry";
+import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
+import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 
 export default class CollectAll	{
 	private datasetEntries: SectionsDatasetEntry[];
@@ -12,7 +12,7 @@ export default class CollectAll	{
 		let propertiesToAdd: SectionEntry[] = [];
 
 		for (let dataset of this.datasetEntries) {
-			if (String(datasetId) === dataset.get_id()) {
+			if (String(datasetId) === dataset.getId()) {
 				for (let course of dataset.get_courses()) {
 					for (let section of course.getSections()) {
 						propertiesToAdd.push(section);

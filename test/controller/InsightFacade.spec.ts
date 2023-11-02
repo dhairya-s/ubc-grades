@@ -2,7 +2,8 @@ import {
 	IInsightFacade,
 	InsightDatasetKind,
 	InsightError,
-	InsightResult, NotFoundError,
+	InsightResult,
+	NotFoundError,
 	ResultTooLargeError,
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
@@ -19,10 +20,12 @@ describe("InsightFacade", function () {
 
 	// Declare datasets used in tests. You should add more datasets like this!
 	let sections: string;
+	let campus: string;
 
 	before(function () {
 		// This block runs once and loads the datasets.
 		sections = getContentFromArchives("smallpair.zip");
+		campus = getContentFromArchives("small_campus.zip");
 
 		// Just in case there is anything hanging around from a previous run of the test suite
 		clearDisk();
@@ -165,9 +168,128 @@ describe("InsightFacade", function () {
 					});
 
 				});
-				// describe("TestValidateRoomsKindContent", () => {
-				// 	// TODO: This needs to be finished for C2.
-				// });
+				describe("TestValidateRoomsKindContent", () => {
+					it("rejects rooms content that is not a zip file", () => {
+						const badDataset = getContentFromArchives(
+							"addDataset_test/not_a_valid_zip_rooms.txt"
+						);
+						const result = facade.addDataset("rooms", badDataset, InsightDatasetKind.Rooms);
+						return expect(result).to.eventually.be.rejectedWith(InsightError);
+					});
+					it("resolves valid rooms content", async () => {
+						const result = facade.addDataset("rooms", campus, InsightDatasetKind.Rooms);
+						const expected = ["rooms"];
+						return expect(result).to.eventually.deep.members(expected);
+					});
+					describe("invalid index.htm file", () => {
+						it("rejects rooms content if it cannot find an index.htm file", () => {
+							const badDataset = getContentFromArchives(
+								"addDataset_test/no_index.zip"
+							);
+							const result = facade.addDataset("rooms", badDataset, InsightDatasetKind.Rooms);
+							return expect(result).to.eventually.be.rejectedWith(InsightError);
+						});
+						// it("rejects rooms content if it cannot find a valid table in the index.htm", () => {
+						// 	const badDataset = getContentFromArchives(
+						// 		"addDataset_test/no_valid_table.zip"
+						// 	);
+						// 	const result = facade.addDataset("rooms", badDataset, InsightDatasetKind.Rooms)
+						// 	return expect(result).to.eventually.be.rejectedWith(InsightError);
+						// });
+					});
+					// describe("invalid building", () => {
+					// 	it("rejects rooms content if it cannot find a building file linked from index", () => {
+					// 		const badDataset = getContentFromArchives(
+					// 			"addDataset_test/no_valid_building_file.zip"
+					// 		);
+					// 		const result = facade.addDataset("rooms", badDataset, InsightDatasetKind.Rooms)
+					// 		return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 	});
+					// 	it("rejects rooms content if it cannot find a single valid room", () => {
+					// 		const badDataset = getContentFromArchives(
+					// 			"addDataset_test/no_valid_room.zip"
+					// 		);
+					// 		const result = facade.addDataset("rooms", badDataset, InsightDatasetKind.Rooms)
+					// 		return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 	});
+					// 	it("rejects rooms content if found a room, but does not contain valid query keys", () => {
+					// 		const badDataset = getContentFromArchives(
+					// 			"addDataset_test/room_exists_not_valid.zip"
+					// 		);
+					// 		const result = facade.addDataset("rooms", badDataset, InsightDatasetKind.Rooms)
+					// 		return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 	});
+					// 	describe("TestValidRoom", async function () {
+					// 		it(
+					// 			"rejects if room does not contain every field which" + " can be used by a query",
+					// 			async function () {
+					// 				// Removed ID field
+					// 				const badDataset = getContentFromArchives(
+					// 					"addDataset_test/room_missing_query_field.zip"
+					// 				);
+					// 				const result = facade.addDataset(
+					// 					"campus",
+					// 					badDataset,
+					// 					InsightDatasetKind.Rooms
+					// 				);
+					// 				return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 			});
+					// 		it("resolves if a non-intuitive value is given in the room htm", async function () {
+					// 			const badDataset = getContentFromArchives(
+					// 				"addDataset_test/room_htm_non_intuitive_section_value.zip"
+					// 			);
+					// 			const result = facade.addDataset(
+					// 				"campus",
+					// 				badDataset,
+					// 				InsightDatasetKind.Rooms
+					// 			);
+					// 			const expected = ["idstring"];
+					// 			return expect(result).to.eventually.deep.members(expected);
+					// 		});
+					// 		it("resolves if it contains one or more valid rooms", async function () {
+					// 			const badDataset = getContentFromArchives(
+					// 				"addDataset_test/contains_one_or_more_valid_rooms.zip"
+					// 			);
+					// 			const result = facade.addDataset(
+					// 				"campus",
+					// 				badDataset,
+					// 				InsightDatasetKind.Rooms
+					// 			);
+					// 			const expected = ["idstring"];
+					// 			return expect(result).to.eventually.deep.members(expected);
+					// 		});
+					// 		it("rejects if it contains no valid rooms", async function () {
+					// 			const badDataset = getContentFromArchives("addDataset_test/no_valid_room.zip");
+					// 			const result = facade.addDataset(
+					// 				"campus",
+					// 				badDataset,
+					// 				InsightDatasetKind.Rooms
+					// 			);
+					// 			return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 		});
+					// 		it("rejects if rooms are not linked properly", async function () {
+					// 			const badDataset = getContentFromArchives(
+					// 				"addDataset_test/rooms_not_linked_properly.zip"
+					// 			);
+					// 			const result = facade.addDataset(
+					// 				"campus",
+					// 				badDataset,
+					// 				InsightDatasetKind.Rooms
+					// 			);
+					// 			return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 		});
+					// 		it("rejects if it contains no valid rooms", async function () {
+					// 			const badDataset = getContentFromArchives("addDataset_test/no_valid_rooms.zip"); // Contains no "Pass" attribute.
+					// 			const result = facade.addDataset(
+					// 				"campus",
+					// 				badDataset,
+					// 				InsightDatasetKind.Rooms
+					// 			);
+					// 			return expect(result).to.eventually.be.rejectedWith(InsightError);
+					// 		});
+					// 	});
+					// });
+				});
 			});
 			describe("TestSaveDataset", () => {
 				it("should resolve and send data to disk on successful add after a crash", async function () {
@@ -187,6 +309,24 @@ describe("InsightFacade", function () {
 					const newDatasets = await newInsightFacade.listDatasets();
 					return expect(datasets).to.deep.members(newDatasets);
 				});
+				it("should resolve and send rooms data to disk on successful add after a crash", async function () {
+					const resultAdd = await facade.addDataset("ubc", campus, InsightDatasetKind.Rooms);
+					const datasets = await facade.listDatasets();
+					// Fake a crash
+					const newInsightFacade = new InsightFacade();
+					const newDatasets = await newInsightFacade.listDatasets();
+					return expect(datasets).to.deep.members(newDatasets);
+				});
+				it("should resolve and send rooms data to disk on successful add of multiple datasets",
+					async function () {
+						const resultAdd1 = await facade.addDataset("dataset1", campus, InsightDatasetKind.Rooms);
+						const resultAdd2 = await facade.addDataset("dataset2", campus, InsightDatasetKind.Rooms);
+						const datasets = await facade.listDatasets();
+					// Fake a crash
+						const newInsightFacade = new InsightFacade();
+						const newDatasets = await newInsightFacade.listDatasets();
+						return expect(datasets).to.deep.members(newDatasets);
+					});
 			});
 			it("should resolve with valid arguments", async () => {
 				const result = await facade.addDataset("abc", sections, InsightDatasetKind.Sections);
@@ -195,6 +335,15 @@ describe("InsightFacade", function () {
 			it("should resolve with multiple datasets", async () => {
 				const result1 = await facade.addDataset("abc", sections, InsightDatasetKind.Sections);
 				const result2 = await facade.addDataset("def", sections, InsightDatasetKind.Sections);
+				return chai.expect(result2).to.deep.equals(["abc", "def"]);
+			});
+			it("should resolve rooms with valid arguments", async () => {
+				const result = await facade.addDataset("abc", campus, InsightDatasetKind.Rooms);
+				return chai.expect(result).to.deep.equals(["abc"]);
+			});
+			it("should resolve rooms with multiple datasets", async () => {
+				const result1 = await facade.addDataset("abc", campus, InsightDatasetKind.Rooms);
+				const result2 = await facade.addDataset("def", campus, InsightDatasetKind.Rooms);
 				return chai.expect(result2).to.deep.equals(["abc", "def"]);
 			});
 		});
@@ -329,7 +478,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery Ordered tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/ordered_queries",
+			"./test/resources/ordered_queries/inTesting",
 
 			{
 				assertOnResult: async (actual, expected) => {

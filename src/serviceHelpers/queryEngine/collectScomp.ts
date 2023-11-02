@@ -1,7 +1,5 @@
-import SectionsDatasetEntry from "../../controller/SectionsDatasetEntry";
-import SectionEntry from "../../controller/SectionEntry";
-import {collectInsightResult, convertArrayOfObjectToObject} from "../helpers/collectionHelpers";
-import {Property} from "../../services/collectQuery";
+import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
+import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {InsightError} from "../../controller/IInsightFacade";
 
 export default class CollectScomp {
@@ -21,7 +19,7 @@ export default class CollectScomp {
 		const value: string = scomp[localKey[0] as keyof typeof scomp];
 
 		for (let dataset of this.datasetEntries) {
-			if (String(datasetId) === String(dataset.get_id())) {
+			if (String(datasetId) === String(dataset.getId())) {
 				isValidId = true;
 				for (let course of dataset.get_courses()) {
 					for (let section of course.getSections()) {

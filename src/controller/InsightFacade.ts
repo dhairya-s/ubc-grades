@@ -9,10 +9,10 @@ import {
 } from "./IInsightFacade";
 import ValidateQuery from "../services/validateQuery";
 import CollectQuery from "../services/collectQuery";
-import ValidateDataset from "./validateDataset";
-import {DatasetEntry} from "./DatasetEntry";
-import DatasetManager from "./DatasetManager";
-import SectionsDatasetEntry from "./SectionsDatasetEntry";
+import ValidateDataset from "../services/validateDataset";
+import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
+import DatasetManager from "../services/DatasetManager";
+import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 
 export default class InsightFacade implements IInsightFacade {
 	private datasetManager: DatasetManager = new DatasetManager();

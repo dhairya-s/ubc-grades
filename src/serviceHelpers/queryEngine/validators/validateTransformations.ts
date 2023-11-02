@@ -1,5 +1,9 @@
 import {InsightDatasetKind, InsightError} from "../../../controller/IInsightFacade";
-import {checkFieldsBasedOnDatasetKind, validateIdString} from "../../helpers/collectionHelpers";
+import {
+	checkFieldsBasedOnDatasetKind,
+	checkMfieldsBasedOnKind,
+	validateIdString
+} from "../../helpers/collectionHelpers";
 
 
 export default class ValidateTransformations {
@@ -8,7 +12,8 @@ export default class ValidateTransformations {
 
 	private datasetId: string = "";
 	private allowedColumns: string[] = [];
-	private APPLYTOKEN: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
+	private APPLYTOKEN_NUMERIC: string[] = ["MAX", "MIN", "AVG", "SUM"];
+	private APPLYTOKEN_ALL: string[] = ["COUNT"];
 
 
 	constructor(tf: object, datasetKind: InsightDatasetKind) {
@@ -129,32 +134,40 @@ export default class ValidateTransformations {
 		applyToken = keys[0];
 		// console.log(applyToken); // AVG (applytoken)
 
-		isValid = this.APPLYTOKEN.includes(applyToken);
-		if (!isValid) {
-			return isValid;
-		}
+		// isValid = this.APPLYTOKEN.includes(applyToken);
+		// if (!isValid) {
+		// 	return isValid;
+		// }
 
 		let col: string = rule[applyToken as keyof typeof rule];
 
 		let colDatasetId: string = col.split("_")[0];
 		let colField: string = col.split("_")[1];
 
+		if (this.APPLYTOKEN_NUMERIC.includes(applyToken)) {
+			isValid = checkMfieldsBasedOnKind(datasetKind, colField);
+			if (!isValid) {
+				return isValid;
+			}
+		} else if (this.APPLYTOKEN_ALL.includes(applyToken)) {
+			isValid = checkFieldsBasedOnDatasetKind(datasetKind, colField);
+			if (!isValid) {
+				return isValid;
+			}
+		} else {
+			return false;
+		}
+
+
 		if (this.getDatasetId() !== "") {
 			if (colDatasetId === this.getDatasetId()) {
-				// checks valid sfield and mfield for either rooms or sections dataset
-				isValid = checkFieldsBasedOnDatasetKind(datasetKind, colField);
-				if (!isValid) {
-					return isValid;
-				}
+				isValid = true;
 			} else {
 				isValid = false;
 			}
 		} else {
 			this.setDatasetId(colDatasetId);
-			isValid = checkFieldsBasedOnDatasetKind(datasetKind, colField);
-			if (!isValid) {
-				return isValid;
-			}
+			isValid = true;
 		}
 
 

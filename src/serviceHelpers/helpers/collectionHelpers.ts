@@ -1,4 +1,4 @@
-import SectionEntry from "../../controller/SectionEntry";
+import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {Property} from "../../services/collectQuery";
 import {InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
 
