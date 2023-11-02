@@ -1,4 +1,4 @@
-import SectionEntry from "../../controller/SectionEntry";
+import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 
 export class TransformQuery {
 	private collectedQuery: SectionEntry[];
