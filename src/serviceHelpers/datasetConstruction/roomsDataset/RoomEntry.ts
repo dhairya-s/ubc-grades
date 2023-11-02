@@ -90,29 +90,45 @@ export default class RoomEntry {
 
 	public async setLocation(): Promise<void> {
 		let encodedURI = encodeURIComponent(this.getAddress());
-		let url = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team216/" + encodedURI;
+		let url = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team216/";
 		try {
-			const response = await fetch(url, {
-				method: "GET",
-				headers: {
-					Accept: "application/json",
-				},
+
+			const response = await new Promise((resolve, reject) => {
+				const req = http.get(url + encodedURI, (res) => {
+					let body = "";
+
+					res.on("data", (chunk) => {
+						body = body + chunk;
+					});
+
+					res.on("end", () => {
+						resolve(body);
+					});
+				});
+
+				req.on("error", (error) => {
+					reject(new InsightError("Could not get coordinates. "));
+				});
+
+				req.end();
 			});
-			let location = await response.json();
+
+			let parsedBody = JSON.parse(response as string);
 			this.location = {
-				lat: location.lat, lon: location.lon
+				lat: parsedBody.lat,
+				lon: parsedBody.lon
 			};
-			if (location.lat && location.lon) {
-				this.setLat(location.lat);
-				this.setLon(location.lon);
+			if (parsedBody.lat && parsedBody.lon) {
+				this.setLat(parsedBody.lat);
+				this.setLon(parsedBody.lon);
 				this.counter.location = true;
 			}
 
-		} catch {
-			return Promise.reject();
-		}
+			return Promise.resolve();
 
-		return Promise.resolve();
+		} catch {
+			return Promise.resolve();
+		}
 	}
 
 	public setFullname(fullname: string) {
