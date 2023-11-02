@@ -58,11 +58,12 @@ export default class ValidateQuery {
 		if (!isValid) {
 			return isValid;
 		}
+		this.setDatasetId(validateOptions.getDatasetId());
 
 		console.log("Valid Options");
 
 		// check where
-		isValid = this.validateBody(this.query["WHERE" as keyof typeof this.query], datasetKind);
+		isValid = this.validateBody(this.query["WHERE" as keyof typeof this.query], datasetKind, this.getDatasetId());
 		if (!isValid) {
 			return isValid;
 		}
@@ -72,7 +73,7 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateBody(body: object, datasetKind: InsightDatasetKind): boolean {
+	private validateBody(body: object, datasetKind: InsightDatasetKind, datasetId: string): boolean {
 		let isValid = true;
 		let keys: string[];
 		keys = Object.keys(body);
@@ -80,22 +81,22 @@ export default class ValidateQuery {
 
 		for (let key of keys) {
 			if (key === "GT" || key === "LT" || key === "EQ") { // MCOMP
-				isValid = this.validateMCOMP(body[key as keyof typeof body], datasetKind);
+				isValid = this.validateMCOMP(body[key as keyof typeof body], datasetKind, datasetId);
 				if (!isValid) {
 					return isValid;
 				}
 			} else if (key === "AND" || key === "OR") { // LOGICCOMP
-				isValid = this.validateLOGICCOMP(body[key as keyof typeof body], datasetKind);
+				isValid = this.validateLOGICCOMP(body[key as keyof typeof body], datasetKind,datasetId);
 				if (!isValid) {
 					return isValid;
 				}
 			} else if (key === "IS") { // SCOMP
-				isValid = this.validateSCOMP(body[key as keyof typeof body], datasetKind);
+				isValid = this.validateSCOMP(body[key as keyof typeof body], datasetKind,datasetId);
 				if (!isValid) {
 					return isValid;
 				}
 			} else if (key === "NOT") { // NEGATION
-				isValid = this.validateNEGATION(body[key as keyof typeof body], datasetKind);
+				isValid = this.validateNEGATION(body[key as keyof typeof body], datasetKind,datasetId);
 				if (!isValid) {
 					return isValid;
 				}
@@ -107,7 +108,7 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateMCOMP(mcomp: object, datasetKind: InsightDatasetKind): boolean {
+	private validateMCOMP(mcomp: object, datasetKind: InsightDatasetKind, datasetId: string): boolean {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(mcomp);
@@ -120,7 +121,7 @@ export default class ValidateQuery {
 			if (mkey.length !== 2) {
 				throw new InsightError("Invalid Query");
 			}
-			let isValidString = validateIdString(mkey[0]);
+			let isValidString = mkey[0] === String(datasetId);
 			if (!isValidString || !checkMfieldsBasedOnKind(datasetKind, mkey[1])) {
 				throw new InsightError("Invalid Query");
 			}
@@ -142,13 +143,13 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateLOGICCOMP(logiccomp: object, datasetKind: InsightDatasetKind): boolean {
+	private validateLOGICCOMP(logiccomp: object, datasetKind: InsightDatasetKind, datasetId: string): boolean {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(logiccomp);
 
 		for (let key of keys) {
-			isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp], datasetKind);
+			isValid = this.validateBody(logiccomp[key as keyof typeof logiccomp], datasetKind, datasetId);
 			if (!isValid) {
 				return isValid;
 			}
@@ -157,7 +158,7 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateSCOMP(scomp: object, datasetKind: InsightDatasetKind): boolean {
+	private validateSCOMP(scomp: object, datasetKind: InsightDatasetKind, datasetId: string): boolean {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(scomp);
@@ -168,7 +169,8 @@ export default class ValidateQuery {
 			if (skey.length !== 2) {
 				throw new InsightError("Invalid Query");
 			}
-			let isValidString = validateIdString(skey[0]);
+
+			let isValidString = skey[0] === String(datasetId); // instead check if matches dataset id
 			if (!isValidString || !checkSfieldsBasedOnKind(datasetKind,skey[1])) {
 				throw new InsightError("Invalid Query");
 			}
@@ -188,7 +190,7 @@ export default class ValidateQuery {
 		return isValid;
 	}
 
-	private validateNEGATION(neg: object, datasetKind: InsightDatasetKind): boolean  {
+	private validateNEGATION(neg: object, datasetKind: InsightDatasetKind, datasetId: string): boolean  {
 		let isValid = false;
 		let keys: string[];
 		keys = Object.keys(neg);
@@ -197,7 +199,7 @@ export default class ValidateQuery {
 		if (keys.length > 1) {
 			throw new InsightError("Invalid Query");
 		}
-		isValid = this.validateBody(neg, datasetKind);
+		isValid = this.validateBody(neg, datasetKind, datasetId);
 
 		return isValid;
 	}

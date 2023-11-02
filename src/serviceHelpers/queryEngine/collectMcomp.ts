@@ -11,11 +11,11 @@ export default class CollectMcomp {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectMCOMP(mcomp: object, key: string): SectionEntry[] {
+	public collectMCOMP(mcomp: object, key: string, datasetId: string): SectionEntry[] {
 		let propertiesToAdd: SectionEntry[] = [];
 
 		let localKey: string[] = Object.keys(mcomp); // sections_id
-		const datasetId = localKey[0].split("_")[0];
+		// const datasetId = localKey[0].split("_")[0];
 		let isValidId = false;
 		const localKeyField = localKey[0].split("_")[1]; // id
 		const value: number = mcomp[localKey[0] as keyof typeof mcomp];

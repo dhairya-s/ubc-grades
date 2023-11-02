@@ -10,7 +10,7 @@ export default class CollectLogicComp {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectLogicComp(logiccomp: object, key: string): SectionEntry[] {
+	public collectLogicComp(logiccomp: object, key: string, datasetId: string): SectionEntry[] {
 		// let start = performance.now();
 		// console.log("key logic", key);
 		let propertiesToAdd: SectionEntry[] = [];
@@ -20,7 +20,7 @@ export default class CollectLogicComp {
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
 			let collectComp: SectionEntry[];
-			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp]);
+			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp], datasetId);
 			// if (Object.keys(collectComp).length !== 0){
 			propertiesToLogic.push(collectComp);
 			// }
