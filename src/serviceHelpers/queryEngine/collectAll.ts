@@ -8,13 +8,15 @@ export default class CollectAll	{
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectAllQueries(): SectionEntry[] {
+	public collectAllQueries(datasetId: string): SectionEntry[] {
 		let propertiesToAdd: SectionEntry[] = [];
 
 		for (let dataset of this.datasetEntries) {
-			for (let course of dataset.get_courses()) {
-				for (let section of course.getSections()) {
-					propertiesToAdd.push(section);
+			if (String(datasetId) === dataset.get_id()) {
+				for (let course of dataset.get_courses()) {
+					for (let section of course.getSections()) {
+						propertiesToAdd.push(section);
+					}
 				}
 			}
 		}
