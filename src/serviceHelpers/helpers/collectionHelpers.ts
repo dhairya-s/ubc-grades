@@ -2,7 +2,7 @@ import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {Property} from "../../services/collectQuery";
 import {InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
 
-export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): object {
+export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): Property[] {
 	let propertiesToAdd: Property[] = [];
 	for (let resultCol of resultCols) {
 		let keyField = resultCol.split("_")[1];
@@ -28,9 +28,11 @@ export function collectInsightResult(section: SectionEntry, resultCols: Set<stri
 			propertiesToAdd.push({key:resultCol, value: String(section.get_uuid())});
 		}
 	}
-
-	return convertArrayOfObjectToObject(propertiesToAdd);
+	// console.log(propertiesToAdd);
+	// return convertArrayOfObjectToObject(propertiesToAdd);
+	return propertiesToAdd;
 }
+
 
 export function compare(val: string|number, val2: string|number) {
 	if (val < val2) {
@@ -48,6 +50,7 @@ export function convertArrayOfObjectToObject(properties: Property[]): object {
 	for (let property of properties) {
 		result[property.key] = property.value;
 	}
+	// console.log(result);
 	return result;
 }
 
@@ -130,5 +133,41 @@ export function validateIdString(idString: string): boolean {
 		throw new InsightError("Invalid id string");
 	}
 	return true;
+}
+
+export function transformOrder(properties: Property[][], resultCols: Set<string>) {
+	let finalArr: object[] = [];
+	// console.log(resultCols);
+
+	let keys = Object.keys(properties[0]);
+	let keysToDelete: string[] = [];
+
+	for (let key of keys) {
+		if (!resultCols.has(properties[0][+key].key)) {
+			keysToDelete.push(properties[0][+key].key);
+		}
+	}
+	// console.log(keysToDelete);
+	//
+	// console.log("KEYS", keys);
+
+	if (keysToDelete.length === 0) {
+		for (let property of properties) {
+			finalArr.push(convertArrayOfObjectToObject(property));
+		}
+	} else {
+		for (let property of properties) {
+			let newProps: Property[] = [];
+
+			for (let p of property) {
+				if (!keysToDelete.includes(p.key)) {
+					newProps.push(p);
+				}
+			}
+			finalArr.push(convertArrayOfObjectToObject(newProps));
+		}
+	}
+	return finalArr;
+
 }
 

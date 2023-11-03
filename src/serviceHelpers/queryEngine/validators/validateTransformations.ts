@@ -21,7 +21,6 @@ export default class ValidateTransformations {
 		this.datasetKind = datasetKind;
 	}
 
-	// wont work in case where apply is before group
 	public Validate(): boolean {
 		let isValid = false;
 		let hasGroup = false;
