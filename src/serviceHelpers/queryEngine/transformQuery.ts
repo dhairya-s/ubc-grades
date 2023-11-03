@@ -113,158 +113,95 @@ export class TransformQuery {
 
 	private handleApply(apply: object[], group: string[], groupMap: Map<string, QueryObject[]>) {
 		let propertiesToAdd: Property[][] = [];
-
+		let applyKeys: string[] = [];
+		let applyTokens: string[] = [];
+		let applyColFields: string [] = [];
 		for (let ap of apply) {
 			let applyKey = Object.keys(ap)[0];
-
 			let rule: object = ap[applyKey as keyof typeof ap];
-
 			let applyToken: string = Object.keys(rule)[0];
 			let applyCol: string = rule[applyToken as keyof typeof rule];
 			let applyColField: string = applyCol.split("_")[1];
 
-			if (applyToken === "MIN") {
-				propertiesToAdd = this.handleMin(applyColField, applyKey, group, groupMap);
-			} else if (applyToken === "MAX") {
-				propertiesToAdd = this.handleMax(applyColField, applyKey, group,groupMap);
-			}  else if (applyToken === "AVG") {
-				propertiesToAdd = this.handleAvg(applyColField, applyKey, group,groupMap);
-			}  else if (applyToken === "SUM") {
-				propertiesToAdd = this.handleSum(applyColField, applyKey, group,groupMap);
-			}  else if (applyToken === "COUNT") {
-				propertiesToAdd = this.handleCount(applyColField, applyKey, group,groupMap);
+			applyKeys.push(applyKey);
+			applyTokens.push(applyToken);
+			applyColFields.push(applyColField);
+		}
+
+		propertiesToAdd = this.applyHelper(applyKeys, applyTokens, applyColFields, group, groupMap);
+
+		return propertiesToAdd;
+	}
+
+	private applyHelper(applyKeys: string[], applyTokens: string[], applyColFields: string[], group: string[],
+		groupMap: Map<string, QueryObject[]>) {
+		let propertiesToAdd: Property[][] = [];
+
+		for (let key of groupMap.keys()) {
+
+			let propsToAdd: Property[] = [];
+
+			let sectionEntries = groupMap.get(key);
+			if (sectionEntries !== undefined) {
+				let groupSet = new Set(group);
+				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+
+
+				propsToAdd = this.transformApplyTokenHelpers(applyKeys, applyTokens, applyColFields,
+					sectionEntries, propsToAdd);
+
+				propertiesToAdd.push(propsToAdd);
 			}
 		}
 		return propertiesToAdd;
 	}
 
-
-	private handleMin(applyColField: string, applyKey: string, group: string[], groupMap: Map<string, QueryObject[]>) {
-		let propertiesToAdd: Property[][] = [];
-
-		for (let key of groupMap.keys()) {
+	private transformApplyTokenHelpers(applyKeys: string[], applyTokens: string[], applyColFields: string[]
+		, sectionEntries: QueryObject[], propsToAdd: Property[]): Property[] {
+		for (let i = 0; i < applyKeys.length;i++) {
 			let min = +Infinity;
-			let propsToAdd: Property[] = [];
-
-			let sectionEntries = groupMap.get(key);
-			if (sectionEntries !== undefined) {
+			let max = -Infinity;
+			let total = new Decimal(0);
+			let numRows = 0;
+			if (applyTokens[i] === "MIN") {
 				for (let section of sectionEntries) {
-					let val = this.handleNumericApplyCols(applyColField, section);
+					let val = this.handleNumericApplyCols(applyColFields[i], section);
 					if (val < min) {
 						min = val;
 					}
 				}
-				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
-				propsToAdd.push({key: applyKey, value:min});
-				propertiesToAdd.push(propsToAdd);
-			}
-		}
-
-		return propertiesToAdd;
-	}
-
-	private handleMax(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, QueryObject[]>) {
-		let propertiesToAdd: Property[][] = [];
-
-		for (let key of groupMap.keys()) {
-			let max = -Infinity;
-			let propsToAdd: Property[] = [];
-
-			let queryObjects = groupMap.get(key);
-			if (queryObjects !== undefined) {
-				for (let queryObject of queryObjects) {
-					let val = this.handleNumericApplyCols(applyColField, queryObject);
+				propsToAdd.push({key: applyKeys[i], value:min});
+			} else if (applyTokens[i] === "MAX") {
+				for (let section of sectionEntries) {
+					let val = this.handleNumericApplyCols(applyColFields[i], section);
 					if (val > max) {
 						max = val;
 					}
 				}
-				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
-				propsToAdd.push({key: applyKey, value:max});
-				propertiesToAdd.push(propsToAdd);
-
-			}
-		}
-
-		return propertiesToAdd;
-	}
-
-	private handleAvg(applyColField: string, applyKey: string,group: string[], groupMap: Map<string, QueryObject[]>) {
-		let propertiesToAdd: Property[][] = [];
-
-		for (let key of groupMap.keys()) {
-			let total = new Decimal(0);
-			let numRows = 0;
-			let propsToAdd: Property[] = [];
-
-			let queryObjects = groupMap.get(key);
-			if (queryObjects !== undefined) {
-				for (let queryObject of queryObjects) {
-					let val = new Decimal(this.handleNumericApplyCols(applyColField, queryObject));
-					// console.log("val", val);
+				propsToAdd.push({key: applyKeys[i], value:max});
+			} else if (applyTokens[i] === "AVG") {
+				for (let section of sectionEntries) {
+					let val = new Decimal(this.handleNumericApplyCols(applyColFields[i], section));
 					total = Decimal.add(total, val);
-					// console.log("total",total);
 					numRows++;
 				}
 				let avg = total.toNumber() / numRows;
-
-				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
-				propsToAdd.push({key: applyKey, value:Number(avg.toFixed(2))});
-				propertiesToAdd.push(propsToAdd);
-			}
-		}
-
-		return propertiesToAdd;
-	}
-
-	private handleSum(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, QueryObject[]>) {
-		let propertiesToAdd: Property[][] = [];
-
-		for (let key of groupMap.keys()) {
-			let total = new Decimal(0);
-			let propsToAdd: Property[] = [];
-
-			let queryObjects = groupMap.get(key);
-			if (queryObjects !== undefined) {
-				for (let queryObject of queryObjects) {
-					let val = new Decimal(this.handleNumericApplyCols(applyColField, queryObject));
+				propsToAdd.push({key: applyKeys[i], value:Number(avg.toFixed(2))});
+			} else if (applyTokens[i] === "SUM") {
+				for (let section of sectionEntries) {
+					let val = new Decimal(this.handleNumericApplyCols(applyColFields[i], section));
 					total = Decimal.add(total, val);
 				}
-				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
-				propsToAdd.push({key: applyKey, value:Number(total.toFixed(2))});
-				propertiesToAdd.push(propsToAdd);
-			}
-		}
-
-		return propertiesToAdd;
-	}
-
-
-	private handleCount(applyColField: string, applyKey: string,group: string[], groupMap: Map<string, QueryObject[]>){
-		let propertiesToAdd: Property[][] = [];
-
-		for (let key of groupMap.keys()) {
-			let count = 0;
-			let propsToAdd: Property[] = [];
-
-			let sectionEntries = groupMap.get(key);
-			if (sectionEntries !== undefined) {
+				propsToAdd.push({key: applyKeys[i], value:Number(total.toFixed(2))});
+			} else if (applyTokens[i] === "COUNT") {
 				for (let section of sectionEntries) {
-					count++;
+					numRows++;
 				}
-				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
-				propsToAdd.push({key: applyKey, value:count});
-				propertiesToAdd.push(propsToAdd);
+				propsToAdd.push({key: applyKeys[i], value:numRows});
 			}
 		}
-
-		return propertiesToAdd;
+		return propsToAdd;
 	}
-
 
 	private handleNumericApplyCols(applyColField: string, qObj: QueryObject): number {
 		let val = 0;
