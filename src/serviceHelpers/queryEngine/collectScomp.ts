@@ -1,16 +1,18 @@
 import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {InsightError} from "../../controller/IInsightFacade";
+import QueryObject from "../datasetConstruction/QueryObject";
+import {DatasetEntry} from "../datasetConstruction/DatasetEntry";
 
 export default class CollectScomp {
-	private datasetEntries: SectionsDatasetEntry[] = [];
+	private datasetEntries: DatasetEntry[] = [];
 
-	constructor(datasetEntries: SectionsDatasetEntry[]) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectSCOMP(scomp: object, datasetId: string): SectionEntry[] {
-		let propertiesToAdd: SectionEntry[] = [];
+	public collectSCOMP(scomp: object, datasetId: string): QueryObject[] {
+		let propertiesToAdd: QueryObject[] = [];
 
 		let localKey: string[] = Object.keys(scomp);
 		// const datasetId = localKey[0].split("_")[0];
@@ -21,17 +23,23 @@ export default class CollectScomp {
 		for (let dataset of this.datasetEntries) {
 			if (String(datasetId) === String(dataset.getId())) {
 				isValidId = true;
-				for (let course of dataset.getChildren()) {
-					for (let section of course.getChildren()) {
-						let sectionEntry: SectionEntry | null = this.handleSFields(section, localKeyField, value);
-						// if (Object.keys(obj).length !== 0) {
-						// 	propertiesToAdd.push(obj);
-						// }
-						if (sectionEntry !== null) {
-							propertiesToAdd.push(sectionEntry);
-						}
+				for (let queryObject of dataset.getQueryObjects()) {
+					let qEntry = this.handleSFields(queryObject, localKeyField, value);
+					if (qEntry !== null) {
+						propertiesToAdd.push(qEntry);
 					}
 				}
+				// for (let course of dataset.getChildren()) {
+				// 	for (let section of course.getChildren()) {
+				// 		let sectionEntry: QueryObject | null = this.handleSFields(section, localKeyField, value);
+				// 		// if (Object.keys(obj).length !== 0) {
+				// 		// 	propertiesToAdd.push(obj);
+				// 		// }
+				// 		if (sectionEntry !== null) {
+				// 			propertiesToAdd.push(sectionEntry);
+				// 		}
+				// 	}
+				// }
 			}
 		}
 
@@ -43,77 +51,77 @@ export default class CollectScomp {
 
 	// private helpers
 
-	private handleSFields(section: SectionEntry, localKeyField: string, value: string): SectionEntry | null {
-		let result: SectionEntry | null = null;
+	private handleSFields(qObj: QueryObject, localKeyField: string, value: string): QueryObject | null {
+		let result: QueryObject | null = null;
 
 		if (localKeyField === "dept") {
-			result = this.handleWildCards(section, value, section.get_dept());
+			result = this.handleWildCards(qObj, value, qObj.get_dept());
 		} else if (localKeyField === "id") {
-			result = this.handleWildCards(section, value, section.get_id());
+			result = this.handleWildCards(qObj, value, qObj.get_id());
 		} else if (localKeyField === "instructor") {
-			result = this.handleWildCards(section, value, section.get_instructor());
+			result = this.handleWildCards(qObj, value, qObj.get_instructor());
 		} else if (localKeyField === "title") {
-			result = this.handleWildCards(section, value, section.get_title());
+			result = this.handleWildCards(qObj, value, qObj.get_title());
 		} else if (localKeyField === "uuid") {
-			result = this.handleWildCards(section, value, section.get_uuid());
+			result = this.handleWildCards(qObj, value, qObj.get_uuid());
 		}
 
 		return result;
 	}
 
-	private handleWildCards(section: SectionEntry, value: string, sectionValue: string): SectionEntry | null {
-		let result: SectionEntry | null = null;
+	private handleWildCards(qObj: QueryObject, value: string, qObjValue: string): QueryObject | null {
+		let result: QueryObject | null = null;
 
 		if (!value.includes("*")) {
-			result = this.matchesExactly(section, value, sectionValue);
+			result = this.matchesExactly(qObj, value, qObjValue);
 		} else if (value.startsWith("*") && value.endsWith("*")) {
-			result = this.contains(section, value, sectionValue);
+			result = this.contains(qObj, value, qObjValue);
 		} else if (value.startsWith("*")) {
-			result = this.endsWith(section, value, sectionValue);
+			result = this.endsWith(qObj, value, qObjValue);
 		} else if (value.endsWith("*")) {
-			result = this.startsWith(section, value, sectionValue);
+			result = this.startsWith(qObj, value, qObjValue);
 		}
 
 		return result;
 	}
 
-	private matchesExactly(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+	private matchesExactly(qObj: QueryObject, value: string, qObjValue: string): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 
-		if (String(sectionVal) === value) {
-			return section;
+		if (String(qObjValue) === value) {
+			return qObj;
 		}
 		return null;
 	}
 
-	private endsWith(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+	private endsWith(qObj: QueryObject, value: string, qObjValue: string): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[1];
-		if (String(sectionVal).endsWith(split)) {
-			return section;
+		if (String(qObjValue).endsWith(split)) {
+			return qObj;
 			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 		return null;
 	}
 
-	private startsWith(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+	private startsWith(qObj: QueryObject, value: string, qObjValue: string): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[0];
-		if (String(sectionVal).startsWith(split)) {
+		if (String(qObjValue).startsWith(split)) {
 			// propertiesToAdd = collectInsightResult(section, this.resultCols);
-			return section;
+			return qObj;
 		}
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 		return null;
 	}
 
-	private contains(section: SectionEntry, value: string, sectionVal: string): SectionEntry | null {
+	private contains(qObj: QueryObject, value: string, qObjValue: string): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		let split = value.split("*")[1];
 
-		if (String(sectionVal).includes(split)) {
-			return section;
+		if (String(qObjValue).includes(split)) {
+			return qObj;
 			// propertiesToAdd = collectInsightResult(section, this.resultCols);
 		}
 		// return convertArrayOfObjectToObject(propertiesToAdd);

@@ -1,7 +1,3 @@
-import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
-import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
-import {Property} from "../../services/collectQuery";
-import {collectInsightResult, convertArrayOfObjectToObject} from "../helpers/collectionHelpers";
 import {InsightError} from "../../controller/IInsightFacade";
 import QueryObject from "../datasetConstruction/QueryObject";
 import {DatasetEntry} from "../datasetConstruction/DatasetEntry";
@@ -13,8 +9,8 @@ export default class CollectMcomp {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectMCOMP(mcomp: object, key: string, datasetId: string): SectionEntry[] {
-		let propertiesToAdd: SectionEntry[] = [];
+	public collectMCOMP(mcomp: object, key: string, datasetId: string): QueryObject[] {
+		let propertiesToAdd:  QueryObject[] = [];
 
 		let localKey: string[] = Object.keys(mcomp); // sections_id
 		// const datasetId = localKey[0].split("_")[0];
@@ -54,7 +50,7 @@ export default class CollectMcomp {
 
 	// private helpers
 
-	private applyGT(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+	private applyGT(section: QueryObject, value: number, sectionVal: number): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		if (sectionVal > value) {
 			// console.log("applyGT result cols", this.resultCols);
@@ -66,7 +62,7 @@ export default class CollectMcomp {
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private applyEQ(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+	private applyEQ(section: QueryObject, value: number, sectionVal: number): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		if (sectionVal === value) {
 			return  section;
@@ -76,7 +72,7 @@ export default class CollectMcomp {
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private applyLT(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+	private applyLT(section: QueryObject, value: number, sectionVal: number): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		if (sectionVal < value) {
 			return section;

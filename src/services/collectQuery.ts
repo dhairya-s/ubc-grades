@@ -130,7 +130,7 @@ export default class CollectQuery {
 		let keys: string[];
 		keys = Object.keys(body);
 
-		let propertiesToAdd: SectionEntry[] = [];
+		let propertiesToAdd: QueryObject[] = [];
 
 		let collectM = new CollectMcomp(this.datasetEntries);
 		let collectS = new CollectScomp(this.datasetEntries);

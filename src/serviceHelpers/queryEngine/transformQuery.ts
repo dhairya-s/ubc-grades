@@ -39,7 +39,7 @@ export class TransformQuery {
 	}
 
 	private handleGroup(group: string[]) {
-		let groupMap = new Map<string, SectionEntry[]>();
+		let groupMap = new Map<string, QueryObject[]>();
 
 		for (let section of this.collectedQuery) {
 			let groupKey: string = JSON.stringify(returnsArray(section));
@@ -57,30 +57,30 @@ export class TransformQuery {
 			}
 		}
 
-		function returnsArray (section: SectionEntry) {
+		function returnsArray (qObj: QueryObject) {
 			let retArr: Array<string|number> = [];
 			for (let keyList of group) {
 				let keyField = keyList.split("_")[1];
 				if (keyField === "avg") {
-					retArr.push(section.get_avg());
+					retArr.push(qObj.get_avg());
 				} else if (keyField === "pass") {
-					retArr.push(section.get_pass());
+					retArr.push(qObj.get_pass());
 				} else if (keyField === "fail") {
-					retArr.push(section.get_fail());
+					retArr.push(qObj.get_fail());
 				} else if (keyField === "audit") {
-					retArr.push(section.get_audit());
+					retArr.push(qObj.get_audit());
 				} else if (keyField === "year") {
-					retArr.push(section.get_year());
+					retArr.push(qObj.get_year());
 				} else if (keyField === "dept") {
-					retArr.push(section.get_dept());
+					retArr.push(qObj.get_dept());
 				} else if (keyField === "id") {
-					retArr.push(section.get_id());
+					retArr.push(qObj.get_id());
 				} else if (keyField === "instructor") {
-					retArr.push(section.get_instructor());
+					retArr.push(qObj.get_instructor());
 				} else if (keyField === "title") {
-					retArr.push(section.get_title());
+					retArr.push(qObj.get_title());
 				} else if (keyField === "uuid") {
-					retArr.push(String(section.get_uuid()));
+					retArr.push(String(qObj.get_uuid()));
 				}
 			}
 			return retArr;
@@ -168,7 +168,7 @@ export class TransformQuery {
 		return propertiesToAdd;
 	}
 
-	private handleAvg(applyColField: string, applyKey: string,group: string[], groupMap: Map<string, SectionEntry[]>) {
+	private handleAvg(applyColField: string, applyKey: string,group: string[], groupMap: Map<string, QueryObject[]>) {
 		let propertiesToAdd: Property[][] = [];
 
 		for (let key of groupMap.keys()) {
@@ -221,7 +221,7 @@ export class TransformQuery {
 	}
 
 
-	private handleCount(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, SectionEntry[]>){
+	private handleCount(applyColField: string, applyKey: string,group: string[], groupMap: Map<string, QueryObject[]>){
 		let propertiesToAdd: Property[][] = [];
 
 		for (let key of groupMap.keys()) {
@@ -247,15 +247,15 @@ export class TransformQuery {
 	private handleNumericApplyCols(applyColField: string, qObj: QueryObject): number {
 		let val = 0;
 		if (applyColField === "avg") {
-			val = section.get_avg();
+			val = qObj.get_avg();
 		} else if (applyColField === "pass") {
-			val = section.get_pass();
+			val = qObj.get_pass();
 		} else if (applyColField === "fail") {
-			val = section.get_fail();
+			val = qObj.get_fail();
 		} else if (applyColField === "audit") {
-			val = section.get_audit();
+			val = qObj.get_audit();
 		} else if (applyColField === "year") {
-			val = section.get_year();
+			val = qObj.get_year();
 		}
 
 		return val;
