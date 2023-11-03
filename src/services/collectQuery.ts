@@ -96,6 +96,28 @@ export default class CollectQuery {
 				return compare(section1.get_title(), section2.get_title());
 			} else if (keyField === "uuid") {
 				return compare(section1.get_uuid(), section2.get_uuid());
+			} else if (keyField === "lat") {
+				return 0;
+			} else if (keyField === "lon") {
+				return 0;
+			} else if (keyField === "seats") {
+				return 0;
+			} else if (keyField === "fullname") {
+				return 0;
+			} else if (keyField === "shortname") {
+				return 0;
+			} else if (keyField === "number") {
+				return 0;
+			} else if (keyField === "name") {
+				return 0;
+			} else if (keyField === "address") {
+				return 0;
+			} else if (keyField === "type") {
+				return 0;
+			} else if (keyField === "furniture") {
+				return 0;
+			} else if (keyField === "href") {
+				return 0;
 			}
 			return 0;
 		}
