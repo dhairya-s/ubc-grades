@@ -45,24 +45,35 @@ export default class CollectQuery {
 			let options = this.query["OPTIONS" as keyof typeof this.query];
 			let orderCol: string | object | undefined = options["ORDER" as keyof  typeof options];
 
+			final = transformOrder(propertiesToAdd, resultCols);
+
+			console.log();
+
 			if (orderCol === undefined) {
 				// we have properties to add [[{}],[{}],[{}]]
 				final = transformOrder(propertiesToAdd, resultCols);
 				return final as InsightResult[];
 			}
-
-			return [] as InsightResult[];
+			final = this.collectSort(orderCol, true, final);
+			return final as InsightResult[];
 
 		} else {
 			// based on the options and the order, we create a final array
-			let options = this.query["OPTIONS" as keyof typeof this.query];
+			let options: object = this.query["OPTIONS" as keyof typeof this.query];
 			let orderCol: string | object | undefined = options["ORDER" as keyof  typeof options];
 
 			if (r.length >= 5000) {
 				throw new ResultTooLargeError("Only queries with a maximum of 5000 results are supported");
 			}
 			if (orderCol !== undefined) {
-				r = this.orderBy(r, orderCol);
+				if (typeof orderCol === "string") {
+					r = this.orderBy(r, [orderCol], "UP");
+				} else if (typeof orderCol === "object"){
+					let dir: string = orderCol["dir" as keyof typeof orderCol];
+					let cols: string[] = orderCol["keys" as keyof typeof orderCol];
+					r = this.orderBy(r, cols, dir);
+				}
+
 			}
 			for (let sec of r) {
 				final.push(convertArrayOfObjectToObject(collectInsightResult(sec, resultCols)));
@@ -75,55 +86,77 @@ export default class CollectQuery {
 
 	}
 
-	private orderBy(sections: QueryObject[], orderCol: string): QueryObject[] {
-		let keyField = orderCol.split("_")[1];
+	private orderBy(sections: QueryObject[], orderCol: string[], dir: string): QueryObject[] {
+		let keyField = orderCol[0].split("_")[1];
+		let helper = this.helper;
 		function orderCompare(section1: QueryObject, section2: QueryObject) {
-			if (keyField === "avg") {
-				return compare(section1.get_avg(), section2.get_avg());
-			} else if (keyField === "pass") {
-				return compare(section1.get_pass(), section2.get_pass());
-			} else if (keyField === "fail") {
-				return compare(section1.get_fail(), section2.get_fail());
-			} else if (keyField === "audit") {
-				return compare(section1.get_audit(), section2.get_audit());
-			} else if (keyField === "year") {
-				return compare(section1.get_year(), section2.get_year());
-			} else if (keyField === "dept") {
-				return compare(section1.get_dept(),section2.get_dept());
-			} else if (keyField === "id") {
-				return compare(section1.get_id(), section2.get_id());
-			} else if (keyField === "instructor") {
-				return compare(section1.get_instructor(), section2.get_instructor());
-			} else if (keyField === "title") {
-				return compare(section1.get_title(), section2.get_title());
-			} else if (keyField === "uuid") {
-				return compare(section1.get_uuid(), section2.get_uuid());
-			} else if (keyField === "lat") {
-				return compare(section1.getLat(), section2.getLat());
-			} else if (keyField === "lon") {
-				return compare(section1.getLon(), section2.getLon());
-			} else if (keyField === "seats") {
-				return compare(section1.getSeats(), section2.getSeats());
-			} else if (keyField === "fullname") {
-				return compare(section1.getFullname(), section2.getFullname());
-			} else if (keyField === "shortname") {
-				return compare(section1.getShortname(), section2.getShortname());
-			} else if (keyField === "number") {
-				return compare(section1.getNumber(), section2.getNumber());
-			} else if (keyField === "name") {
-				return compare(section1.getName(), section2.getName());
-			} else if (keyField === "address") {
-				return compare(section1.getAddress(), section2.getAddress());
-			} else if (keyField === "type") {
-				return compare(section1.getType(), section2.getType());
-			} else if (keyField === "furniture") {
-				return compare(section1.getFurniture(), section2.getFurniture());
-			} else if (keyField === "href") {
-				return compare(section1.getHref(), section2.getHref());
+			let arr = helper(keyField, section1, section2);
+			if (arr !== undefined){
+				let c = compare(arr[0], arr[1], dir);
+				if (c === 0) {
+					for (let i = 1; i < orderCol.length; i++) {
+						let childKeyField = orderCol[i].split("_")[1];
+						let childArr = helper(childKeyField, section1, section2);
+						if (childArr !== undefined) {
+							let childC = compare(childArr[0], childArr[1], dir);
+						}
+					}
+					return c;
+				} else {
+					return c;
+				}
+			} else {
+				return 0;
 			}
-			return 0;
 		}
+
 		return sections.sort(orderCompare);
+	}
+
+	private helper(field: string, section1: QueryObject, section2: QueryObject) {
+		if (field === "avg") {
+			return [section1.get_avg(), section2.get_avg()];
+		} else if (field === "pass") {
+			return [section1.get_pass(), section2.get_pass()];
+		} else if (field === "fail") {
+			return [section1.get_fail(), section2.get_fail()];
+		} else if (field === "audit") {
+			return [section1.get_audit(), section2.get_audit()];
+		} else if (field === "year") {
+			return [section1.get_year(), section2.get_year()];
+		} else if (field === "dept") {
+			return [section1.get_dept(),section2.get_dept()];
+		} else if (field === "id") {
+			return [section1.get_id(), section2.get_id()];
+		} else if (field === "instructor") {
+			return [section1.get_instructor(), section2.get_instructor()];
+		} else if (field === "title") {
+			return [section1.get_title(), section2.get_title()];
+		} else if (field === "uuid") {
+			return [section1.get_uuid(), section2.get_uuid()];
+		} else if (field === "lat") {
+			return [section1.getLat(), section2.getLat()];
+		} else if (field === "lon") {
+			return [section1.getLon(), section2.getLon()];
+		} else if (field === "seats") {
+			return [section1.getSeats(), section2.getSeats()];
+		} else if (field === "fullname") {
+			return [section1.getFullname(), section2.getFullname()];
+		} else if (field === "shortname") {
+			return [section1.getShortname(), section2.getShortname()];
+		} else if (field === "number") {
+			return [section1.getNumber(), section2.getNumber()];
+		} else if (field === "name") {
+			return [section1.getName(), section2.getName()];
+		} else if (field === "address") {
+			return [section1.getAddress(), section2.getAddress()];
+		} else if (field === "type") {
+			return [section1.getType(), section2.getType()];
+		} else if (field === "furniture") {
+			return [section1.getFurniture(), section2.getFurniture()];
+		} else if (field === "href") {
+			return [section1.getHref(), section2.getHref()];
+		}
 	}
 
 	public collectBody(body: object, datasetId: string, datasetKind: InsightDatasetKind): QueryObject[] {
@@ -169,4 +202,44 @@ export default class CollectQuery {
 
 		return resultCols;
 	}
+
+	private collectSort(order: object | string, hasTransformations: boolean, objArr: object[]) {
+		if (order === undefined) {
+			return [];
+		}
+		let outputObjArr: object[] = [];
+		if (typeof order === "string") {
+			if (hasTransformations) {
+				outputObjArr = this.transOrderBy([order], objArr, "UP");
+			}
+		} else if (typeof order === "object") {
+			if (hasTransformations) {
+				let dir: string = order["dir" as keyof typeof order];
+				let cols: string[] = order["keys" as keyof typeof order];
+				outputObjArr = this.transOrderBy(cols, objArr, dir);
+
+			}
+		}
+		return outputObjArr;
+	}
+
+	private transOrderBy(order: string[], objArr: object[], dir: string) {
+		let firstOrder = order[0];
+		function orderCompare(val1: object, val2: object) {
+			let c = compare(val1[firstOrder as keyof typeof val1],val2[firstOrder as keyof typeof val2], dir);
+			if (c === 0) {
+				for (let i = 1; i < order.length; i++) {
+					let childC = compare(val1[order[i] as keyof typeof val1],val2[order[i] as keyof typeof val2], dir);
+					if (childC !== 0) {
+						return childC;
+					}
+				}
+				return c;
+			} else {
+				return c;
+			}
+		}
+		return objArr.sort(orderCompare);
+	}
+
 }

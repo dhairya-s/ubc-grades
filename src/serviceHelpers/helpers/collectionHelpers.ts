@@ -55,11 +55,14 @@ export function collectInsightResult(qObj: QueryObject, resultCols: Set<string>)
 }
 
 
-export function compare(val: string|number, val2: string|number) {
+export function compare(val: string|number, val2: string|number, dir: string) {
+
 	if (val < val2) {
-		return -1;
+		return dir === "UP" ? -1 : 1;
+		// return -1;
 	} else if (val > val2) {
-		return 1;
+		return dir === "UP" ? 1 : -1;
+		// return 1;
 	} else {
 		return 0;
 	}
