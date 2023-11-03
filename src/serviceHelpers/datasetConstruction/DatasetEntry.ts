@@ -4,6 +4,8 @@ import SectionsDatasetEntry from "./sectionsDataset/SectionsDatasetEntry";
 import RoomsDatasetEntry from "./roomsDataset/RoomsDatasetEntry";
 import CourseEntry from "./sectionsDataset/CourseEntry";
 import BuildingEntry from "./roomsDataset/BuildingEntry";
+import RoomEntry from "./roomsDataset/RoomEntry";
+import SectionEntry from "./sectionsDataset/SectionEntry";
 
 export class DatasetEntry {
 	public id: string = "";
@@ -72,5 +74,21 @@ export class DatasetEntry {
 
 	public JSONToDatasetEntry(objectJSON: any) {
 
+	}
+
+	public getChildren() {
+		return this.children;
+	}
+
+	public setChildren(sections: BuildingEntry[] | CourseEntry[]) {
+		this.children = sections;
+	}
+
+	public getQueryObjects(): SectionEntry[] | RoomEntry[] {
+		let queryObjects: any[] = [];
+		for (const child of this.getChildren()){
+			queryObjects.concat(child.getChildren());
+		}
+		return queryObjects;
 	}
 }

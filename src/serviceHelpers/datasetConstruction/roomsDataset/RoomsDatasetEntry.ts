@@ -95,7 +95,7 @@ export default class RoomsDatasetEntry extends DatasetEntry {
 
 	public getNumRows() {
 		let numRooms = this.getChildren().map(function(building) {
-			return building.getRooms().length;
+			return building.getChildren().length;
 		}).reduce((sum, current) => sum + current, 0);
 		this.setNumRows(numRooms);
 
