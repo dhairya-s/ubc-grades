@@ -56,7 +56,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		let datasets: DatasetEntry[] = await this.datasetManager.loadSectionsDatasetsFromDisk();
+		let datasets: DatasetEntry[] = await this.datasetManager.loadDatasetFromDisk();
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
 		// let collect = new CollectQuery(query as typeof Object, datasets); //TODO add back in

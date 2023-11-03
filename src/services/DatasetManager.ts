@@ -1,5 +1,5 @@
 import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
-import {InsightDataset, InsightError, NotFoundError} from "../controller/IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "../controller/IInsightFacade";
 import fs from "fs-extra";
 import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import RoomsDatasetEntry from "../serviceHelpers/datasetConstruction/roomsDataset/RoomsDatasetEntry";
@@ -137,7 +137,7 @@ export default class DatasetManager {
 		}
 	}
 
-	public async loadSectionsDatasetsFromDisk(): Promise<DatasetEntry[]> {
+	public async loadDatasetFromDisk(): Promise<DatasetEntry[]> {
 		// return Promise.reject("Could not load datasets from disk.");
 		try {
 			let dirFiles = fs.readdirSync(this.path);
@@ -164,7 +164,12 @@ export default class DatasetManager {
 		// let dataset = new SectionsDatasetEntry();
 		const fileContents = await fs.readJSON(this.path + "/" + datasetDir);
 		let objectJSON = JSON.parse(fileContents);
-		let dataset = new DatasetEntry();
+		let dataset: DatasetEntry;
+		if (objectJSON.kind === InsightDatasetKind.Sections){
+			dataset = new SectionsDatasetEntry();
+		} else {
+			dataset = new RoomsDatasetEntry();
+		}
 		dataset.JSONToDatasetEntry(objectJSON);
 		return Promise.resolve(dataset);
 	}

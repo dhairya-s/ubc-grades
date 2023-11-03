@@ -45,9 +45,9 @@ export default class SectionsDatasetEntry extends DatasetEntry {
 		this.setNumRows(json["numRows"]);
 		this.setKind(json["kind"]);
 
-		let courses = json["courses"];
+		let children = json["children"];
 		let courseEntries: CourseEntry[] = [];
-		for (const course of courses){
+		for (const course of children){
 			const courseEntry = new CourseEntry();
 			courseEntry.JSONToEntry(course);
 			courseEntries.push(courseEntry);
@@ -114,6 +114,7 @@ export default class SectionsDatasetEntry extends DatasetEntry {
 			this.setKind(kind);
 			let courses = await this.parseZip(content);
 			this.setChildren(courses);
+			this.getNumRows();
 		} catch {
 			return Promise.reject("Could not parse zip file.");
 		}

@@ -55,7 +55,7 @@ export default class RoomsDatasetEntry extends DatasetEntry {
 		this.setNumRows(json["numRows"]);
 		this.setKind(json["kind"]);
 
-		let buildings = json["buildings"];
+		let buildings = json["children"];
 		let buildingEntries: BuildingEntry[] = [];
 		for (const building of buildings){
 			const buildingEntry = new BuildingEntry();

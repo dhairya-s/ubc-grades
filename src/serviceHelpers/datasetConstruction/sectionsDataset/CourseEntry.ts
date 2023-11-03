@@ -73,9 +73,9 @@ export default class CourseEntry {
 	}
 
 	public JSONToEntry(json: any): CourseEntry {
-		this.setCourseName(json["name"]);
+		this.setCourseName(json["courseName"]);
 
-		let sections = json["sections"];
+		let sections = json["children"];
 		let sectionEntries = [];
 		for (const section of sections) {
 			const sectionEntry = new SectionEntry();

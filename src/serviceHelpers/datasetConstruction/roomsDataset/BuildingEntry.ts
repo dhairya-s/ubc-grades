@@ -220,7 +220,7 @@ export default class BuildingEntry {
 	public JSONToEntry(json: any): BuildingEntry {
 		this.setBuildingName(json["buildingName"]);
 
-		let rooms = json["rooms"];
+		let rooms = json["children"];
 		let roomEntries = [];
 		for (const room of rooms) {
 			const roomEntry = new RoomEntry();

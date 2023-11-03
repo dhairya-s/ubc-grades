@@ -28,6 +28,7 @@ export class DatasetEntry {
 	}
 
 	public async saveDataset(path: string): Promise<void> {
+
 		let saveDir = path + "/" + this.getId() + ".json";
 		let content = JSON.stringify(this);
 		try {
@@ -88,7 +89,7 @@ export class DatasetEntry {
 	public getQueryObjects(): QueryObject[] {
 		let queryObjects: any[] = [];
 		for (const child of this.getChildren()){
-			queryObjects.concat(child.getChildren());
+			queryObjects = queryObjects.concat(child.getChildren());
 		}
 		return queryObjects;
 	}
