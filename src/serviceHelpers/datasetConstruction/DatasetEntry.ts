@@ -6,6 +6,7 @@ import CourseEntry from "./sectionsDataset/CourseEntry";
 import BuildingEntry from "./roomsDataset/BuildingEntry";
 import RoomEntry from "./roomsDataset/RoomEntry";
 import SectionEntry from "./sectionsDataset/SectionEntry";
+import QueryObject from "./QueryObject";
 
 export class DatasetEntry {
 	public id: string = "";
@@ -84,7 +85,7 @@ export class DatasetEntry {
 		this.children = sections;
 	}
 
-	public getQueryObjects(): SectionEntry[] | RoomEntry[] {
+	public getQueryObjects(): QueryObject[] {
 		let queryObjects: any[] = [];
 		for (const child of this.getChildren()){
 			queryObjects.concat(child.getChildren());

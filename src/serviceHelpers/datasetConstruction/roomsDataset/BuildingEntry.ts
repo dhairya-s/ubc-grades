@@ -224,7 +224,7 @@ export default class BuildingEntry {
 		let roomEntries = [];
 		for (const room of rooms) {
 			const roomEntry = new RoomEntry();
-			roomEntry.sectionFromDisk(room);
+			roomEntry.queryObjectFromDisk(room);
 			roomEntries.push(roomEntry);
 		}
 

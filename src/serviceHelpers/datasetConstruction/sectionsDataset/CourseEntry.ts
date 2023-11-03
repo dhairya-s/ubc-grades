@@ -44,7 +44,7 @@ export default class CourseEntry {
 			for (const result of sectionJSON["result"]){
 				try {
 					let section = new SectionEntry();
-					section.sectionFromJSON(result);
+					section.queryObjectFromJSON(result);
 					this.addChild(section);
 				} catch {
 					// continue
@@ -79,7 +79,7 @@ export default class CourseEntry {
 		let sectionEntries = [];
 		for (const section of sections) {
 			const sectionEntry = new SectionEntry();
-			sectionEntry.sectionFromDisk(section);
+			sectionEntry.queryObjectFromDisk(section);
 			sectionEntries.push(sectionEntry);
 		}
 
