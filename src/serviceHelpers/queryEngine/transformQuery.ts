@@ -2,10 +2,11 @@ import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import Decimal from "decimal.js";
 import {Property} from "../../services/collectQuery";
 import {collectInsightResult} from "../helpers/collectionHelpers";
+import QueryObject from "../datasetConstruction/QueryObject";
 
 export class TransformQuery {
-	private collectedQuery: SectionEntry[];
-	constructor(collectedQuery: SectionEntry[]) {
+	private collectedQuery: QueryObject[];
+	constructor(collectedQuery: QueryObject[]) {
 		this.collectedQuery = collectedQuery;
 	}
 
@@ -14,7 +15,7 @@ export class TransformQuery {
 
 		// handle group
 		// let tempSecReturn: SectionEntry[] = [];
-		let groupMap: Map<string, SectionEntry[]> = new Map<string, SectionEntry[]>();
+		let groupMap: Map<string, QueryObject[]> = new Map<string, SectionEntry[]>();
 		let group: string[] = transform["GROUP" as keyof typeof transform];
 		groupMap = this.handleGroup(group);
 		// console.log("Group handled");
@@ -88,7 +89,7 @@ export class TransformQuery {
 		return groupMap;
 	}
 
-	private handleApply(apply: object[], group: string[], groupMap: Map<string, SectionEntry[]>) {
+	private handleApply(apply: object[], group: string[], groupMap: Map<string, QueryObject[]>) {
 		let propertiesToAdd: Property[][] = [];
 
 		for (let ap of apply) {
@@ -116,7 +117,7 @@ export class TransformQuery {
 	}
 
 
-	private handleMin(applyColField: string, applyKey: string, group: string[], groupMap: Map<string, SectionEntry[]>) {
+	private handleMin(applyColField: string, applyKey: string, group: string[], groupMap: Map<string, QueryObject[]>) {
 		let propertiesToAdd: Property[][] = [];
 
 		for (let key of groupMap.keys()) {
@@ -141,23 +142,23 @@ export class TransformQuery {
 		return propertiesToAdd;
 	}
 
-	private handleMax(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, SectionEntry[]>) {
+	private handleMax(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, QueryObject[]>) {
 		let propertiesToAdd: Property[][] = [];
 
 		for (let key of groupMap.keys()) {
 			let max = -Infinity;
 			let propsToAdd: Property[] = [];
 
-			let sectionEntries = groupMap.get(key);
-			if (sectionEntries !== undefined) {
-				for (let section of sectionEntries) {
-					let val = this.handleNumericApplyCols(applyColField, section);
+			let queryObjects = groupMap.get(key);
+			if (queryObjects !== undefined) {
+				for (let queryObject of queryObjects) {
+					let val = this.handleNumericApplyCols(applyColField, queryObject);
 					if (val > max) {
 						max = val;
 					}
 				}
 				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
 				propsToAdd.push({key: applyKey, value:max});
 				propertiesToAdd.push(propsToAdd);
 
@@ -175,10 +176,10 @@ export class TransformQuery {
 			let numRows = 0;
 			let propsToAdd: Property[] = [];
 
-			let sectionEntries = groupMap.get(key);
-			if (sectionEntries !== undefined) {
-				for (let section of sectionEntries) {
-					let val = new Decimal(this.handleNumericApplyCols(applyColField, section));
+			let queryObjects = groupMap.get(key);
+			if (queryObjects !== undefined) {
+				for (let queryObject of queryObjects) {
+					let val = new Decimal(this.handleNumericApplyCols(applyColField, queryObject));
 					// console.log("val", val);
 					total = Decimal.add(total, val);
 					// console.log("total",total);
@@ -187,7 +188,7 @@ export class TransformQuery {
 				let avg = total.toNumber() / numRows;
 
 				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
 				propsToAdd.push({key: applyKey, value:Number(avg.toFixed(2))});
 				propertiesToAdd.push(propsToAdd);
 			}
@@ -196,21 +197,21 @@ export class TransformQuery {
 		return propertiesToAdd;
 	}
 
-	private handleSum(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, SectionEntry[]>) {
+	private handleSum(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, QueryObject[]>) {
 		let propertiesToAdd: Property[][] = [];
 
 		for (let key of groupMap.keys()) {
 			let total = new Decimal(0);
 			let propsToAdd: Property[] = [];
 
-			let sectionEntries = groupMap.get(key);
-			if (sectionEntries !== undefined) {
-				for (let section of sectionEntries) {
-					let val = new Decimal(this.handleNumericApplyCols(applyColField, section));
+			let queryObjects = groupMap.get(key);
+			if (queryObjects !== undefined) {
+				for (let queryObject of queryObjects) {
+					let val = new Decimal(this.handleNumericApplyCols(applyColField, queryObject));
 					total.add(val);
 				}
 				let groupSet = new Set(group);
-				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
 				propsToAdd.push({key: applyKey, value:Number(total.toFixed(2))});
 				propertiesToAdd.push(propsToAdd);
 			}
@@ -243,7 +244,7 @@ export class TransformQuery {
 	}
 
 
-	private handleNumericApplyCols(applyColField: string, section: SectionEntry): number {
+	private handleNumericApplyCols(applyColField: string, qObj: QueryObject): number {
 		let val = 0;
 		if (applyColField === "avg") {
 			val = section.get_avg();

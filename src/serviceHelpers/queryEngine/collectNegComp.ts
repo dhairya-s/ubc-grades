@@ -1,20 +1,21 @@
-import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
-import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
+
 import CollectQuery from "../../services/collectQuery";
 import CollectAll from "./collectAll";
+import {DatasetEntry} from "../datasetConstruction/DatasetEntry";
+import QueryObject from "../datasetConstruction/QueryObject";
 
 export default class CollectNegComp {
-	private datasetEntries: SectionsDatasetEntry[] = [];
+	private datasetEntries: DatasetEntry[] = [];
 
-	constructor(datasetEntries: SectionsDatasetEntry[]) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectNegComp(negComp: object, datasetId: string): SectionEntry[] {
+	public collectNegComp(negComp: object, datasetId: string): QueryObject[] {
 		let start = performance.now();
 
-		let propertyToNegate: SectionEntry[] = [];
-		let allProperties: SectionEntry[] = [];
+		let propertyToNegate: QueryObject[] = [];
+		let allProperties: QueryObject[] = [];
 
 		let collectQuery = new CollectQuery(negComp, this.datasetEntries);
 		propertyToNegate = collectQuery.collectBody(negComp, datasetId);
@@ -28,7 +29,7 @@ export default class CollectNegComp {
 		// let end2 = performance.now();
 		// console.log((end2 - end1) / 1000);
 
-		let propertiesToAdd = new Set<SectionEntry>(allProperties);
+		let propertiesToAdd = new Set<QueryObject>(allProperties);
 
 		// let end3 = performance.now();
 		// console.log((end3 - end2) / 1000);
@@ -41,9 +42,9 @@ export default class CollectNegComp {
 		// let end4 = performance.now();
 		// console.log((end4 - end3) / 1000);
 
-		for (let sectionEntry of allProperties) {
-			if (propertyToNegateUuids.has(String(sectionEntry.get_uuid()))) {
-				propertiesToAdd.delete(sectionEntry);
+		for (let queryObject of allProperties) {
+			if (propertyToNegateUuids.has(String(queryObject.get_uuid()))) {
+				propertiesToAdd.delete(queryObject);
 			}
 		}
 

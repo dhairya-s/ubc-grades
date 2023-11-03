@@ -92,4 +92,5 @@ export class DatasetEntry {
 		}
 		return queryObjects;
 	}
+
 }

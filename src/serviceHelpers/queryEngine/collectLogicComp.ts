@@ -2,24 +2,26 @@ import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/Section
 import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import CollectQuery from "../../services/collectQuery";
 import {log} from "util";
+import {DatasetEntry} from "../datasetConstruction/DatasetEntry";
+import QueryObject from "../datasetConstruction/QueryObject";
 
 export default class CollectLogicComp {
-	private datasetEntries: SectionsDatasetEntry[] = [];
+	private datasetEntries: DatasetEntry[] = [];
 
-	constructor(datasetEntries: SectionsDatasetEntry[]) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectLogicComp(logiccomp: object, key: string, datasetId: string): SectionEntry[] {
+	public collectLogicComp(logiccomp: object, key: string, datasetId: string): QueryObject[] {
 		// let start = performance.now();
 		// console.log("key logic", key);
-		let propertiesToAdd: SectionEntry[] = [];
-		let propertiesToLogic: SectionEntry[][] = [];
+		let propertiesToAdd: QueryObject[] = [];
+		let propertiesToLogic: QueryObject[][] = [];
 		let localKeys: string[] = Object.keys(logiccomp); // 0,1,2,3
 
 		for (let locakKey of localKeys) {
 			let collectQuery = new CollectQuery(logiccomp[locakKey as keyof typeof logiccomp], this.datasetEntries);
-			let collectComp: SectionEntry[];
+			let collectComp: QueryObject[];
 			collectComp = collectQuery.collectBody(logiccomp[locakKey as keyof typeof logiccomp], datasetId);
 			// if (Object.keys(collectComp).length !== 0){
 			propertiesToLogic.push(collectComp);
@@ -46,11 +48,11 @@ export default class CollectLogicComp {
 		return propertiesToAdd;
 	}
 
-	private handleAndComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
+	private handleAndComp(propertiesToLogic: QueryObject[][]): QueryObject[] {
 		// let start = performance.now();
 
 		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
-		let map = new Map<string, SectionEntry>();
+		let map = new Map<string, QueryObject>();
 
 		let lenProps = propertiesToLogic.length;
 		// console.log(lenProps);
@@ -113,7 +115,7 @@ export default class CollectLogicComp {
 		return Array.from(map.values());
 	}
 
-	private handleOrComp(propertiesToLogic: SectionEntry[][]): SectionEntry[] {
+	private handleOrComp(propertiesToLogic: QueryObject[][]): QueryObject[] {
 		// let start = performance.now();
 
 		// let set = new SetWithContentEquality<SectionEntry>((section) => section.get_uuid());
@@ -124,7 +126,7 @@ export default class CollectLogicComp {
 		// 	}
 		// }
 
-		let map = new Map<string, SectionEntry>();
+		let map = new Map<string, QueryObject>();
 		for (const sections of propertiesToLogic) {
 			for (const s of sections) {
 				if (!map.has(String(s.get_uuid()))) {
