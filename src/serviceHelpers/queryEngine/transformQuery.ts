@@ -230,7 +230,7 @@ export class TransformQuery {
 			if (queryObjects !== undefined) {
 				for (let queryObject of queryObjects) {
 					let val = new Decimal(this.handleNumericApplyCols(applyColField, queryObject));
-					total.add(val);
+					total = Decimal.add(total, val);
 				}
 				let groupSet = new Set(group);
 				propsToAdd = collectInsightResult(queryObjects[0], groupSet);
