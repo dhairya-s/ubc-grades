@@ -75,7 +75,7 @@ export class DatasetEntry {
 	}
 
 	public JSONToDatasetEntry(objectJSON: any) {
-
+		return;
 	}
 
 	public getChildren() {

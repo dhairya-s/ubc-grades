@@ -107,7 +107,7 @@ export default class QueryObject {
 	}
 
 	public queryObjectFromJSON(jsonSection: any) {
-
+		return;
 	}
 
 	public set_uuid(uuid: string) {
