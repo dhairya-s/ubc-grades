@@ -1,0 +1,1879 @@
+{
+	"title": "RoomsSeatsLTGroupApplyMAXlatSUMlonMINseatsOrderedUP1",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"LT": {
+						"rooms_seats": 100
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"group1",
+				"group2",
+				"group3"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"group1"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_seats",
+				"rooms_lon"
+			],
+			"APPLY": [
+				{
+					"group1": {
+						"MAX": "rooms_lat"
+					}
+				},
+				{
+					"group2": {
+						"SUM": "rooms_lon"
+					}
+				},
+				{
+					"group3": {
+						"MIN": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_name": "FSC_1001",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 65
+		},
+		{
+			"rooms_name": "FSC_1002",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "FSC_1003",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 65
+		},
+		{
+			"rooms_name": "FSC_1221",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 99
+		},
+		{
+			"rooms_name": "FSC_1402",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 18
+		},
+		{
+			"rooms_name": "FSC_1611",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "FSC_1613",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 36
+		},
+		{
+			"rooms_name": "FSC_1615",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "FSC_1617",
+			"group1": 49.26044,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "OSBO_203A",
+			"group1": 49.26047,
+			"group2": -123.24,
+			"group3": 40
+		},
+		{
+			"rooms_name": "OSBO_203B",
+			"group1": 49.26047,
+			"group2": -123.24,
+			"group3": 39
+		},
+		{
+			"rooms_name": "ORCH_1001",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 72
+		},
+		{
+			"rooms_name": "ORCH_3002",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_3004",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_3016",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_3018",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 48
+		},
+		{
+			"rooms_name": "ORCH_3052",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_3058",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_3062",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ORCH_3068",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ORCH_3072",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ORCH_3074",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 72
+		},
+		{
+			"rooms_name": "ORCH_4002",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_4004",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_4016",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_4018",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 48
+		},
+		{
+			"rooms_name": "ORCH_4052",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_4058",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "ORCH_4062",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ORCH_4068",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ORCH_4072",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "ORCH_4074",
+			"group1": 49.26048,
+			"group2": -123.25,
+			"group3": 72
+		},
+		{
+			"rooms_name": "MCML_154",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "MCML_158",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 74
+		},
+		{
+			"rooms_name": "MCML_160",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 72
+		},
+		{
+			"rooms_name": "MCML_256",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "MCML_260",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "MCML_358",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "MCML_360A",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 6
+		},
+		{
+			"rooms_name": "MCML_360B",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 6
+		},
+		{
+			"rooms_name": "MCML_360C",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360D",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360E",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360F",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360G",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360H",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360J",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360K",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360L",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "MCML_360M",
+			"group1": 49.26114,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "DMP_101",
+			"group1": 49.26125,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "DMP_201",
+			"group1": 49.26125,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "DMP_301",
+			"group1": 49.26125,
+			"group2": -123.25,
+			"group3": 80
+		},
+		{
+			"rooms_name": "FORW_303",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 63
+		},
+		{
+			"rooms_name": "FORW_317",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 44
+		},
+		{
+			"rooms_name": "FORW_519",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 35
+		},
+		{
+			"rooms_name": "MCLD_214",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 60
+		},
+		{
+			"rooms_name": "MCLD_220",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "MCLD_242",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 60
+		},
+		{
+			"rooms_name": "MCLD_254",
+			"group1": 49.26176,
+			"group2": -123.25,
+			"group3": 84
+		},
+		{
+			"rooms_name": "CHBE_102",
+			"group1": 49.26228,
+			"group2": -123.25,
+			"group3": 94
+		},
+		{
+			"rooms_name": "CHBE_103",
+			"group1": 49.26228,
+			"group2": -123.25,
+			"group3": 60
+		},
+		{
+			"rooms_name": "EOSM_135",
+			"group1": 49.26228,
+			"group2": -123.25,
+			"group3": 50
+		},
+		{
+			"rooms_name": "PHRM_3112",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3114",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3115",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3116",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 14
+		},
+		{
+			"rooms_name": "PHRM_3118",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3120",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3122",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3124",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 7
+		},
+		{
+			"rooms_name": "PHRM_3208",
+			"group1": 49.26229,
+			"group2": -123.24,
+			"group3": 72
+		},
+		{
+			"rooms_name": "CEME_1204",
+			"group1": 49.26273,
+			"group2": -123.25,
+			"group3": 62
+		},
+		{
+			"rooms_name": "CEME_1206",
+			"group1": 49.26273,
+			"group2": -123.25,
+			"group3": 26
+		},
+		{
+			"rooms_name": "CEME_1210",
+			"group1": 49.26273,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "CEME_1212",
+			"group1": 49.26273,
+			"group2": -123.25,
+			"group3": 34
+		},
+		{
+			"rooms_name": "CEME_1215",
+			"group1": 49.26273,
+			"group2": -123.25,
+			"group3": 45
+		},
+		{
+			"rooms_name": "ESB_2012",
+			"group1": 49.26274,
+			"group2": -123.25,
+			"group3": 80
+		},
+		{
+			"rooms_name": "SWNG_105",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_106",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_107",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_108",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_109",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_110",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_305",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_306",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_307",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_308",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_309",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_310",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_405",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_406",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_407",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_408",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SWNG_409",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 47
+		},
+		{
+			"rooms_name": "SWNG_410",
+			"group1": 49.26293,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "SCRF_1003",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_1004",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_1005",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_1020",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "SCRF_1021",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "SCRF_1022",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "SCRF_1023",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "SCRF_1024",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "SCRF_1328",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 38
+		},
+		{
+			"rooms_name": "SCRF_200",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_201",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_202",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_203",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_204",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_204A",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "SCRF_205",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 34
+		},
+		{
+			"rooms_name": "SCRF_206",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_207",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_208",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "SCRF_209",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 60
+		},
+		{
+			"rooms_name": "SCRF_210",
+			"group1": 49.26398,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "PCOH_1001",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 40
+		},
+		{
+			"rooms_name": "PCOH_1002",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 40
+		},
+		{
+			"rooms_name": "PCOH_1003",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 40
+		},
+		{
+			"rooms_name": "PCOH_1008",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 24
+		},
+		{
+			"rooms_name": "PCOH_1009",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 24
+		},
+		{
+			"rooms_name": "PCOH_1011",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 24
+		},
+		{
+			"rooms_name": "PCOH_1215",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 24
+		},
+		{
+			"rooms_name": "PCOH_1302",
+			"group1": 49.264,
+			"group2": -123.26,
+			"group3": 24
+		},
+		{
+			"rooms_name": "FNH_20",
+			"group1": 49.26414,
+			"group2": -123.25,
+			"group3": 12
+		},
+		{
+			"rooms_name": "FNH_30",
+			"group1": 49.26414,
+			"group2": -123.25,
+			"group3": 28
+		},
+		{
+			"rooms_name": "FNH_320",
+			"group1": 49.26414,
+			"group2": -123.25,
+			"group3": 27
+		},
+		{
+			"rooms_name": "FNH_40",
+			"group1": 49.26414,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "FNH_50",
+			"group1": 49.26414,
+			"group2": -123.25,
+			"group3": 43
+		},
+		{
+			"rooms_name": "FNH_60",
+			"group1": 49.26414,
+			"group2": -123.25,
+			"group3": 99
+		},
+		{
+			"rooms_name": "SPPH_143",
+			"group1": 49.2642,
+			"group2": -123.25,
+			"group3": 28
+		},
+		{
+			"rooms_name": "SPPH_B108",
+			"group1": 49.2642,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "SPPH_B112",
+			"group1": 49.2642,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "SPPH_B136",
+			"group1": 49.2642,
+			"group2": -123.25,
+			"group3": 12
+		},
+		{
+			"rooms_name": "SPPH_B138",
+			"group1": 49.2642,
+			"group2": -123.25,
+			"group3": 14
+		},
+		{
+			"rooms_name": "SPPH_B151",
+			"group1": 49.2642,
+			"group2": -123.25,
+			"group3": 66
+		},
+		{
+			"rooms_name": "SOWK_122",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 12
+		},
+		{
+			"rooms_name": "SOWK_124",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 68
+		},
+		{
+			"rooms_name": "SOWK_222",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 29
+		},
+		{
+			"rooms_name": "SOWK_223",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 29
+		},
+		{
+			"rooms_name": "SOWK_224",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 31
+		},
+		{
+			"rooms_name": "SOWK_324",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 16
+		},
+		{
+			"rooms_name": "SOWK_326",
+			"group1": 49.2643,
+			"group2": -123.26,
+			"group3": 16
+		},
+		{
+			"rooms_name": "WOOD_3",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 88
+		},
+		{
+			"rooms_name": "WOOD_B75",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "WOOD_B79",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 21
+		},
+		{
+			"rooms_name": "WOOD_G41",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "WOOD_G44",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 14
+		},
+		{
+			"rooms_name": "WOOD_G53",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 10
+		},
+		{
+			"rooms_name": "WOOD_G55",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 10
+		},
+		{
+			"rooms_name": "WOOD_G57",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 12
+		},
+		{
+			"rooms_name": "WOOD_G59",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 10
+		},
+		{
+			"rooms_name": "WOOD_G65",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 12
+		},
+		{
+			"rooms_name": "WOOD_G66",
+			"group1": 49.26478,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "BIOL_1503",
+			"group1": 49.26479,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "BIOL_2200",
+			"group1": 49.26479,
+			"group2": -123.25,
+			"group3": 76
+		},
+		{
+			"rooms_name": "BIOL_2519",
+			"group1": 49.26479,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ANGU_037",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "ANGU_039",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "ANGU_232",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ANGU_234",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 60
+		},
+		{
+			"rooms_name": "ANGU_235",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 41
+		},
+		{
+			"rooms_name": "ANGU_237",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 41
+		},
+		{
+			"rooms_name": "ANGU_241",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 70
+		},
+		{
+			"rooms_name": "ANGU_243",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 68
+		},
+		{
+			"rooms_name": "ANGU_254",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 80
+		},
+		{
+			"rooms_name": "ANGU_291",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "ANGU_292",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 35
+		},
+		{
+			"rooms_name": "ANGU_293",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "ANGU_295",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "ANGU_296",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 37
+		},
+		{
+			"rooms_name": "ANGU_332",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ANGU_334",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 60
+		},
+		{
+			"rooms_name": "ANGU_335",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 41
+		},
+		{
+			"rooms_name": "ANGU_339",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "ANGU_343",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 68
+		},
+		{
+			"rooms_name": "ANGU_345",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 68
+		},
+		{
+			"rooms_name": "ANGU_347",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 70
+		},
+		{
+			"rooms_name": "ANGU_350",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 58
+		},
+		{
+			"rooms_name": "ANGU_354",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 44
+		},
+		{
+			"rooms_name": "ANGU_432",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "ANGU_434",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 44
+		},
+		{
+			"rooms_name": "ANGU_435",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 53
+		},
+		{
+			"rooms_name": "ANGU_437",
+			"group1": 49.26486,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "LSK_460",
+			"group1": 49.26545,
+			"group2": -123.26,
+			"group3": 75
+		},
+		{
+			"rooms_name": "LSK_462",
+			"group1": 49.26545,
+			"group2": -123.26,
+			"group3": 42
+		},
+		{
+			"rooms_name": "CHEM_C124",
+			"group1": 49.2659,
+			"group2": -123.25,
+			"group3": 90
+		},
+		{
+			"rooms_name": "CHEM_C126",
+			"group1": 49.2659,
+			"group2": -123.25,
+			"group3": 90
+		},
+		{
+			"rooms_name": "GEOG_101",
+			"group1": 49.26605,
+			"group2": -123.26,
+			"group3": 60
+		},
+		{
+			"rooms_name": "GEOG_147",
+			"group1": 49.26605,
+			"group2": -123.26,
+			"group3": 60
+		},
+		{
+			"rooms_name": "GEOG_201",
+			"group1": 49.26605,
+			"group2": -123.26,
+			"group3": 42
+		},
+		{
+			"rooms_name": "GEOG_212",
+			"group1": 49.26605,
+			"group2": -123.26,
+			"group3": 72
+		},
+		{
+			"rooms_name": "GEOG_214",
+			"group1": 49.26605,
+			"group2": -123.26,
+			"group3": 39
+		},
+		{
+			"rooms_name": "GEOG_242",
+			"group1": 49.26605,
+			"group2": -123.26,
+			"group3": 21
+		},
+		{
+			"rooms_name": "HEBB_10",
+			"group1": 49.2661,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "HEBB_12",
+			"group1": 49.2661,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "HEBB_13",
+			"group1": 49.2661,
+			"group2": -123.25,
+			"group3": 54
+		},
+		{
+			"rooms_name": "HENN_301",
+			"group1": 49.26627,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "HENN_302",
+			"group1": 49.26627,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "HENN_304",
+			"group1": 49.26627,
+			"group2": -123.25,
+			"group3": 36
+		},
+		{
+			"rooms_name": "MGYM_206",
+			"group1": 49.2663,
+			"group2": -123.25,
+			"group3": 25
+		},
+		{
+			"rooms_name": "MGYM_208",
+			"group1": 49.2663,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "MATH_102",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 60
+		},
+		{
+			"rooms_name": "MATH_104",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 48
+		},
+		{
+			"rooms_name": "MATH_105",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 30
+		},
+		{
+			"rooms_name": "MATH_202",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 30
+		},
+		{
+			"rooms_name": "MATH_203",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 48
+		},
+		{
+			"rooms_name": "MATH_204",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 30
+		},
+		{
+			"rooms_name": "MATH_225",
+			"group1": 49.266463,
+			"group2": -123.26,
+			"group3": 25
+		},
+		{
+			"rooms_name": "AUDX_142",
+			"group1": 49.2666,
+			"group2": -123.26,
+			"group3": 20
+		},
+		{
+			"rooms_name": "AUDX_157",
+			"group1": 49.2666,
+			"group2": -123.26,
+			"group3": 21
+		},
+		{
+			"rooms_name": "IBLC_155",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 50
+		},
+		{
+			"rooms_name": "IBLC_156",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "IBLC_157",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "IBLC_158",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "IBLC_185",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "IBLC_191",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "IBLC_192",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "IBLC_193",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "IBLC_194",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "IBLC_195",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "IBLC_263",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "IBLC_264",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 12
+		},
+		{
+			"rooms_name": "IBLC_265",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 10
+		},
+		{
+			"rooms_name": "IBLC_266",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 8
+		},
+		{
+			"rooms_name": "IBLC_460",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 16
+		},
+		{
+			"rooms_name": "IBLC_461",
+			"group1": 49.26766,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "LASR_102",
+			"group1": 49.26767,
+			"group2": -123.26,
+			"group3": 80
+		},
+		{
+			"rooms_name": "LASR_104",
+			"group1": 49.26767,
+			"group2": -123.26,
+			"group3": 94
+		},
+		{
+			"rooms_name": "LASR_105",
+			"group1": 49.26767,
+			"group2": -123.26,
+			"group3": 60
+		},
+		{
+			"rooms_name": "LASR_107",
+			"group1": 49.26767,
+			"group2": -123.26,
+			"group3": 51
+		},
+		{
+			"rooms_name": "LASR_211",
+			"group1": 49.26767,
+			"group2": -123.26,
+			"group3": 20
+		},
+		{
+			"rooms_name": "LASR_5C",
+			"group1": 49.26767,
+			"group2": -123.26,
+			"group3": 20
+		},
+		{
+			"rooms_name": "BUCH_B141",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 42
+		},
+		{
+			"rooms_name": "BUCH_B142",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 26
+		},
+		{
+			"rooms_name": "BUCH_B208",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 56
+		},
+		{
+			"rooms_name": "BUCH_B209",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_B210",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 48
+		},
+		{
+			"rooms_name": "BUCH_B211",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_B213",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 78
+		},
+		{
+			"rooms_name": "BUCH_B215",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 78
+		},
+		{
+			"rooms_name": "BUCH_B216",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_B218",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_B219",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "BUCH_B302",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "BUCH_B303",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_B304",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "BUCH_B306",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "BUCH_B307",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "BUCH_B308",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "BUCH_B309",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_B310",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 32
+		},
+		{
+			"rooms_name": "BUCH_B312",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 18
+		},
+		{
+			"rooms_name": "BUCH_B313",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 78
+		},
+		{
+			"rooms_name": "BUCH_B315",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 78
+		},
+		{
+			"rooms_name": "BUCH_B316",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_B318",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_B319",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "BUCH_D201",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_D204",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_D205",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D207",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D209",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_D213",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D214",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_D216",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "BUCH_D217",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 65
+		},
+		{
+			"rooms_name": "BUCH_D218",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 65
+		},
+		{
+			"rooms_name": "BUCH_D219",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 65
+		},
+		{
+			"rooms_name": "BUCH_D221",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D222",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 65
+		},
+		{
+			"rooms_name": "BUCH_D228",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "BUCH_D229",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D301",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_D304",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D306",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_D307",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D312",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_D313",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 30
+		},
+		{
+			"rooms_name": "BUCH_D314",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 40
+		},
+		{
+			"rooms_name": "BUCH_D315",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_D316",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 50
+		},
+		{
+			"rooms_name": "BUCH_D317",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 50
+		},
+		{
+			"rooms_name": "BUCH_D319",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BUCH_D322",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 50
+		},
+		{
+			"rooms_name": "BUCH_D323",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 31
+		},
+		{
+			"rooms_name": "BUCH_D325",
+			"group1": 49.26826,
+			"group2": -123.25,
+			"group3": 22
+		},
+		{
+			"rooms_name": "BRKX_2365",
+			"group1": 49.26862,
+			"group2": -123.25,
+			"group3": 70
+		},
+		{
+			"rooms_name": "BRKX_2367",
+			"group1": 49.26862,
+			"group2": -123.25,
+			"group3": 24
+		},
+		{
+			"rooms_name": "UCLL_101",
+			"group1": 49.26867,
+			"group2": -123.26,
+			"group3": 30
+		},
+		{
+			"rooms_name": "UCLL_103",
+			"group1": 49.26867,
+			"group2": -123.26,
+			"group3": 55
+		},
+		{
+			"rooms_name": "UCLL_107",
+			"group1": 49.26867,
+			"group2": -123.26,
+			"group3": 48
+		},
+		{
+			"rooms_name": "UCLL_109",
+			"group1": 49.26867,
+			"group2": -123.26,
+			"group3": 30
+		},
+		{
+			"rooms_name": "ANSO_202",
+			"group1": 49.26958,
+			"group2": -123.26,
+			"group3": 26
+		},
+		{
+			"rooms_name": "ANSO_203",
+			"group1": 49.26958,
+			"group2": -123.26,
+			"group3": 33
+		},
+		{
+			"rooms_name": "ANSO_205",
+			"group1": 49.26958,
+			"group2": -123.26,
+			"group3": 37
+		},
+		{
+			"rooms_name": "ANSO_207",
+			"group1": 49.26958,
+			"group2": -123.26,
+			"group3": 90
+		},
+		{
+			"rooms_name": "ALRD_105",
+			"group1": 49.2699,
+			"group2": -123.25,
+			"group3": 94
+		},
+		{
+			"rooms_name": "ALRD_112",
+			"group1": 49.2699,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "ALRD_113",
+			"group1": 49.2699,
+			"group2": -123.25,
+			"group3": 20
+		},
+		{
+			"rooms_name": "ALRD_121",
+			"group1": 49.2699,
+			"group2": -123.25,
+			"group3": 50
+		},
+		{
+			"rooms_name": "ALRD_B101",
+			"group1": 49.2699,
+			"group2": -123.25,
+			"group3": 44
+		},
+		{
+			"rooms_name": "IONA_633",
+			"group1": 49.27106,
+			"group2": -123.25,
+			"group3": 50
+		}
+	]
+}

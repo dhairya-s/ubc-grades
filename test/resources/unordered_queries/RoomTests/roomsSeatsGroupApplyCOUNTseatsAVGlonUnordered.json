@@ -1,0 +1,1738 @@
+{
+	"title": "RoomsSeatsGroupApplyCOUNTseatsAVGlonUnordered",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"LT": {
+						"rooms_seats": 200
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"avgSeats",
+				"avgLon"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_seats",
+				"rooms_lon"
+			],
+			"APPLY": [
+				{
+					"avgSeats": {
+						"COUNT": "rooms_seats"
+					}
+				},
+				{
+					"avgLon": {
+						"AVG": "rooms_lon"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_name": "ALRD_105",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ALRD_112",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ALRD_113",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ALRD_121",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ALRD_B101",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANSO_202",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "ANSO_203",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "ANSO_205",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "ANSO_207",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "AERL_120",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "AUDX_142",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "AUDX_157",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "BIOL_1503",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BIOL_2200",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BIOL_2519",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BRKX_2365",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BRKX_2367",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_A102",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_A103",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_A104",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_A201",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_A202",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_A203",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B141",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B142",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B208",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B209",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B210",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B211",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B213",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B215",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B216",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B218",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B219",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B302",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B303",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B304",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B306",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B307",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B308",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B309",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B310",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B312",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B313",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B315",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B316",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B318",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_B319",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D201",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D204",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D205",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D207",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D209",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D213",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D214",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D216",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D217",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D218",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D219",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D221",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D222",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D228",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D229",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D301",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D304",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D306",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D307",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D312",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D313",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D314",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D315",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D316",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D317",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D319",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D322",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D323",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "BUCH_D325",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CHBE_102",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CHBE_103",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CHEM_C124",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CHEM_C126",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CHEM_D200",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CHEM_D300",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CEME_1202",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CEME_1204",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CEME_1206",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CEME_1210",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CEME_1212",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "CEME_1215",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "EOSM_135",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ESB_1012",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ESB_2012",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FNH_20",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FNH_30",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FNH_320",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FNH_40",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FNH_50",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FNH_60",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1001",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1002",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1003",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1221",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1402",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1611",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1613",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1615",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FSC_1617",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FORW_303",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FORW_317",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "FORW_519",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "LASR_102",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LASR_104",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LASR_105",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LASR_107",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LASR_211",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LASR_5C",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "FRDM_153",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "GEOG_101",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "GEOG_147",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "GEOG_200",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "GEOG_201",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "GEOG_212",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "GEOG_214",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "GEOG_242",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "HEBB_10",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HEBB_12",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HEBB_13",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HENN_201",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HENN_202",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HENN_301",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HENN_302",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "HENN_304",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_037",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_039",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_232",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_234",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_235",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_237",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_241",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_243",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_254",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_291",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_292",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_293",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_295",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_296",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_332",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_334",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_335",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_339",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_343",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_345",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_347",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_350",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_354",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_432",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_434",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_435",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ANGU_437",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "DMP_101",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "DMP_110",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "DMP_201",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "DMP_301",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "DMP_310",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IONA_301",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IONA_633",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_155",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_156",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_157",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_158",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_182",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_185",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_191",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_192",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_193",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_194",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_195",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_261",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_263",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_264",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_265",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_266",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_460",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "IBLC_461",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SOWK_122",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "SOWK_124",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "SOWK_222",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "SOWK_223",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "SOWK_224",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "SOWK_324",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "SOWK_326",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LSK_201",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LSK_460",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LSK_462",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "LSC_1003",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "MCLD_202",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCLD_214",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCLD_220",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCLD_228",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCLD_242",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCLD_254",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_154",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_158",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_160",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_256",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_260",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_358",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360A",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360B",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360C",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360D",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360E",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360F",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360G",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360H",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360J",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360K",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360L",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MCML_360M",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MATH_102",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATH_104",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATH_105",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATH_202",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATH_203",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATH_204",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATH_225",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MATX_1100",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1003",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1004",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1005",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1020",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1021",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1022",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1023",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1024",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_1328",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_200",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_201",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_202",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_203",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_204",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_204A",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_205",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_206",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_207",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_208",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_209",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SCRF_210",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_1001",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3002",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3004",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3016",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3018",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3052",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3058",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3062",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3068",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3072",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_3074",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4002",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4004",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4016",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4018",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4052",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4058",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4062",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4068",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4072",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "ORCH_4074",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "PHRM_1201",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3112",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3114",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3115",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3116",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3118",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3120",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3122",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3124",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PHRM_3208",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "PCOH_1001",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1002",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1003",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1008",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1009",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1011",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1215",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "PCOH_1302",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "OSBO_203A",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "OSBO_203B",
+			"avgSeats": 1,
+			"avgLon": -123.24
+		},
+		{
+			"rooms_name": "SPPH_143",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SPPH_B108",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SPPH_B112",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SPPH_B136",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SPPH_B138",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SPPH_B151",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "UCLL_101",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "UCLL_103",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "UCLL_107",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "UCLL_109",
+			"avgSeats": 1,
+			"avgLon": -123.26
+		},
+		{
+			"rooms_name": "MGYM_206",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "MGYM_208",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WESB_201",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_105",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_106",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_107",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_108",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_109",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_110",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_121",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_122",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_221",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_222",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_305",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_306",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_307",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_308",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_309",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_310",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_405",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_406",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_407",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_408",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_409",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "SWNG_410",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_1",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_3",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_4",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_5",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_6",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_B75",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_B79",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G41",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G44",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G53",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G55",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G57",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G59",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G65",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		},
+		{
+			"rooms_name": "WOOD_G66",
+			"avgSeats": 1,
+			"avgLon": -123.25
+		}
+	]
+}

@@ -86,45 +86,40 @@ export default class CollectMcomp {
 		let result: QueryObject | null = null;
 
 		if (lKeyField === "avg") {
-			if (key === "GT") {
-				result = this.applyGT(qobj, value, qobj.get_avg());
-			} else if (key === "EQ") {
-				result = this.applyEQ(qobj, value, qobj.get_avg());
-			} else if (key === "LT") {
-				result = this.applyLT(qobj, value, qobj.get_avg());
-			}
+			result = this.mFieldsHelper(qobj, key, value, qobj.get_avg());
 		} else if (lKeyField === "pass") {
-			if (key === "GT") {
-				result = this.applyGT(qobj, value, qobj.get_pass());
-			} else if (key === "EQ") {
-				result = this.applyEQ(qobj, value, qobj.get_pass());
-			} else if (key === "LT") {
-				result = this.applyLT(qobj, value, qobj.get_pass());
-			}
+			result = this.mFieldsHelper(qobj, key, value, qobj.get_pass());
+
 		} else if (lKeyField === "fail") {
-			if (key === "GT") {
-				result = this.applyGT(qobj, value, qobj.get_fail());
-			} else if (key === "EQ") {
-				result = this.applyEQ(qobj, value, qobj.get_fail());
-			} else if (key === "LT") {
-				result = this.applyLT(qobj, value, qobj.get_fail());
-			}
+			result = this.mFieldsHelper(qobj, key, value, qobj.get_fail());
+
 		} else if (lKeyField === "audit") {
-			if (key === "GT") {
-				result = this.applyGT(qobj, value, qobj.get_audit());
-			} else if (key === "EQ") {
-				result = this.applyEQ(qobj, value, qobj.get_audit());
-			} else if (key === "LT") {
-				result = this.applyLT(qobj, value, qobj.get_audit());
-			}
+			result = this.mFieldsHelper(qobj, key, value, qobj.get_audit());
+
 		} else if (lKeyField === "year") {
-			if (key === "GT") {
-				result = this.applyGT(qobj, value, qobj.get_year());
-			} else if (key === "EQ") {
-				result = this.applyEQ(qobj, value, qobj.get_year());
-			} else if (key === "LT") {
-				result = this.applyLT(qobj, value, qobj.get_year());
-			}
+			result = this.mFieldsHelper(qobj, key, value, qobj.get_year());
+
+		} else if (lKeyField === "lat") {
+			result = this.mFieldsHelper(qobj, key, value, qobj.getLat());
+
+		}  else if (lKeyField === "lon") {
+			result = this.mFieldsHelper(qobj, key, value, qobj.getLon());
+
+		}  else if (lKeyField === "seats") {
+			result = this.mFieldsHelper(qobj, key, value, qobj.getSeats());
+		}
+		return result;
+	}
+
+	private mFieldsHelper(qobj: QueryObject, key: string, value: number, qObjVal: number) {
+		let result: QueryObject | null = null;
+
+		if (key === "GT") {
+			result = this.applyGT(qobj, value, qObjVal);
+		} else if (key === "EQ") {
+			result = this.applyEQ(qobj, value, qObjVal);
+		} else if (key === "LT") {
+			result = this.applyLT(qobj, value, qObjVal);
 		}
 
 		return result;
