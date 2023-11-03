@@ -1,0 +1,69 @@
+{
+	"title": "RoomsLonGroupApplyMaxUnordered",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"rooms_seats": 300
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"maxLon"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_lat",
+				"rooms_lon"
+			],
+			"APPLY": [
+				{
+					"maxLon": {
+						"MAX": "rooms_lon"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_name": "CIRS_1250",
+			"maxLon": -123.25314
+		},
+		{
+			"rooms_name": "ESB_1013",
+			"maxLon": -123.25224
+		},
+		{
+			"rooms_name": "HEBB_100",
+			"maxLon": -123.25165
+		},
+		{
+			"rooms_name": "LSC_1001",
+			"maxLon": -123.24494
+		},
+		{
+			"rooms_name": "LSC_1002",
+			"maxLon": -123.24494
+		},
+		{
+			"rooms_name": "OSBO_A",
+			"maxLon": -123.24467
+		},
+		{
+			"rooms_name": "WESB_100",
+			"maxLon": -123.24937
+		},
+		{
+			"rooms_name": "WOOD_2",
+			"maxLon": -123.24673
+		}
+	]
+}
