@@ -1,0 +1,59 @@
+{
+	"title": "RoomsSeatsEQGroupApplyCOUNTseatsAVGlonOrderedDOWN",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"EQ": {
+						"rooms_seats": 200
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"group1",
+				"group2"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"group1"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_seats",
+				"rooms_lon"
+			],
+			"APPLY": [
+				{
+					"group1": {
+						"COUNT": "rooms_seats"
+					}
+				},
+				{
+					"group2": {
+						"AVG": "rooms_lon"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_name": "CHBE_101",
+			"group1": 1,
+			"group2": -123.25
+		},
+		{
+			"rooms_name": "MCML_166",
+			"group1": 1,
+			"group2": -123.25
+		}
+	]
+}
