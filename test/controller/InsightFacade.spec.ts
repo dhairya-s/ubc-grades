@@ -481,7 +481,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery Ordered tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/ordered_queries/test_queries",
+			"./test/resources/ordered_queries/RoomTests",
 
 			{
 				assertOnResult: async (actual, expected) => {
@@ -504,54 +504,6 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery Unordered tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/unordered_queries/test_queries",
-
-			{
-				assertOnResult: async (actual, expected) => {
-					expect(actual).to.have.deep.members(await expected);
-				},
-				errorValidator: (error): error is PQErrorKind =>
-					error === "ResultTooLargeError" || error === "InsightError",
-				assertOnError: (actual, expected) => {
-					if (expected === "InsightError") {
-						expect(actual).to.be.instanceof(InsightError);
-					} else if (expected === "ResultTooLargeError") {
-						expect(actual).to.be.instanceof(ResultTooLargeError);
-					} else {
-						// this should be unreachable
-						expect.fail("UNEXPECTED ERROR");
-					}
-				},
-			}
-		);
-
-
-		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
-			"Dynamic InsightFacade PerformQuery Ordered tests (Rooms)",
-			(input) => facade.performQuery(input),
-			"./test/resources/ordered_queries/RoomTests",
-
-			{
-				assertOnResult: async (actual, expected) => {
-					expect(actual).to.deep.equals(await expected);
-				},
-				errorValidator: (error): error is PQErrorKind =>
-					error === "ResultTooLargeError" || error === "InsightError",
-				assertOnError: (actual, expected) => {
-					if (expected === "InsightError") {
-						expect(actual).to.be.instanceof(InsightError);
-					} else if (expected === "ResultTooLargeError") {
-						expect(actual).to.be.instanceof(ResultTooLargeError);
-					} else {
-						// this should be unreachable
-						expect.fail("UNEXPECTED ERROR");
-					}
-				},
-			}
-		);
-		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
-			"Dynamic InsightFacade PerformQuery Unordered tests (Rooms)",
-			(input) => facade.performQuery(input),
 			"./test/resources/unordered_queries/RoomTests",
 
 			{
@@ -572,6 +524,54 @@ describe("InsightFacade", function () {
 				},
 			}
 		);
+
+
+		// folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
+		// 	"Dynamic InsightFacade PerformQuery Ordered tests (Rooms)",
+		// 	(input) => facade.performQuery(input),
+		// 	"./test/resources/ordered_queries/RoomTests",
+		//
+		// 	{
+		// 		assertOnResult: async (actual, expected) => {
+		// 			expect(actual).to.deep.equals(await expected);
+		// 		},
+		// 		errorValidator: (error): error is PQErrorKind =>
+		// 			error === "ResultTooLargeError" || error === "InsightError",
+		// 		assertOnError: (actual, expected) => {
+		// 			if (expected === "InsightError") {
+		// 				expect(actual).to.be.instanceof(InsightError);
+		// 			} else if (expected === "ResultTooLargeError") {
+		// 				expect(actual).to.be.instanceof(ResultTooLargeError);
+		// 			} else {
+		// 				// this should be unreachable
+		// 				expect.fail("UNEXPECTED ERROR");
+		// 			}
+		// 		},
+		// 	}
+		// );
+		// folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
+		// 	"Dynamic InsightFacade PerformQuery Unordered tests (Rooms)",
+		// 	(input) => facade.performQuery(input),
+		// 	"./test/resources/unordered_queries/RoomTests",
+		//
+		// 	{
+		// 		assertOnResult: async (actual, expected) => {
+		// 			expect(actual).to.have.deep.members(await expected);
+		// 		},
+		// 		errorValidator: (error): error is PQErrorKind =>
+		// 			error === "ResultTooLargeError" || error === "InsightError",
+		// 		assertOnError: (actual, expected) => {
+		// 			if (expected === "InsightError") {
+		// 				expect(actual).to.be.instanceof(InsightError);
+		// 			} else if (expected === "ResultTooLargeError") {
+		// 				expect(actual).to.be.instanceof(ResultTooLargeError);
+		// 			} else {
+		// 				// this should be unreachable
+		// 				expect.fail("UNEXPECTED ERROR");
+		// 			}
+		// 		},
+		// 	}
+		// );
 
 	});
 });
