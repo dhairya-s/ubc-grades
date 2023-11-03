@@ -99,27 +99,27 @@ export default class CollectQuery {
 			} else if (keyField === "uuid") {
 				return compare(section1.get_uuid(), section2.get_uuid());
 			} else if (keyField === "lat") {
-				return 0;
+				return compare(section1.getLat(), section2.getLat());
 			} else if (keyField === "lon") {
-				return 0;
+				return compare(section1.getLon(), section2.getLon());
 			} else if (keyField === "seats") {
-				return 0;
+				return compare(section1.getSeats(), section2.getSeats());
 			} else if (keyField === "fullname") {
-				return 0;
+				return compare(section1.getFullname(), section2.getFullname());
 			} else if (keyField === "shortname") {
-				return 0;
+				return compare(section1.getShortname(), section2.getShortname());
 			} else if (keyField === "number") {
-				return 0;
+				return compare(section1.getNumber(), section2.getNumber());
 			} else if (keyField === "name") {
-				return 0;
+				return compare(section1.getName(), section2.getName());
 			} else if (keyField === "address") {
-				return 0;
+				return compare(section1.getAddress(), section2.getAddress());
 			} else if (keyField === "type") {
-				return 0;
+				return compare(section1.getType(), section2.getType());
 			} else if (keyField === "furniture") {
-				return 0;
+				return compare(section1.getFurniture(), section2.getFurniture());
 			} else if (keyField === "href") {
-				return 0;
+				return compare(section1.getHref(), section2.getHref());
 			}
 			return 0;
 		}

@@ -1,7 +1,7 @@
 import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import Decimal from "decimal.js";
 import {Property} from "../../services/collectQuery";
-import {collectInsightResult} from "../helpers/collectionHelpers";
+import {collectInsightResult, compare} from "../helpers/collectionHelpers";
 import QueryObject from "../datasetConstruction/QueryObject";
 
 export class TransformQuery {
@@ -42,7 +42,7 @@ export class TransformQuery {
 		let groupMap = new Map<string, QueryObject[]>();
 
 		for (let section of this.collectedQuery) {
-			let groupKey: string = JSON.stringify(returnsArray(section));
+			let groupKey: string = JSON.stringify(this.returnsArray(group, section));
 
 			if (groupMap.has(groupKey)) {
 				let groupedSections = groupMap.get(groupKey);
@@ -57,36 +57,58 @@ export class TransformQuery {
 			}
 		}
 
-		function returnsArray (qObj: QueryObject) {
-			let retArr: Array<string|number> = [];
-			for (let keyList of group) {
-				let keyField = keyList.split("_")[1];
-				if (keyField === "avg") {
-					retArr.push(qObj.get_avg());
-				} else if (keyField === "pass") {
-					retArr.push(qObj.get_pass());
-				} else if (keyField === "fail") {
-					retArr.push(qObj.get_fail());
-				} else if (keyField === "audit") {
-					retArr.push(qObj.get_audit());
-				} else if (keyField === "year") {
-					retArr.push(qObj.get_year());
-				} else if (keyField === "dept") {
-					retArr.push(qObj.get_dept());
-				} else if (keyField === "id") {
-					retArr.push(qObj.get_id());
-				} else if (keyField === "instructor") {
-					retArr.push(qObj.get_instructor());
-				} else if (keyField === "title") {
-					retArr.push(qObj.get_title());
-				} else if (keyField === "uuid") {
-					retArr.push(String(qObj.get_uuid()));
-				}
-			}
-			return retArr;
-
-		}
 		return groupMap;
+	}
+
+	private returnsArray(group: string[],qObj: QueryObject) {
+		let retArr: Array<string|number> = [];
+		for (let keyList of group) {
+			let keyField = keyList.split("_")[1];
+			if (keyField === "avg") {
+				retArr.push(qObj.get_avg());
+			} else if (keyField === "pass") {
+				retArr.push(qObj.get_pass());
+			} else if (keyField === "fail") {
+				retArr.push(qObj.get_fail());
+			} else if (keyField === "audit") {
+				retArr.push(qObj.get_audit());
+			} else if (keyField === "year") {
+				retArr.push(qObj.get_year());
+			} else if (keyField === "dept") {
+				retArr.push(qObj.get_dept());
+			} else if (keyField === "id") {
+				retArr.push(qObj.get_id());
+			} else if (keyField === "instructor") {
+				retArr.push(qObj.get_instructor());
+			} else if (keyField === "title") {
+				retArr.push(qObj.get_title());
+			} else if (keyField === "uuid") {
+				retArr.push(String(qObj.get_uuid()));
+			} else if (keyField === "lat") {
+				retArr.push(qObj.getLat());
+			} else if (keyField === "lon") {
+				retArr.push(qObj.getLon());
+			} else if (keyField === "seats") {
+				retArr.push(qObj.getSeats());
+			} else if (keyField === "fullname") {
+				retArr.push(String(qObj.getFullname()));
+			} else if (keyField === "shortname") {
+				retArr.push(String(qObj.getShortname()));
+			} else if (keyField === "number") {
+				retArr.push(String(qObj.getNumber()));
+			} else if (keyField === "name") {
+				retArr.push(String(qObj.getName()));
+			} else if (keyField === "address") {
+				retArr.push(String(qObj.getAddress()));
+			} else if (keyField === "type") {
+				retArr.push(String(qObj.getType()));
+			} else if (keyField === "furniture") {
+				retArr.push(String(qObj.getFurniture()));
+			} else if (keyField === "href") {
+				retArr.push(String(qObj.getHref()));
+			}
+		}
+		return retArr;
 	}
 
 	private handleApply(apply: object[], group: string[], groupMap: Map<string, QueryObject[]>) {
@@ -256,6 +278,12 @@ export class TransformQuery {
 			val = qObj.get_audit();
 		} else if (applyColField === "year") {
 			val = qObj.get_year();
+		}  else if (applyColField === "lat") {
+			val = qObj.getLat();
+		} else if (applyColField === "lon") {
+			val = qObj.getLon();
+		} else if (applyColField === "seats") {
+			val = qObj.getSeats();
 		}
 
 		return val;
