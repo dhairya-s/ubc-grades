@@ -64,6 +64,22 @@ export default class CollectScomp {
 			result = this.handleWildCards(qObj, value, qObj.get_title());
 		} else if (localKeyField === "uuid") {
 			result = this.handleWildCards(qObj, value, qObj.get_uuid());
+		} else if (localKeyField === "fullname") {
+			result = this.handleWildCards(qObj, value, qObj.getFullname());
+		} else if (localKeyField === "shortname") {
+			result = this.handleWildCards(qObj, value, qObj.getShortname());
+		} else if (localKeyField === "number") {
+			result = this.handleWildCards(qObj, value, qObj.getNumber());
+		} else if (localKeyField === "name") {
+			result = this.handleWildCards(qObj, value, qObj.getName());
+		} else if (localKeyField === "address") {
+			result = this.handleWildCards(qObj, value, qObj.getAddress());
+		} else if (localKeyField === "type") {
+			result = this.handleWildCards(qObj, value, qObj.getType());
+		} else if (localKeyField === "furniture") {
+			result = this.handleWildCards(qObj, value, qObj.getFurniture());
+		} else if (localKeyField === "href") {
+			result = this.handleWildCards(qObj, value, qObj.getHref());
 		}
 
 		return result;

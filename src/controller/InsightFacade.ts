@@ -59,19 +59,19 @@ export default class InsightFacade implements IInsightFacade {
 		let datasets: DatasetEntry[] = await this.datasetManager.loadDatasetFromDisk();
 		let isValid: boolean = false;
 		let validate = new ValidateQuery(query as typeof Object);
-		let collect = new CollectQuery(query as typeof Object, datasets); // TODO add back in
+		let collect = new CollectQuery(query as typeof Object, datasets);
 
 		let results: InsightResult[] = [];
 		try {
 
 			// pass the actual dataset kind based on dataset id from query
-			isValid = validate.ValidateQuery(InsightDatasetKind.Sections);
+			isValid = validate.ValidateQuery(InsightDatasetKind.Rooms);
 
 			if (!isValid) {
 				throw new InsightError("Invalid Query");
 			}
 
-			results = await collect.CollectQuery(validate.getDatasetId()); // TODO add back in
+			results = await collect.CollectQuery(validate.getDatasetId(), InsightDatasetKind.Rooms);
 		} catch (e) {
 			if (e instanceof InsightError) {
 				throw e;

@@ -3,34 +3,54 @@ import {Property} from "../../services/collectQuery";
 import {InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
 import QueryObject from "../datasetConstruction/QueryObject";
 
-export function collectInsightResult(section: QueryObject, resultCols: Set<string>): Property[] {
+export function collectInsightResult(qObj: QueryObject, resultCols: Set<string>): Property[] {
 	let propertiesToAdd: Property[] = [];
 	for (let resultCol of resultCols) {
 		let keyField = resultCol.split("_")[1];
 		if (keyField === "avg") {
-			propertiesToAdd.push({key:resultCol, value: Number(section.get_avg())});
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.get_avg())});
 		} else if (keyField === "pass") {
-			propertiesToAdd.push({key:resultCol, value: Number(section.get_pass())});
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.get_pass())});
 		} else if (keyField === "fail") {
-			propertiesToAdd.push({key:resultCol, value: Number(section.get_fail())});
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.get_fail())});
 		} else if (keyField === "audit") {
-			propertiesToAdd.push({key:resultCol, value: Number(section.get_audit())});
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.get_audit())});
 		} else if (keyField === "year") {
-			propertiesToAdd.push({key:resultCol, value: Number(section.get_year())});
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.get_year())});
+		} else if (keyField === "lat") {
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.getLat())});
+		} else if (keyField === "lon") {
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.getLon())});
+		} else if (keyField === "seats") {
+			propertiesToAdd.push({key:resultCol, value: Number(qObj.getSeats())});
 		} else if (keyField === "dept") {
-			propertiesToAdd.push({key:resultCol, value: String(section.get_dept())});
+			propertiesToAdd.push({key:resultCol, value: String(qObj.get_dept())});
 		} else if (keyField === "id") {
-			propertiesToAdd.push({key:resultCol, value: String(section.get_id())});
+			propertiesToAdd.push({key:resultCol, value: String(qObj.get_id())});
 		} else if (keyField === "instructor") {
-			propertiesToAdd.push({key:resultCol, value: String(section.get_instructor())});
+			propertiesToAdd.push({key:resultCol, value: String(qObj.get_instructor())});
 		} else if (keyField === "title") {
-			propertiesToAdd.push({key:resultCol, value: String(section.get_title())});
+			propertiesToAdd.push({key:resultCol, value: String(qObj.get_title())});
 		} else if (keyField === "uuid") {
-			propertiesToAdd.push({key:resultCol, value: String(section.get_uuid())});
+			propertiesToAdd.push({key:resultCol, value: String(qObj.get_uuid())});
+		}else if (keyField === "fullname") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getFullname())});
+		} else if (keyField === "shortname") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getShortname())});
+		} else if (keyField === "number") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getNumber())});
+		} else if (keyField === "name") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getName())});
+		} else if (keyField === "address") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getAddress())});
+		} else if (keyField === "type") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getType())});
+		} else if (keyField === "furniture") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getFurniture())});
+		} else if (keyField === "href") {
+			propertiesToAdd.push({key:resultCol, value: String(qObj.getHref())});
 		}
 	}
-	// console.log(propertiesToAdd);
-	// return convertArrayOfObjectToObject(propertiesToAdd);
 	return propertiesToAdd;
 }
 
@@ -136,10 +156,13 @@ export function validateIdString(idString: string): boolean {
 	return true;
 }
 
-export function transformOrder(properties: Property[][], resultCols: Set<string>) {
+export function transformOrder(properties: Property[][], resultCols: Set<string>): object[] {
 	let finalArr: object[] = [];
 	// console.log(resultCols);
 
+	if (properties.length === 0) {
+		return [{}];
+	}
 	let keys = Object.keys(properties[0]);
 	let keysToDelete: string[] = [];
 

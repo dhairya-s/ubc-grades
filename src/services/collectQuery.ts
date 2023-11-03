@@ -1,4 +1,4 @@
-import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
+import {InsightDatasetKind, InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import SectionEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionEntry";
 import CollectMcomp from "../serviceHelpers/queryEngine/collectMcomp";
@@ -30,12 +30,12 @@ export default class CollectQuery {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public async CollectQuery(datasetId: string): Promise<InsightResult[]> {
+	public async CollectQuery(datasetId: string, datasetKind: InsightDatasetKind): Promise<InsightResult[]> {
 		let final: object[] = [];
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
 		// console.log(resultCols);
 		// we collect the body
-		let r: QueryObject[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId);
+		let r: QueryObject[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId, datasetKind);
 
 		let propertiesToAdd: Property[][] = [];
 		if (Object.keys(this.query).includes("TRANSFORMATIONS")) {
@@ -126,7 +126,7 @@ export default class CollectQuery {
 		return sections.sort(orderCompare);
 	}
 
-	public collectBody(body: object, datasetId: string): QueryObject[] {
+	public collectBody(body: object, datasetId: string, datasetKind: InsightDatasetKind): QueryObject[] {
 		let keys: string[];
 		keys = Object.keys(body);
 
@@ -146,11 +146,12 @@ export default class CollectQuery {
 				propertiesToAdd = collectM.collectMCOMP(body[key as keyof typeof body], key, datasetId);
 			} else if (key === "AND" || key === "OR") { // LOGICCOMP
 				// console.log("key body", key);
-				propertiesToAdd = collectLogic.collectLogicComp(body[key as keyof typeof body], key, datasetId);
+				propertiesToAdd = collectLogic.collectLogicComp(body[key as keyof typeof body],
+					key, datasetId, datasetKind);
 			} else if (key === "IS") { // SCOMP
 				propertiesToAdd = collectS.collectSCOMP(body[key as keyof typeof body], datasetId);
 			} else if (key === "NOT") { // NEGATION
-				propertiesToAdd = collectNeg.collectNegComp(body[key as keyof typeof body], datasetId);
+				propertiesToAdd = collectNeg.collectNegComp(body[key as keyof typeof body], datasetId, datasetKind);
 			} else {
 				throw new InsightError("Invalid Query - Failed in Body");
 			}
