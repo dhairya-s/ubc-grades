@@ -4,7 +4,7 @@ import {InsightError} from "../../../controller/IInsightFacade";
 
 export default class CourseEntry {
 
-	public sections: SectionEntry[] = [];
+	public children: SectionEntry[] = [];
 	public courseName: string = "";
 
 	public async parseCourse(file: JSZip.JSZipObject | null, filename: string): Promise<CourseEntry> {
@@ -34,7 +34,7 @@ export default class CourseEntry {
 		- True if a valid section can be found
 		- False otherwise.
 		 */
-		return this.sections.length > 0;
+		return this.children.length > 0;
 	}
 
 	private courseFromJSON(sectionData: any, courseName: string) {
@@ -45,7 +45,7 @@ export default class CourseEntry {
 				try {
 					let section = new SectionEntry();
 					section.sectionFromJSON(result);
-					this.addSection(section);
+					this.addChild(section);
 				} catch {
 					// continue
 				}
@@ -59,17 +59,17 @@ export default class CourseEntry {
 		this.courseName = courseName;
 	}
 
-	private addSection(section: SectionEntry) {
-		this.sections.push(section);
+	private addChild(section: SectionEntry) {
+		this.children.push(section);
 		return;
 	}
 
-	public getSections() {
-		return this.sections;
+	public getChildren() {
+		return this.children;
 	}
 
-	public setSections(sections: SectionEntry[]) {
-		this.sections = sections;
+	public setChildren(sections: SectionEntry[]) {
+		this.children = sections;
 	}
 
 	public JSONToEntry(json: any): CourseEntry {
@@ -83,7 +83,7 @@ export default class CourseEntry {
 			sectionEntries.push(sectionEntry);
 		}
 
-		this.setSections(sectionEntries);
+		this.setChildren(sectionEntries);
 
 		return this;
 	}

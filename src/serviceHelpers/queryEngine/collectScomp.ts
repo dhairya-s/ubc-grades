@@ -22,7 +22,7 @@ export default class CollectScomp {
 			if (String(datasetId) === String(dataset.getId())) {
 				isValidId = true;
 				for (let course of dataset.getChildren()) {
-					for (let section of course.getSections()) {
+					for (let section of course.getChildren()) {
 						let sectionEntry: SectionEntry | null = this.handleSFields(section, localKeyField, value);
 						// if (Object.keys(obj).length !== 0) {
 						// 	propertiesToAdd.push(obj);

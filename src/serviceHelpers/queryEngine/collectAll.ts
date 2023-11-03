@@ -14,7 +14,7 @@ export default class CollectAll	{
 		for (let dataset of this.datasetEntries) {
 			if (String(datasetId) === dataset.getId()) {
 				for (let course of dataset.getChildren()) {
-					for (let section of course.getSections()) {
+					for (let section of course.getChildren()) {
 						propertiesToAdd.push(section);
 					}
 				}

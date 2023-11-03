@@ -130,7 +130,7 @@ export default class SectionsDatasetEntry extends DatasetEntry {
 
 	public getNumRows() {
 		let numSections = this.getChildren().map(function(course) {
-			return course.getSections().length;
+			return course.getChildren().length;
 		}).reduce((sum, current) => sum + current, 0);
 		this.setNumRows(numSections);
 
