@@ -49,7 +49,7 @@ export default class ValidateQuery {
 			hasTransformations = true;
 		}
 
-		console.log("Valid Transform");
+		// console.log("Valid Transform");
 
 		// check options
 		let validateOptions = new ValidateOptions(this.query["OPTIONS" as keyof typeof this.query],
@@ -60,7 +60,7 @@ export default class ValidateQuery {
 		}
 		this.setDatasetId(validateOptions.getDatasetId());
 
-		console.log("Valid Options");
+		// console.log("Valid Options");
 
 		// check where
 		isValid = this.validateBody(this.query["WHERE" as keyof typeof this.query], datasetKind, this.getDatasetId());
@@ -68,7 +68,7 @@ export default class ValidateQuery {
 			return isValid;
 		}
 
-		console.log("Valid Body");
+		// console.log("Valid Body");
 
 		return isValid;
 	}

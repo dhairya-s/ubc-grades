@@ -1,11 +1,15 @@
-import InsightFacade from "../controller/InsightFacade";
 import {InsightError, InsightResult, ResultTooLargeError} from "../controller/IInsightFacade";
 import SectionsDatasetEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionsDatasetEntry";
 import SectionEntry from "../serviceHelpers/datasetConstruction/sectionsDataset/SectionEntry";
 import CollectMcomp from "../serviceHelpers/queryEngine/collectMcomp";
 import CollectScomp from "../serviceHelpers/queryEngine/collectScomp";
 import CollectLogicComp from "../serviceHelpers/queryEngine/collectLogicComp";
-import {collectInsightResult, compare} from "../serviceHelpers/helpers/collectionHelpers";
+import {
+	collectInsightResult,
+	compare,
+	convertArrayOfObjectToObject,
+	transformOrder
+} from "../serviceHelpers/helpers/collectionHelpers";
 import CollectAll from "../serviceHelpers/queryEngine/collectAll";
 import CollectNegComp from "../serviceHelpers/queryEngine/collectNegComp";
 import {TransformQuery} from "../serviceHelpers/queryEngine/transformQuery";
@@ -27,31 +31,46 @@ export default class CollectQuery {
 	public async CollectQuery(datasetId: string): Promise<InsightResult[]> {
 		let final: object[] = [];
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
-		console.log(resultCols);
+		// console.log(resultCols);
 		// we collect the body
 		let r: SectionEntry[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId);
 
+		let propertiesToAdd: Property[][] = [];
 		if (Object.keys(this.query).includes("TRANSFORMATIONS")) {
 			let transform = new TransformQuery(r);
-			r = transform.TransformQuery(this.query["TRANSFORMATIONS" as keyof typeof this.query]);
+			propertiesToAdd = transform.TransformQuery(this.query["TRANSFORMATIONS" as keyof typeof this.query]);
+
+			let options = this.query["OPTIONS" as keyof typeof this.query];
+			let orderCol: string | object | undefined = options["ORDER" as keyof  typeof options];
+
+			if (orderCol === undefined) {
+				// we have properties to add [[{}],[{}],[{}]]
+				final = transformOrder(propertiesToAdd, resultCols);
+				return final as InsightResult[];
+			}
+
+			return [] as InsightResult[];
+
+		} else {
+			// based on the options and the order, we create a final array
+			let options = this.query["OPTIONS" as keyof typeof this.query];
+			let orderCol: string | object | undefined = options["ORDER" as keyof  typeof options];
+
+			if (r.length >= 5000) {
+				throw new ResultTooLargeError("Only queries with a maximum of 5000 results are supported");
+			}
+			if (orderCol !== undefined) {
+				r = this.orderBy(r, orderCol);
+			}
+			for (let sec of r) {
+				final.push(convertArrayOfObjectToObject(collectInsightResult(sec, resultCols)));
+			}
+
+			// return the final array
+			return final as InsightResult[];
 		}
 
-		// based on the options and the order, we create a final array
-		let options = this.query["OPTIONS" as keyof typeof this.query];
-		let orderCol: string | undefined = options["ORDER" as keyof  typeof options];
 
-		if (r.length >= 5000) {
-			throw new ResultTooLargeError("Only queries with a maximum of 5000 results are supported");
-		}
-		if (orderCol !== undefined) {
-			r = this.orderBy(r, orderCol);
-		}
-		for (let sec of r) {
-			final.push(collectInsightResult(sec, resultCols));
-		}
-
-		// return the final array
-		return final as InsightResult[];
 	}
 
 	private orderBy(sections: SectionEntry[], orderCol: string): SectionEntry[] {

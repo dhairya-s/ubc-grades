@@ -1,4 +1,7 @@
 import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
+import Decimal from "decimal.js";
+import {Property} from "../../services/collectQuery";
+import {collectInsightResult} from "../helpers/collectionHelpers";
 
 export class TransformQuery {
 	private collectedQuery: SectionEntry[];
@@ -7,23 +10,31 @@ export class TransformQuery {
 	}
 
 	public TransformQuery(transform: object) {
+		let propertiesToAdd: Property[][] = [];
+
 		// handle group
-		let tempSecReturn: SectionEntry[] = [];
+		// let tempSecReturn: SectionEntry[] = [];
 		let groupMap: Map<string, SectionEntry[]> = new Map<string, SectionEntry[]>();
-		groupMap = this.handleGroup(transform["GROUP" as keyof typeof transform]);
-		console.log("Group handled");
+		let group: string[] = transform["GROUP" as keyof typeof transform];
+		groupMap = this.handleGroup(group);
+		// console.log("Group handled");
 
-		for (let g of groupMap.keys()) {
-			let sec = groupMap.get(g);
-			if (sec === undefined) {
-				continue;
-			} else {
-				tempSecReturn.push(sec[0]);
+		propertiesToAdd = this.handleApply(transform["APPLY" as keyof typeof transform],group, groupMap);
+
+		if (propertiesToAdd.length === 0 ) {
+			for (let key of groupMap.keys()) {
+				let propsToAdd: Property[] = [];
+
+				let sectionEntries = groupMap.get(key);
+				if (sectionEntries !== undefined) {
+					let groupSet: Set<string> = new Set(group);
+					propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+					propertiesToAdd.push(propsToAdd);
+				}
 			}
-
 		}
 
-		return tempSecReturn;
+		return propertiesToAdd;
 	}
 
 	private handleGroup(group: string[]) {
@@ -77,7 +88,9 @@ export class TransformQuery {
 		return groupMap;
 	}
 
-	private handleApply(apply: object[], groupMap: Map<string, SectionEntry[]>) {
+	private handleApply(apply: object[], group: string[], groupMap: Map<string, SectionEntry[]>) {
+		let propertiesToAdd: Property[][] = [];
+
 		for (let ap of apply) {
 			let applyKey = Object.keys(ap)[0];
 
@@ -85,41 +98,166 @@ export class TransformQuery {
 
 			let applyToken: string = Object.keys(rule)[0];
 			let applyCol: string = rule[applyToken as keyof typeof rule];
+			let applyColField: string = applyCol.split("_")[1];
 
-			// if (applyToken === "MIN") {
-			// 	handleMin(applyCol, groupMap);
-			// } else if (applyToken === "MAX") {
-			// 	handleMax(applyCol, groupMap);
-			// }  else if (applyToken === "AVG") {
-			// 	handleAvg(applyCol, groupMap);
-			// }  else if (applyToken === "SUM") {
-			// 	handleSum(applyCol, groupMap);
-			// }  else if (applyToken === "COUNT") {
-			// 	handleCount(applyCol, groupMap);
-			// }
+			if (applyToken === "MIN") {
+				propertiesToAdd = this.handleMin(applyColField, applyKey, group, groupMap);
+			} else if (applyToken === "MAX") {
+				propertiesToAdd = this.handleMax(applyColField, applyKey, group,groupMap);
+			}  else if (applyToken === "AVG") {
+				propertiesToAdd = this.handleAvg(applyColField, applyKey, group,groupMap);
+			}  else if (applyToken === "SUM") {
+				propertiesToAdd = this.handleSum(applyColField, applyKey, group,groupMap);
+			}  else if (applyToken === "COUNT") {
+				propertiesToAdd = this.handleCount(applyColField, applyKey, group,groupMap);
+			}
 		}
-
-		//
-		// function handleMin(applyCol: string, groupMap: Map<string, SectionEntry[]>) {
-		//
-		// }
-		//
-		// function handleMax(applyCol: string, groupMap: Map<string, SectionEntry[]>) {
-		//
-		// }
-		//
-		// function handleAvg(applyCol: string, groupMap: Map<string, SectionEntry[]>) {
-		//
-		// }
-		//
-		// function handleSum(applyCol: string, groupMap: Map<string, SectionEntry[]>) {
-		//
-		// }
-		//
-		// function handleCount(applyCol: string, groupMap: Map<string, SectionEntry[]>){
-		//
-		// }
+		return propertiesToAdd;
 	}
 
+
+	private handleMin(applyColField: string, applyKey: string, group: string[], groupMap: Map<string, SectionEntry[]>) {
+		let propertiesToAdd: Property[][] = [];
+
+		for (let key of groupMap.keys()) {
+			let min = +Infinity;
+			let propsToAdd: Property[] = [];
+
+			let sectionEntries = groupMap.get(key);
+			if (sectionEntries !== undefined) {
+				for (let section of sectionEntries) {
+					let val = this.handleNumericApplyCols(applyColField, section);
+					if (val < min) {
+						min = val;
+					}
+				}
+				let groupSet = new Set(group);
+				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd.push({key: applyKey, value:min});
+				propertiesToAdd.push(propsToAdd);
+			}
+		}
+
+		return propertiesToAdd;
+	}
+
+	private handleMax(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, SectionEntry[]>) {
+		let propertiesToAdd: Property[][] = [];
+
+		for (let key of groupMap.keys()) {
+			let max = -Infinity;
+			let propsToAdd: Property[] = [];
+
+			let sectionEntries = groupMap.get(key);
+			if (sectionEntries !== undefined) {
+				for (let section of sectionEntries) {
+					let val = this.handleNumericApplyCols(applyColField, section);
+					if (val > max) {
+						max = val;
+					}
+				}
+				let groupSet = new Set(group);
+				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd.push({key: applyKey, value:max});
+				propertiesToAdd.push(propsToAdd);
+
+			}
+		}
+
+		return propertiesToAdd;
+	}
+
+	private handleAvg(applyColField: string, applyKey: string,group: string[], groupMap: Map<string, SectionEntry[]>) {
+		let propertiesToAdd: Property[][] = [];
+
+		for (let key of groupMap.keys()) {
+			let total = new Decimal(0);
+			let numRows = 0;
+			let propsToAdd: Property[] = [];
+
+			let sectionEntries = groupMap.get(key);
+			if (sectionEntries !== undefined) {
+				for (let section of sectionEntries) {
+					let val = new Decimal(this.handleNumericApplyCols(applyColField, section));
+					// console.log("val", val);
+					total = Decimal.add(total, val);
+					// console.log("total",total);
+					numRows++;
+				}
+				let avg = total.toNumber() / numRows;
+
+				let groupSet = new Set(group);
+				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd.push({key: applyKey, value:Number(avg.toFixed(2))});
+				propertiesToAdd.push(propsToAdd);
+			}
+		}
+
+		return propertiesToAdd;
+	}
+
+	private handleSum(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, SectionEntry[]>) {
+		let propertiesToAdd: Property[][] = [];
+
+		for (let key of groupMap.keys()) {
+			let total = new Decimal(0);
+			let propsToAdd: Property[] = [];
+
+			let sectionEntries = groupMap.get(key);
+			if (sectionEntries !== undefined) {
+				for (let section of sectionEntries) {
+					let val = new Decimal(this.handleNumericApplyCols(applyColField, section));
+					total.add(val);
+				}
+				let groupSet = new Set(group);
+				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd.push({key: applyKey, value:Number(total.toFixed(2))});
+				propertiesToAdd.push(propsToAdd);
+			}
+		}
+
+		return propertiesToAdd;
+	}
+
+
+	private handleCount(applyColField: string, applyKey: string,group: string[],groupMap: Map<string, SectionEntry[]>){
+		let propertiesToAdd: Property[][] = [];
+
+		for (let key of groupMap.keys()) {
+			let count = 0;
+			let propsToAdd: Property[] = [];
+
+			let sectionEntries = groupMap.get(key);
+			if (sectionEntries !== undefined) {
+				for (let section of sectionEntries) {
+					count++;
+				}
+				let groupSet = new Set(group);
+				propsToAdd = collectInsightResult(sectionEntries[0], groupSet);
+				propsToAdd.push({key: applyKey, value:count});
+				propertiesToAdd.push(propsToAdd);
+			}
+		}
+
+		return propertiesToAdd;
+	}
+
+
+	private handleNumericApplyCols(applyColField: string, section: SectionEntry): number {
+		let val = 0;
+		if (applyColField === "avg") {
+			val = section.get_avg();
+		} else if (applyColField === "pass") {
+			val = section.get_pass();
+		} else if (applyColField === "fail") {
+			val = section.get_fail();
+		} else if (applyColField === "audit") {
+			val = section.get_audit();
+		} else if (applyColField === "year") {
+			val = section.get_year();
+		}
+
+		return val;
+	}
 
 }
