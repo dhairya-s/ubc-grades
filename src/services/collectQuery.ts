@@ -13,6 +13,8 @@ import {
 import CollectAll from "../serviceHelpers/queryEngine/collectAll";
 import CollectNegComp from "../serviceHelpers/queryEngine/collectNegComp";
 import {TransformQuery} from "../serviceHelpers/queryEngine/transformQuery";
+import {DatasetEntry} from "../serviceHelpers/datasetConstruction/DatasetEntry";
+import QueryObject from "../serviceHelpers/datasetConstruction/QueryObject";
 
 export interface Property {
 	key: string,
@@ -20,10 +22,10 @@ export interface Property {
 }
 export default class CollectQuery {
 	private query: object;
-	private datasetEntries: SectionsDatasetEntry[] = [];
+	private datasetEntries: DatasetEntry[] = [];
 	// private resultCols = new Set<string>();
 
-	constructor(query: object, datasetEntries: SectionsDatasetEntry[]) {
+	constructor(query: object, datasetEntries: DatasetEntry[]) {
 		this.query = query;
 		this.datasetEntries = datasetEntries;
 	}
@@ -33,7 +35,7 @@ export default class CollectQuery {
 		let resultCols: Set<string> = this.collectOptions(this.query["OPTIONS" as keyof typeof this.query]);
 		// console.log(resultCols);
 		// we collect the body
-		let r: SectionEntry[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId);
+		let r: QueryObject[] = this.collectBody(this.query["WHERE" as keyof typeof this.query], datasetId);
 
 		let propertiesToAdd: Property[][] = [];
 		if (Object.keys(this.query).includes("TRANSFORMATIONS")) {
@@ -73,9 +75,9 @@ export default class CollectQuery {
 
 	}
 
-	private orderBy(sections: SectionEntry[], orderCol: string): SectionEntry[] {
+	private orderBy(sections: QueryObject[], orderCol: string): QueryObject[] {
 		let keyField = orderCol.split("_")[1];
-		function orderCompare(section1: SectionEntry, section2: SectionEntry) {
+		function orderCompare(section1: QueryObject, section2: QueryObject) {
 			if (keyField === "avg") {
 				return compare(section1.get_avg(), section2.get_avg());
 			} else if (keyField === "pass") {
@@ -96,17 +98,39 @@ export default class CollectQuery {
 				return compare(section1.get_title(), section2.get_title());
 			} else if (keyField === "uuid") {
 				return compare(section1.get_uuid(), section2.get_uuid());
+			} else if (keyField === "lat") {
+				return 0;
+			} else if (keyField === "lon") {
+				return 0;
+			} else if (keyField === "seats") {
+				return 0;
+			} else if (keyField === "fullname") {
+				return 0;
+			} else if (keyField === "shortname") {
+				return 0;
+			} else if (keyField === "number") {
+				return 0;
+			} else if (keyField === "name") {
+				return 0;
+			} else if (keyField === "address") {
+				return 0;
+			} else if (keyField === "type") {
+				return 0;
+			} else if (keyField === "furniture") {
+				return 0;
+			} else if (keyField === "href") {
+				return 0;
 			}
 			return 0;
 		}
 		return sections.sort(orderCompare);
 	}
 
-	public collectBody(body: object, datasetId: string): SectionEntry[] {
+	public collectBody(body: object, datasetId: string): QueryObject[] {
 		let keys: string[];
 		keys = Object.keys(body);
 
-		let propertiesToAdd: SectionEntry[] = [];
+		let propertiesToAdd: QueryObject[] = [];
 
 		let collectM = new CollectMcomp(this.datasetEntries);
 		let collectS = new CollectScomp(this.datasetEntries);

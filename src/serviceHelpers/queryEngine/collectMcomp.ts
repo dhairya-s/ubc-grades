@@ -1,18 +1,16 @@
-import SectionsDatasetEntry from "../datasetConstruction/sectionsDataset/SectionsDatasetEntry";
-import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
-import {Property} from "../../services/collectQuery";
-import {collectInsightResult, convertArrayOfObjectToObject} from "../helpers/collectionHelpers";
 import {InsightError} from "../../controller/IInsightFacade";
+import QueryObject from "../datasetConstruction/QueryObject";
+import {DatasetEntry} from "../datasetConstruction/DatasetEntry";
 
 export default class CollectMcomp {
-	private datasetEntries: SectionsDatasetEntry[] = [];
+	private datasetEntries: DatasetEntry[] = [];
 
-	constructor(datasetEntries: SectionsDatasetEntry[]) {
+	constructor(datasetEntries: DatasetEntry[]) {
 		this.datasetEntries = datasetEntries;
 	}
 
-	public collectMCOMP(mcomp: object, key: string, datasetId: string): SectionEntry[] {
-		let propertiesToAdd: SectionEntry[] = [];
+	public collectMCOMP(mcomp: object, key: string, datasetId: string): QueryObject[] {
+		let propertiesToAdd:  QueryObject[] = [];
 
 		let localKey: string[] = Object.keys(mcomp); // sections_id
 		// const datasetId = localKey[0].split("_")[0];
@@ -23,17 +21,24 @@ export default class CollectMcomp {
 		for (let dataset of this.datasetEntries) {
 			if (String(datasetId) === String(dataset.getId())) {
 				isValidId = true;
-				for (let course of dataset.get_courses()) {
-					for (let section of course.getSections()) {
-						let sectionEntry: SectionEntry | null = this.handleMFields(section, localKeyField, key, value);
-						// if (Object.keys(obj).length !== 0) {
-						// 	propertiesToAdd.push(obj);
-						// }
-						if (sectionEntry !==  null) {
-							propertiesToAdd.push(sectionEntry);
-						}
+				for (let queryObject of dataset.getQueryObjects()) {
+					let qEntry = this.handleMFields(queryObject, localKeyField, key, value);
+					if (qEntry !==  null) {
+						propertiesToAdd.push(qEntry);
 					}
 				}
+
+				// for (let course of dataset.getChildren()) {
+				// 	for (let section of course.getChildren()) {
+				// 		let qobj: QueryObject | null = this.handleMFields(section, localKeyField, key, value);
+				// 		// if (Object.keys(obj).length !== 0) {
+				// 		// 	propertiesToAdd.push(obj);
+				// 		// }
+				// 		if (qobj !==  null) {
+				// 			propertiesToAdd.push(qobj);
+				// 		}
+				// 	}
+				// }
 			}
 		}
 
@@ -45,7 +50,7 @@ export default class CollectMcomp {
 
 	// private helpers
 
-	private applyGT(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+	private applyGT(section: QueryObject, value: number, sectionVal: number): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		if (sectionVal > value) {
 			// console.log("applyGT result cols", this.resultCols);
@@ -57,7 +62,7 @@ export default class CollectMcomp {
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private applyEQ(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+	private applyEQ(section: QueryObject, value: number, sectionVal: number): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		if (sectionVal === value) {
 			return  section;
@@ -67,7 +72,7 @@ export default class CollectMcomp {
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private applyLT(section: SectionEntry, value: number, sectionVal: number): SectionEntry | null {
+	private applyLT(section: QueryObject, value: number, sectionVal: number): QueryObject | null {
 		// let propertiesToAdd: Property[] = [];
 		if (sectionVal < value) {
 			return section;
@@ -77,48 +82,48 @@ export default class CollectMcomp {
 		// return convertArrayOfObjectToObject(propertiesToAdd);
 	}
 
-	private handleMFields(section: SectionEntry, lKeyField: string, key: string, value: number): SectionEntry | null {
-		let result: SectionEntry | null = null;
+	private handleMFields(qobj: QueryObject, lKeyField: string, key: string, value: number): QueryObject | null {
+		let result: QueryObject | null = null;
 
 		if (lKeyField === "avg") {
 			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_avg());
+				result = this.applyGT(qobj, value, qobj.get_avg());
 			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_avg());
+				result = this.applyEQ(qobj, value, qobj.get_avg());
 			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_avg());
+				result = this.applyLT(qobj, value, qobj.get_avg());
 			}
 		} else if (lKeyField === "pass") {
 			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_pass());
+				result = this.applyGT(qobj, value, qobj.get_pass());
 			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_pass());
+				result = this.applyEQ(qobj, value, qobj.get_pass());
 			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_pass());
+				result = this.applyLT(qobj, value, qobj.get_pass());
 			}
 		} else if (lKeyField === "fail") {
 			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_fail());
+				result = this.applyGT(qobj, value, qobj.get_fail());
 			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_fail());
+				result = this.applyEQ(qobj, value, qobj.get_fail());
 			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_fail());
+				result = this.applyLT(qobj, value, qobj.get_fail());
 			}
 		} else if (lKeyField === "audit") {
 			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_audit());
+				result = this.applyGT(qobj, value, qobj.get_audit());
 			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_audit());
+				result = this.applyEQ(qobj, value, qobj.get_audit());
 			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_audit());
+				result = this.applyLT(qobj, value, qobj.get_audit());
 			}
 		} else if (lKeyField === "year") {
 			if (key === "GT") {
-				result = this.applyGT(section, value, section.get_year());
+				result = this.applyGT(qobj, value, qobj.get_year());
 			} else if (key === "EQ") {
-				result = this.applyEQ(section, value, section.get_year());
+				result = this.applyEQ(qobj, value, qobj.get_year());
 			} else if (key === "LT") {
-				result = this.applyLT(section, value, section.get_year());
+				result = this.applyLT(qobj, value, qobj.get_year());
 			}
 		}
 

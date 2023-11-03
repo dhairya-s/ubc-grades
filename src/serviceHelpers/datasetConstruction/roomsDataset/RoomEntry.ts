@@ -1,5 +1,6 @@
 import * as http from "http";
 import {InsightError} from "../../../controller/IInsightFacade";
+import QueryObject from "../QueryObject";
 
 interface GeoResponse {
 
@@ -10,7 +11,7 @@ interface GeoResponse {
 	error?: string;
 
 }
-export default class RoomEntry {
+export default class RoomEntry extends QueryObject {
 
 	private location: GeoResponse = {};
 	private fullname: string = "";
@@ -24,7 +25,6 @@ export default class RoomEntry {
 	private type: string = "";
 	private furniture: string = "";
 	private href: string = "";
-	private valid: boolean = true;
 
 	private counter = {
 		number: false,
@@ -180,11 +180,7 @@ export default class RoomEntry {
 		this.counter.href = true;
 	}
 
-	public setValid(valid: boolean) {
-		this.valid = valid;
-	}
-
-	public sectionFromDisk(roomObject: any) {
+	public queryObjectFromDisk(roomObject: any) {
 		this.setFullname(roomObject["fullname"]);
 		this.setShortname(roomObject["shortname"]);
 		this.setNumber(roomObject["number"]);

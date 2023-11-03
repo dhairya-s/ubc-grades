@@ -6,19 +6,19 @@ import {parse} from "parse5";
 
 export default class BuildingEntry {
 
-	public rooms: RoomEntry[] = [];
+	public children: RoomEntry[] = [];
 	public buildingName: string = "";
 	public link: string = "";
 	public address: string = "";
 	public buildingCode: string = "";
 	public valid: boolean = true;
 
-	public setRooms(rooms: RoomEntry[]) {
-		this.rooms = rooms;
+	public setChild(rooms: RoomEntry[]) {
+		this.children = rooms;
 	}
 
-	public addRoom(room: RoomEntry) {
-		this.rooms.push(room);
+	public addChild(room: RoomEntry) {
+		this.children.push(room);
 	}
 
 	public setBuildingName(name: string) {
@@ -41,8 +41,8 @@ export default class BuildingEntry {
 		this.valid = valid;
 	}
 
-	public getRooms() {
-		return this.rooms;
+	public getChildren() {
+		return this.children;
 	}
 
 	public getBuildingName() {
@@ -73,7 +73,7 @@ export default class BuildingEntry {
 				await this.parseBuildingFile(file);
 			}
 			let roomPromises: Array<Promise<void>> = [];
-			for (const room of this.getRooms()) {
+			for (const room of this.getChildren()) {
 				roomPromises.push(room.setLocation());
 			}
 			await Promise.all(roomPromises);
@@ -177,7 +177,7 @@ export default class BuildingEntry {
 				}
 			}
 		}
-		this.addRoom(roomEntry);
+		this.addChild(roomEntry);
 	}
 
 	private getRoomNumberFromHTML(node: any): string {
@@ -211,7 +211,7 @@ export default class BuildingEntry {
 	}
 
 	public validateBuildingEntry() {
-		let filtered = this.getRooms().filter(function(room) {
+		let filtered = this.getChildren().filter(function(room) {
 			return room.getValid();
 		});
 		return filtered.length > 0;
@@ -220,15 +220,15 @@ export default class BuildingEntry {
 	public JSONToEntry(json: any): BuildingEntry {
 		this.setBuildingName(json["buildingName"]);
 
-		let rooms = json["rooms"];
+		let rooms = json["children"];
 		let roomEntries = [];
 		for (const room of rooms) {
 			const roomEntry = new RoomEntry();
-			roomEntry.sectionFromDisk(room);
+			roomEntry.queryObjectFromDisk(room);
 			roomEntries.push(roomEntry);
 		}
 
-		this.setRooms(roomEntries);
+		this.setChild(roomEntries);
 
 		return this;
 	}

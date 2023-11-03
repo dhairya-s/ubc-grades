@@ -5,12 +5,12 @@ import JSZip from "jszip";
 import fs from "fs-extra";
 
 
-export default class SectionsDatasetEntry implements DatasetEntry {
+export default class SectionsDatasetEntry extends DatasetEntry {
 
 	public id: string = "";
 	public numRows: number = 0;
 	public kind: InsightDatasetKind = InsightDatasetKind.Sections;
-	public courses: CourseEntry[] = [];
+	public children: CourseEntry[] = [];
 
 	public validateDatasetEntry(): boolean {
 		/*
@@ -29,7 +29,7 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		- True if the sections dataset is valid
 		- False otherwise
 		 */
-		for (const course of this.courses) {
+		for (const course of this.children) {
 			if (course.findValidSection()) {
 				return true;
 			}
@@ -42,18 +42,18 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		Returns a SectionsDatasetEntry from the JSON.
 		 */
 		this.setId(json["id"]);
-		this.set_numRows(json["numRows"]);
+		this.setNumRows(json["numRows"]);
 		this.setKind(json["kind"]);
 
-		let courses = json["courses"];
+		let children = json["children"];
 		let courseEntries: CourseEntry[] = [];
-		for (const course of courses){
+		for (const course of children){
 			const courseEntry = new CourseEntry();
 			courseEntry.JSONToEntry(course);
 			courseEntries.push(courseEntry);
 		}
 
-		this.setCourses(courseEntries);
+		this.setChildren(courseEntries);
 
 		return this;
 	}
@@ -100,18 +100,6 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 		return Promise.resolve(courseList);
 	}
 
-	public setCourses(courses: CourseEntry[]){
-		this.courses = courses;
-	}
-
-	public setId(id: string) {
-		this.id = id;
-	}
-
-	public setKind(kind: InsightDatasetKind) {
-		this.kind = kind;
-	}
-
 	public async createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): Promise<DatasetEntry> {
 		/*
 		Creates a SectionsDatasetEntry using the content given.
@@ -125,58 +113,29 @@ export default class SectionsDatasetEntry implements DatasetEntry {
 			this.setId(id);
 			this.setKind(kind);
 			let courses = await this.parseZip(content);
-			this.setCourses(courses);
+			this.setChildren(courses);
+			this.getNumRows();
 		} catch {
 			return Promise.reject("Could not parse zip file.");
 		}
 		return Promise.resolve(this);
 	}
 
-	public get_courses() {
-		return this.courses;
+	public getChildren() {
+		return this.children;
 	}
 
-	public getId() {
-		return this.id;
-	}
-
-	public async saveDataset(path: string): Promise<void> {
-		let saveDir = path + "/" + this.getId() + ".json";
-		let content = JSON.stringify(this);
-		try {
-			if (!fs.existsSync(path + "/")){
-				fs.mkdirSync(path + "/");
-			}
-			await fs.writeJSON(saveDir, content, "utf-8");
-		} catch(err) {
-			return Promise.reject(new InsightError("Could not write new dataset to file."));
-		}
-		return Promise.resolve();
-	}
-
-	public createInsightDataset(): InsightDataset {
-		return {
-			id: this.getId(),
-			kind: this.getKind(),
-			numRows: this.getNumRows(),
-		};
-	}
-
-	public set_numRows(num_rows: number){
-		this.numRows = num_rows;
+	public setChildren(courses: CourseEntry[]){
+		this.children = courses;
 	}
 
 	public getNumRows() {
-		let numSections = this.get_courses().map(function(course) {
-			return course.getSections().length;
+		let numSections = this.getChildren().map(function(course) {
+			return course.getChildren().length;
 		}).reduce((sum, current) => sum + current, 0);
-		this.set_numRows(numSections);
+		this.setNumRows(numSections);
 
 		return this.numRows;
-	}
-
-	public getKind() {
-		return this.kind;
 	}
 
 }

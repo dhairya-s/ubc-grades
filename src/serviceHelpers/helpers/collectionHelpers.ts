@@ -1,8 +1,9 @@
 import SectionEntry from "../datasetConstruction/sectionsDataset/SectionEntry";
 import {Property} from "../../services/collectQuery";
 import {InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
+import QueryObject from "../datasetConstruction/QueryObject";
 
-export function collectInsightResult(section: SectionEntry, resultCols: Set<string>): Property[] {
+export function collectInsightResult(section: QueryObject, resultCols: Set<string>): Property[] {
 	let propertiesToAdd: Property[] = [];
 	for (let resultCol of resultCols) {
 		let keyField = resultCol.split("_")[1];

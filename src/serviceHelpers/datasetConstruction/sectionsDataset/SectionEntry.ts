@@ -1,6 +1,7 @@
 import {InsightError} from "../../../controller/IInsightFacade";
+import QueryObject from "../QueryObject";
 
-export default class SectionEntry {
+export default class SectionEntry extends QueryObject {
 	private uuid: string = "";
 	private id: string = "";
 	private title: string = "";
@@ -12,7 +13,7 @@ export default class SectionEntry {
 	private fail: number = -100;
 	private audit: number = -100;
 
-	public sectionFromJSON(jsonSection: any) {
+	public queryObjectFromJSON(jsonSection: any) {
 		let keys = Object.keys(jsonSection);
 		let expectedKeys = ["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 		const hasAllElems = expectedKeys.every((elem) => keys.includes(elem));
@@ -31,7 +32,7 @@ export default class SectionEntry {
 		this.set_audit(jsonSection["Audit"]);
 	}
 
-	public sectionFromDisk(sectionObject: any) {
+	public queryObjectFromDisk(sectionObject: any) {
 		this.set_uuid(sectionObject["uuid"]);
 		this.set_id(sectionObject["id"]);
 		this.set_title(sectionObject["title"]);
