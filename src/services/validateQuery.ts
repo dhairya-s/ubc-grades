@@ -213,6 +213,26 @@ export default class ValidateQuery {
 		return true;
 	}
 
+	public getPreliminaryDatasetId(): string {
+		let datasetId = "";
+		let options: object = this.query["OPTIONS" as keyof typeof this.query];
+
+		datasetId = getDatasetIdFromCols(options);
+		function getDatasetIdFromCols(obj: object): string {
+			let dtId = "";
+			let cols: string[] = obj["COLUMNS" as keyof typeof obj];
+			for (let col of cols) {
+				let fields = col.split("_");
+				if (fields.length === 2) {
+					dtId = fields[0];
+					break;
+				}
+			}
+			return dtId;
+		}
+		return datasetId;
+	}
+
 	public getDatasetId(): string {
 		return this.datasetId;
 	}
