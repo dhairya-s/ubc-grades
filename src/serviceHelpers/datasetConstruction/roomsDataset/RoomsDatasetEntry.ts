@@ -28,6 +28,7 @@ export default class RoomsDatasetEntry extends DatasetEntry {
 			let parser = new ParseRoomsHTML();
 			let buildings = await parser.parseZip(content);
 			this.setChildren(buildings);
+			this.getNumRows();
 		} catch {
 			return Promise.reject("Could not parse zip file.");
 		}

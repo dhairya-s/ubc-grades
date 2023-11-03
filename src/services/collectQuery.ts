@@ -28,7 +28,6 @@ export default class CollectQuery {
 	constructor(query: object, datasetEntries: DatasetEntry[]) {
 		this.query = query;
 		this.datasetEntries = datasetEntries;
-		console.log(this.datasetEntries);
 	}
 
 	public async CollectQuery(datasetId: string): Promise<InsightResult[]> {

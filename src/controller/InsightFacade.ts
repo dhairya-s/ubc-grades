@@ -70,7 +70,6 @@ export default class InsightFacade implements IInsightFacade {
 			if (!isValid) {
 				throw new InsightError("Invalid Query");
 			}
-			// console.log("DatsetId ",validate.getDatasetId());
 
 			results = await collect.CollectQuery(validate.getDatasetId()); // TODO add back in
 		} catch (e) {

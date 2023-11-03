@@ -478,7 +478,7 @@ describe("InsightFacade", function () {
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery Ordered tests",
 			(input) => facade.performQuery(input),
-			"./test/resources/ordered_queries/test_queries",
+			"./test/resources/ordered_queries",
 
 			{
 				assertOnResult: async (actual, expected) => {
@@ -498,8 +498,6 @@ describe("InsightFacade", function () {
 				},
 			}
 		);
-
-		// for queries without order
 		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
 			"Dynamic InsightFacade PerformQuery Unordered tests",
 			(input) => facade.performQuery(input),
@@ -523,5 +521,55 @@ describe("InsightFacade", function () {
 				},
 			}
 		);
+
 	});
+
+	describe("PerformQueryRooms", () => {
+		before(function () {
+			console.info(`Before: ${this.test?.parent?.title}`);
+			campus = getContentFromArchives("campus.zip");
+
+			clearDisk();
+			facade = new InsightFacade();
+
+			// Load the datasets specified in datasetsToQuery and add them to InsightFacade.
+			// Will *fail* if there is a problem reading ANY dataset.
+			const loadDatasetPromises = [facade.addDataset("rooms", campus, InsightDatasetKind.Rooms)];
+
+			return Promise.all(loadDatasetPromises);
+		});
+
+		after(function () {
+			console.info(`After: ${this.test?.parent?.title}`);
+			clearDisk();
+		});
+
+		type PQErrorKind = "ResultTooLargeError" | "InsightError";
+
+		// for queries with order
+		folderTest<unknown, Promise<InsightResult[]>, PQErrorKind>(
+			"Dynamic InsightFacade PerformQuery Ordered tests",
+			(input) => facade.performQuery(input),
+			"./test/resources/ordered_queries/RoomTests",
+
+			{
+				assertOnResult: async (actual, expected) => {
+					expect(actual).to.deep.equals(await expected);
+				},
+				errorValidator: (error): error is PQErrorKind =>
+					error === "ResultTooLargeError" || error === "InsightError",
+				assertOnError: (actual, expected) => {
+					if (expected === "InsightError") {
+						expect(actual).to.be.instanceof(InsightError);
+					} else if (expected === "ResultTooLargeError") {
+						expect(actual).to.be.instanceof(ResultTooLargeError);
+					} else {
+						// this should be unreachable
+						expect.fail("UNEXPECTED ERROR");
+					}
+				},
+			}
+		);
+	});
+
 });
