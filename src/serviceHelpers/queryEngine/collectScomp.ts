@@ -21,7 +21,7 @@ export default class CollectScomp {
 		for (let dataset of this.datasetEntries) {
 			if (String(datasetId) === String(dataset.getId())) {
 				isValidId = true;
-				for (let course of dataset.get_courses()) {
+				for (let course of dataset.getChildren()) {
 					for (let section of course.getSections()) {
 						let sectionEntry: SectionEntry | null = this.handleSFields(section, localKeyField, value);
 						// if (Object.keys(obj).length !== 0) {

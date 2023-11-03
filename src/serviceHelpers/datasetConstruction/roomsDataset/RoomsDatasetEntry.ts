@@ -7,11 +7,11 @@ import ParseRoomsHTML from "./ParseHTML";
 import fs from "fs-extra";
 import CourseEntry from "../sectionsDataset/CourseEntry";
 
-export default class RoomsDatasetEntry implements DatasetEntry {
+export default class RoomsDatasetEntry extends DatasetEntry {
 	public id: string = "";
 	public numRows: number = 0;
 	public kind: InsightDatasetKind = InsightDatasetKind.Rooms;
-	public buildings: BuildingEntry[] = [];
+	public children: BuildingEntry[] = [];
 
 	public async createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): Promise<RoomsDatasetEntry> {
 		/*
@@ -27,7 +27,7 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 			this.setKind(kind);
 			let parser = new ParseRoomsHTML();
 			let buildings = await parser.parseZip(content);
-			this.setBuildings(buildings);
+			this.setChildren(buildings);
 		} catch {
 			return Promise.reject("Could not parse zip file.");
 		}
@@ -47,20 +47,6 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		return this.id;
 	}
 
-	public async saveDataset(path: string): Promise<void> {
-		let saveDir = path + "/" + this.getId() + ".json";
-		let content = JSON.stringify(this);
-		try {
-			if (!fs.existsSync(path + "/")){
-				fs.mkdirSync(path + "/");
-			}
-			await fs.writeJSON(saveDir, content, "utf-8");
-		} catch(err) {
-			return Promise.reject(new InsightError("Could not write new dataset to file."));
-		}
-		return Promise.resolve();
-	}
-
 	public JSONToDatasetEntry(json: any): RoomsDatasetEntry {
 		/*
 		Returns a SectionsDatasetEntry from the JSON.
@@ -77,7 +63,7 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 			buildingEntries.push(buildingEntry);
 		}
 
-		this.setBuildings(buildingEntries);
+		this.setChildren(buildingEntries);
 
 		return this;
 	}
@@ -101,18 +87,14 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		- True if the sections dataset is valid
 		- False otherwise
 		 */
-		let filtered = this.getBuildings().filter(function(building) {
+		let filtered = this.getChildren().filter(function(building) {
 			return building.validateBuildingEntry();
 		});
 		return filtered.length > 0;
 	}
 
-	public getKind() {
-		return InsightDatasetKind.Rooms;
-	}
-
 	public getNumRows() {
-		let numRooms = this.getBuildings().map(function(building) {
+		let numRooms = this.getChildren().map(function(building) {
 			return building.getRooms().length;
 		}).reduce((sum, current) => sum + current, 0);
 		this.setNumRows(numRooms);
@@ -120,29 +102,11 @@ export default class RoomsDatasetEntry implements DatasetEntry {
 		return this.numRows;
 	}
 
-	public setNumRows(rows: number) {
-		this.numRows = rows;
+	public getChildren() {
+		return this.children;
 	}
 
-	public getBuildings() {
-		return this.buildings;
+	public setChildren(buildings: BuildingEntry[]) {
+		this.children = buildings;
 	}
-
-	public setBuildings(buildings: BuildingEntry[]) {
-		this.buildings = buildings;
-	}
-
-	public addBuilding(building: BuildingEntry) {
-		this.buildings.push(building);
-	}
-
-	private setId(id: string) {
-		this.id = id;
-	}
-
-	private setKind(kind: InsightDatasetKind) {
-		this.kind = kind;
-	}
-
-
 }

@@ -23,7 +23,7 @@ export default class CollectMcomp {
 		for (let dataset of this.datasetEntries) {
 			if (String(datasetId) === String(dataset.getId())) {
 				isValidId = true;
-				for (let course of dataset.get_courses()) {
+				for (let course of dataset.getChildren()) {
 					for (let section of course.getSections()) {
 						let sectionEntry: SectionEntry | null = this.handleMFields(section, localKeyField, key, value);
 						// if (Object.keys(obj).length !== 0) {

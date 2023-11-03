@@ -137,7 +137,7 @@ export default class DatasetManager {
 		}
 	}
 
-	public async loadSectionsDatasetsFromDisk(): Promise<SectionsDatasetEntry[]> {
+	public async loadSectionsDatasetsFromDisk(): Promise<DatasetEntry[]> {
 		// return Promise.reject("Could not load datasets from disk.");
 		try {
 			let dirFiles = fs.readdirSync(this.path);
@@ -145,10 +145,10 @@ export default class DatasetManager {
 				return value !== "datasetLedger.json";
 			});
 
-			let loadedDatasetPromises: Array<Promise<SectionsDatasetEntry>> = [];
+			let loadedDatasetPromises: Array<Promise<DatasetEntry>> = [];
 
 			for (const dir of dirFiles) {
-				const dataset = this.loadSectionsDataset(dir);
+				const dataset = this.loadDataset(dir);
 				loadedDatasetPromises.push(dataset);
 			}
 
@@ -160,44 +160,44 @@ export default class DatasetManager {
 		}
 	}
 
-	public async loadSectionsDataset(datasetDir: string): Promise<SectionsDatasetEntry> {
+	public async loadDataset(datasetDir: string): Promise<DatasetEntry> {
 		// let dataset = new SectionsDatasetEntry();
 		const fileContents = await fs.readJSON(this.path + "/" + datasetDir);
 		let objectJSON = JSON.parse(fileContents);
-		let dataset = new SectionsDatasetEntry();
+		let dataset = new DatasetEntry();
 		dataset.JSONToDatasetEntry(objectJSON);
 		return Promise.resolve(dataset);
 	}
 
-	public async loadRoomsDatasetsFromDisk(): Promise<RoomsDatasetEntry[]> {
-		// return Promise.reject("Could not load datasets from disk.");
-		try {
-			let dirFiles = fs.readdirSync(this.path);
-			dirFiles = dirFiles.filter(function(value) {
-				return value !== "datasetLedger.json";
-			});
-
-			let loadedDatasetPromises: Array<Promise<RoomsDatasetEntry>> = [];
-
-			for (const dir of dirFiles) {
-				const dataset = this.loadRoomsDataset(dir);
-				loadedDatasetPromises.push(dataset);
-			}
-
-			let datasetEntries = await Promise.all(loadedDatasetPromises);
-			return Promise.resolve(datasetEntries);
-
-		} catch {
-			return Promise.reject(new InsightError("Could not load datasets."));
-		}
-	}
-
-	public async loadRoomsDataset(datasetDir: string): Promise<RoomsDatasetEntry> {
-		// let dataset = new SectionsDatasetEntry();
-		const fileContents = await fs.readJSON(this.path + "/" + datasetDir);
-		let objectJSON = JSON.parse(fileContents);
-		let dataset = new RoomsDatasetEntry();
-		dataset.JSONToDatasetEntry(objectJSON);
-		return Promise.resolve(dataset);
-	}
+	// public async loadRoomsDatasetsFromDisk(): Promise<RoomsDatasetEntry[]> {
+	// 	// return Promise.reject("Could not load datasets from disk.");
+	// 	try {
+	// 		let dirFiles = fs.readdirSync(this.path);
+	// 		dirFiles = dirFiles.filter(function(value) {
+	// 			return value !== "datasetLedger.json";
+	// 		});
+	//
+	// 		let loadedDatasetPromises: Array<Promise<RoomsDatasetEntry>> = [];
+	//
+	// 		for (const dir of dirFiles) {
+	// 			const dataset = this.loadRoomsDataset(dir);
+	// 			loadedDatasetPromises.push(dataset);
+	// 		}
+	//
+	// 		let datasetEntries = await Promise.all(loadedDatasetPromises);
+	// 		return Promise.resolve(datasetEntries);
+	//
+	// 	} catch {
+	// 		return Promise.reject(new InsightError("Could not load datasets."));
+	// 	}
+	// }
+	//
+	// public async loadRoomsDataset(datasetDir: string): Promise<RoomsDatasetEntry> {
+	// 	// let dataset = new SectionsDatasetEntry();
+	// 	const fileContents = await fs.readJSON(this.path + "/" + datasetDir);
+	// 	let objectJSON = JSON.parse(fileContents);
+	// 	let dataset = new RoomsDatasetEntry();
+	// 	dataset.JSONToDatasetEntry(objectJSON);
+	// 	return Promise.resolve(dataset);
+	// }
 }

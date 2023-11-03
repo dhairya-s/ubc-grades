@@ -1,28 +1,76 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "../../controller/IInsightFacade";
 import fs from "fs-extra";
+import SectionsDatasetEntry from "./sectionsDataset/SectionsDatasetEntry";
+import RoomsDatasetEntry from "./roomsDataset/RoomsDatasetEntry";
+import CourseEntry from "./sectionsDataset/CourseEntry";
+import BuildingEntry from "./roomsDataset/BuildingEntry";
 
-export interface DatasetEntry {
-	id: string;
-	numRows: number;
-	kind: InsightDatasetKind;
+export class DatasetEntry {
+	public id: string = "";
+	public numRows: number = 0;
+	public kind: InsightDatasetKind = InsightDatasetKind.Rooms;
+	public children: CourseEntry[] | BuildingEntry[] = [];
 	/*
 	Must validate DatasetEntry according to spec.
 	 */
-	validateDatasetEntry(): boolean;
+	public validateDatasetEntry(): boolean{
+		return false;
+	}
 
 	/*
 	Create datasetEntry.
 	 */
-	createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): void;
+	public createDatasetEntry(id: string, content: string, kind: InsightDatasetKind): void {
+		return;
+	}
 
-	saveDataset(path: string): void;
+	public async saveDataset(path: string): Promise<void> {
+		let saveDir = path + "/" + this.getId() + ".json";
+		let content = JSON.stringify(this);
+		try {
+			if (!fs.existsSync(path + "/")){
+				fs.mkdirSync(path + "/");
+			}
+			await fs.writeJSON(saveDir, content, "utf-8");
+		} catch(err) {
+			return Promise.reject(new InsightError("Could not write new dataset to file."));
+		}
+		return Promise.resolve();
+	}
 
-	createInsightDataset(): InsightDataset;
+	public createInsightDataset(): InsightDataset {
+		return {
+			id: this.getId(),
+			kind: this.getKind(),
+			numRows: this.getNumRows(),
+		};
+	}
 
-	getId(): string;
+	public getId(): string {
+		return this.id;
+	}
 
-	getNumRows(): number;
+	public getNumRows(): number {
+		return this.numRows;
+	}
 
-	getKind(): string;
+	public getKind(): InsightDatasetKind {
+		return this.kind;
+	}
 
+	public setNumRows(num_rows: number){
+		this.numRows = num_rows;
+	}
+
+	public setId(id: string) {
+		this.id = id;
+	}
+
+	public setKind(kind: InsightDatasetKind) {
+		this.kind = kind;
+	}
+
+	public JSONToDatasetEntry(objectJSON: any) {
+
+	}
 }
