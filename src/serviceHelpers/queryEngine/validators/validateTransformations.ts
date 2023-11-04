@@ -5,7 +5,7 @@ import {
 	validateIdString
 } from "../../helpers/collectionHelpers";
 
-
+// 98,105,115,130,154-157,165
 export default class ValidateTransformations {
 	private tf: object;
 	private datasetKind: InsightDatasetKind;
@@ -95,14 +95,14 @@ export default class ValidateTransformations {
 		for (let ap of apply) {
 			let keys: string[] = Object.keys(ap);
 			if (keys.length > 1) {
-				return false;
+				return false; // doesnt reach here
 			}
 
 			applyKey = keys[0];
 
 			// apply key cant be empty or have underscore (same as id string)
 			if (!validateIdString(applyKey)) {
-				return false;
+				return false; // doesnt reach here
 			}
 
 			if (!this.validateApplyRule(ap[applyKey as keyof typeof ap], datasetKind)) {
@@ -112,7 +112,7 @@ export default class ValidateTransformations {
 
 			// duplicate apply keys not allowed
 			if (this.getAllowedColumns().includes(applyKey)) {
-				return false;
+				return false; // doesnt reach here
 			} else {
 				this.setAllowedColumns(applyKey);
 			}

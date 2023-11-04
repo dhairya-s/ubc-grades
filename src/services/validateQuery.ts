@@ -218,6 +218,9 @@ export default class ValidateQuery {
 		let options: object = this.query["OPTIONS" as keyof typeof this.query];
 
 		datasetId = getDatasetIdFromCols(options);
+		if (datasetId === "") { // apply may have the dataset id
+			datasetId = this.prelimDatasetIdHelper();
+		}
 		function getDatasetIdFromCols(obj: object): string {
 			let dtId = "";
 			let cols: string[] = obj["COLUMNS" as keyof typeof obj];
@@ -231,6 +234,20 @@ export default class ValidateQuery {
 			return dtId;
 		}
 		return datasetId;
+	}
+
+	private prelimDatasetIdHelper(): string {
+		let dtId = "";
+		let tf: object = this.query["TRANSFORMATIONS" as keyof typeof this.query];
+		let grpCols: string[] = tf["GROUP" as keyof typeof tf];
+		for (let col of grpCols) {
+			let fields = col.split("_");
+			if (fields.length === 2) {
+				dtId = fields[0];
+				break;
+			}
+		}
+		return dtId;
 	}
 
 	public getDatasetId(): string {
