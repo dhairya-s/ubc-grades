@@ -1,0 +1,54 @@
+{
+	"title": "RoomsSeatsLTGroupApplyAVGnameSUMlonMINseatsOrderedUP1",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"LT": {
+						"rooms_seats": 100
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_name",
+				"group1",
+				"group2",
+				"group3"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"group1"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_seats",
+				"rooms_lon"
+			],
+			"APPLY": [
+				{
+					"group1": {
+						"AVG": "rooms_name"
+					}
+				},
+				{
+					"group2": {
+						"SUM": "rooms_furniture"
+					}
+				},
+				{
+					"group3": {
+						"MIN": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

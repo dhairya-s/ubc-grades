@@ -1,0 +1,42 @@
+{
+	"title": "group-max-test",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"EQ": {
+						"rooms_seats": 200
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"group2"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_name",
+				"rooms_seats",
+				"rooms_lon"
+			],
+			"APPLY": [
+				{
+					"group2": {
+						"MAX": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"group2": 200
+		},
+		{
+			"group2": 200
+		}
+	]
+}
