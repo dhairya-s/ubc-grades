@@ -84,6 +84,25 @@ export default class Server {
 		// http://localhost:4321/echo/hello
 		this.express.get("/echo/:msg", Server.echo);
 
+		// list dataset
+		this.express.get("/datasets", (req, res) => {
+			res.send(res.toString());
+		});
+
+		// perform query
+		this.express.post("/query/", (req, res) => {
+			res.send("Got a POST request");
+		});
+
+		// Add dataset
+		this.express.put("/dataset/:id/:kind/", (req, res) => {
+			res.send("Got a PUT request at /user");
+		});
+
+		// Delete dataset
+		this.express.delete("/dataset/:id/", (req, res) => {
+			res.send("Got a DELETE request at /user");
+		});
 		// TODO: your other endpoints should go here
 
 	}
