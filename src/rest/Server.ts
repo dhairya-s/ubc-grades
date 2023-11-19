@@ -163,17 +163,17 @@ export default class Server {
 			await this.getOperation(req, res);
 		});
 		// perform query
-		this.express.post("/query/", async (req, res) => {
+		this.express.post("/query", async (req, res) => {
 			await this.postOperation(req, res);
 		});
 
 		// Add dataset
-		this.express.put("/dataset/:id/:kind/", async (req, res) => {
+		this.express.put("/dataset/:id/:kind", async (req, res) => {
 			await this.putOperation(req, res);
 		});
 
 		// Delete dataset
-		this.express.delete("/dataset/:id/", async (req, res) => {
+		this.express.delete("/dataset/:id", async (req, res) => {
 			await this.deleteOperation(req, res);
 		});
 	}
