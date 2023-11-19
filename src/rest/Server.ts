@@ -2,8 +2,7 @@ import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
 import InsightFacade from "../controller/InsightFacade";
-import bodyParser from "body-parser";
-import {InsightDatasetKind, InsightError} from "../controller/IInsightFacade";
+import {InsightDatasetKind, InsightError, NotFoundError} from "../controller/IInsightFacade";
 
 export default class Server {
 	private readonly port: number;
@@ -81,54 +80,102 @@ export default class Server {
 		this.express.use(cors());
 	}
 
+	private async getOperation(req: any, res: any) {
+		let facade = new InsightFacade();
+		try {
+			let result = await facade.listDatasets();
+			res.status(200);
+			res.send({result: result});
+		} catch (error) {
+			// Do nothing
+		}
+	}
+
+	private async postOperation(req: any, res: any) {
+		let facade = new InsightFacade();
+		let query = req.body;
+		try {
+			let result = await facade.performQuery(query);
+			res.status(200);
+			res.send({result: result});
+		} catch (error) {
+			res.status(400);
+			if (error instanceof InsightError) {
+				res.send({error: error.message});
+			}
+		}
+	}
+
+	private async putOperation(req: any, res: any) {
+		let facade = new InsightFacade();
+		const params = req.params;
+		if (params.id && params.kind) {
+			let id = params.id.toString();
+			let kind = InsightDatasetKind.Sections;
+			if (req.query.kind === InsightDatasetKind.Rooms) {
+				kind = InsightDatasetKind.Rooms;
+			}
+			let content = req.body.toString("base64");
+			try {
+				let result = await facade.addDataset(id, content, kind);
+				res.status(200);
+				res.send({result: result});
+
+			} catch (error) {
+				res.status(400);
+				if (error instanceof InsightError) {
+					res.send({error: error.message});
+				}
+			}
+		}
+	}
+
+	private async deleteOperation(req: any, res: any) {
+		let facade = new InsightFacade();
+		const params = req.params;
+		if (params.id) {
+			let id = params.id.toString();
+			try {
+				let result = await facade.removeDataset(id);
+				res.status(200);
+				res.send({result: result});
+			} catch (error) {
+				if (error instanceof InsightError) {
+					res.status(400);
+					res.send({error: error.message});
+				}
+				if (error instanceof NotFoundError) {
+					res.status(404);
+					res.send({error: error.message});
+				}
+			}
+		}
+	}
+
 	// Registers all request handlers to routes
 	private registerRoutes() {
 		// This is an example endpoint this you can invoke by accessing this URL in your browser:
 		// http://localhost:4321/echo/hello
 
 		this.express.get("/echo/:msg", Server.echo);
-
 		// list dataset
-		this.express.get("/datasets", (req, res) => {
-			res.send(res.toString());
+		this.express.get("/datasets", async (req, res) => {
+			await this.getOperation(req, res);
 		});
-
 		// perform query
-		this.express.post("/query/", (req, res) => {
-			res.send("Got a POST request");
+		this.express.post("/query/", async (req, res) => {
+			await this.postOperation(req, res);
 		});
 
 		// Add dataset
 		this.express.put("/dataset/:id/:kind/", async (req, res) => {
-			let facade = new InsightFacade();
-			const params = req.params;
-			if (params.id && params.kind) {
-				let id = params.id.toString();
-				let kind = InsightDatasetKind.Sections;
-				if (req.query.kind === InsightDatasetKind.Rooms) {
-					kind = InsightDatasetKind.Rooms;
-				}
-				let content = req.body.toString("base64");
-				try {
-					let result = await facade.addDataset(id, content, kind);
-					res.status(200);
-					res.send({result: result});
-
-				} catch (error) {
-					res.status(400);
-					if (error instanceof InsightError) {
-						res.send({error: error.message});
-					}
-				}
-			}
+			await this.putOperation(req, res);
 		});
 
 		// Delete dataset
-		this.express.delete("/dataset/:id/", (req, res) => {
-			res.send("Got a DELETE request at /user");
+		this.express.delete("/dataset/:id/", async (req, res) => {
+			await this.deleteOperation(req, res);
 		});
-		// TODO: your other endpoints should go here
-
 	}
 
 	// The next two methods handle the echo service.
