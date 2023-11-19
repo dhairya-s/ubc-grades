@@ -86,8 +86,10 @@ export default class Server {
 			let result = await facade.listDatasets();
 			res.status(200);
 			res.send({result: result});
+			return Promise.resolve();
 		} catch (error) {
 			// Do nothing
+			return Promise.resolve();
 		}
 	}
 
@@ -98,11 +100,13 @@ export default class Server {
 			let result = await facade.performQuery(query);
 			res.status(200);
 			res.send({result: result});
+			return Promise.resolve();
 		} catch (error) {
 			res.status(400);
 			if (error instanceof InsightError) {
 				res.send({error: error.message});
 			}
+			return Promise.resolve();
 		}
 	}
 
@@ -120,12 +124,13 @@ export default class Server {
 				let result = await facade.addDataset(id, content, kind);
 				res.status(200);
 				res.send({result: result});
-
+				return Promise.resolve();
 			} catch (error) {
 				res.status(400);
 				if (error instanceof InsightError) {
 					res.send({error: error.message});
 				}
+				return Promise.resolve();
 			}
 		}
 	}
@@ -139,6 +144,7 @@ export default class Server {
 				let result = await facade.removeDataset(id);
 				res.status(200);
 				res.send({result: result});
+				return Promise.resolve();
 			} catch (error) {
 				if (error instanceof InsightError) {
 					res.status(400);
@@ -148,6 +154,7 @@ export default class Server {
 					res.status(404);
 					res.send({error: error.message});
 				}
+				return Promise.resolve();
 			}
 		}
 	}
@@ -161,20 +168,24 @@ export default class Server {
 		// list dataset
 		this.express.get("/datasets", async (req, res) => {
 			await this.getOperation(req, res);
+			return Promise.resolve();
 		});
 		// perform query
 		this.express.post("/query", async (req, res) => {
 			await this.postOperation(req, res);
+			return Promise.resolve();
 		});
 
 		// Add dataset
 		this.express.put("/dataset/:id/:kind", async (req, res) => {
 			await this.putOperation(req, res);
+			return Promise.resolve();
 		});
 
 		// Delete dataset
 		this.express.delete("/dataset/:id", async (req, res) => {
 			await this.deleteOperation(req, res);
+			return Promise.resolve();
 		});
 	}
 
