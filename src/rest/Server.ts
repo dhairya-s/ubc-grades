@@ -1,6 +1,9 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
+import InsightFacade from "../controller/InsightFacade";
+import bodyParser from "body-parser";
+import {InsightDatasetKind, InsightError} from "../controller/IInsightFacade";
 
 export default class Server {
 	private readonly port: number;
@@ -82,6 +85,7 @@ export default class Server {
 	private registerRoutes() {
 		// This is an example endpoint this you can invoke by accessing this URL in your browser:
 		// http://localhost:4321/echo/hello
+
 		this.express.get("/echo/:msg", Server.echo);
 
 		// list dataset
@@ -95,8 +99,28 @@ export default class Server {
 		});
 
 		// Add dataset
-		this.express.put("/dataset/:id/:kind/", (req, res) => {
-			res.send("Got a PUT request at /user");
+		this.express.put("/dataset/:id/:kind/", async (req, res) => {
+			let facade = new InsightFacade();
+			const params = req.params;
+			if (params.id && params.kind) {
+				let id = params.id.toString();
+				let kind = InsightDatasetKind.Sections;
+				if (req.query.kind === InsightDatasetKind.Rooms) {
+					kind = InsightDatasetKind.Rooms;
+				}
+				let content = req.body.toString("base64");
+				try {
+					let result = await facade.addDataset(id, content, kind);
+					res.status(200);
+					res.send({result: result});
+
+				} catch (error) {
+					res.status(400);
+					if (error instanceof InsightError) {
+						res.send({error: error.message});
+					}
+				}
+			}
 		});
 
 		// Delete dataset
