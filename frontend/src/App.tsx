@@ -1,19 +1,24 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css'
-import { Button } from '@/components/ui/button'
+import "./App.css";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {FindGPABoostersForm} from "./student/studentQuery";
 
 function App() {
-  // const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <Button>CLICK ME!</Button>
-</div>
-</>
-  )
+	return (
+		<>
+			<div>
+				<Tabs defaultValue="Student Query" className="w-[400px]">
+					<TabsList>
+						<TabsTrigger value="Student Query">Student Query</TabsTrigger>
+						<TabsTrigger value="Instructor Query">Instructor Query</TabsTrigger>
+					</TabsList>
+					<TabsContent value="Student Query">
+						<FindGPABoostersForm />
+					</TabsContent>
+					<TabsContent value="Instructor Query">Change your password here.</TabsContent>
+				</Tabs>
+			</div>
+		</>
+	);
 }
 
-export default App
+export default App;
