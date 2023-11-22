@@ -8,6 +8,8 @@ import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
 import axios from "axios";
+import {useState} from "react";
+import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 
 const formSchema = z.object({
 	average: z.coerce.number(),
@@ -27,6 +29,9 @@ const courseDigit = [
 ] as const;
 
 export function FindGPABoostersForm() {
+	const [hasData, setData] = useState(false);
+	var tableData = [{sections_dept: "", sections_id: "", overallAvg: 0}];
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -36,6 +41,7 @@ export function FindGPABoostersForm() {
 
 	// 2. Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
+		setData(false);
 		const body = {
 			WHERE: {
 				AND: [
@@ -70,87 +76,111 @@ export function FindGPABoostersForm() {
 			},
 		};
 
-		// const mutation = useMutation({
-		// 	mutationFn: (body) => {
-		// 		return axios.post("localhost:4321/query", body);
-		// 	},
-		// });
-		axios
-			.post("http://localhost:4321/query", body)
-			.then((response) => console.log(response.data))
-			.then((error) => console.log(error));
-
-		// console.log(mutation);
+		axios.post("http://localhost:4321/query", body).then((response) => {
+			tableData = response.data.result;
+			tableData.map((tableData) => console.log(tableData.overallAvg));
+			setData(true);
+		});
 	}
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				<FormField
-					control={form.control}
-					name="average"
-					render={({field}) => (
-						<FormItem>
-							<FormLabel>Average</FormLabel>
-							<FormControl>
-								<Input type="number" {...field} />
-							</FormControl>
-							<FormDescription>This is your public display name.</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="courseDigit"
-					render={({field}) => (
-						<FormItem className="flex flex-col">
-							<FormLabel>Language</FormLabel>
-							<Popover>
-								<PopoverTrigger asChild>
-									<FormControl>
-										<Button
-											variant="outline"
-											role="combobox"
-											className={cn(
-												"w-[200px] justify-between",
-												!field.value && "text-muted-foreground"
-											)}
-										>
-											{field.value
-												? courseDigit.find((courseDigit) => courseDigit.value === field.value)
-														?.label
-												: "Select Course Digit"}
-										</Button>
-									</FormControl>
-								</PopoverTrigger>
-								<PopoverContent className="w-[200px] p-0">
-									<Command>
-										<CommandInput placeholder="Search framework..." className="h-9" />
-										<CommandEmpty>No framework found.</CommandEmpty>
-										<CommandGroup>
-											{courseDigit.map((courseDigit) => (
-												<CommandItem
-													value={courseDigit.label}
-													key={courseDigit.value}
-													onSelect={() => {
-														form.setValue("courseDigit", courseDigit.value);
-													}}
-												>
-													{courseDigit.label}
-												</CommandItem>
-											))}
-										</CommandGroup>
-									</Command>
-								</PopoverContent>
-							</Popover>
-							<FormDescription>This is the language that will be used in the dashboard.</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+		<>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+					<FormField
+						control={form.control}
+						name="average"
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Average</FormLabel>
+								<FormControl>
+									<Input type="number" {...field} />
+								</FormControl>
+								<FormDescription>This is your public display name.</FormDescription>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="courseDigit"
+						render={({field}) => (
+							<FormItem className="flex flex-col">
+								<FormLabel>Language</FormLabel>
+								<Popover>
+									<PopoverTrigger asChild>
+										<FormControl>
+											<Button
+												variant="outline"
+												role="combobox"
+												className={cn(
+													"w-[200px] justify-between",
+													!field.value && "text-muted-foreground"
+												)}
+											>
+												{field.value
+													? courseDigit.find(
+															(courseDigit) => courseDigit.value === field.value
+													  )?.label
+													: "Select Course Digit"}
+											</Button>
+										</FormControl>
+									</PopoverTrigger>
+									<PopoverContent className="w-[200px] p-0">
+										<Command>
+											<CommandInput placeholder="Search framework..." className="h-9" />
+											<CommandEmpty>No framework found.</CommandEmpty>
+											<CommandGroup>
+												{courseDigit.map((courseDigit) => (
+													<CommandItem
+														value={courseDigit.label}
+														key={courseDigit.value}
+														onSelect={() => {
+															form.setValue("courseDigit", courseDigit.value);
+														}}
+													>
+														{courseDigit.label}
+													</CommandItem>
+												))}
+											</CommandGroup>
+										</Command>
+									</PopoverContent>
+								</Popover>
+								<FormDescription>
+									This is the language that will be used in the dashboard.
+								</FormDescription>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<Button type="submit">Submit</Button>
-			</form>
-		</Form>
+					<Button type="submit">Submit</Button>
+				</form>
+			</Form>
+			{hasData == true ? (
+				<div>
+					<Table>
+						<TableCaption>A list of your recent invoices.</TableCaption>
+						<TableHeader>
+							<TableRow>
+								<TableHead className="w-[100px]">Department</TableHead>
+								<TableHead>Course Code</TableHead>
+								<TableHead className="text-right">Historical Average</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{tableData.map((tableData) => (
+								<TableRow key={tableData.sections_id}>
+									<TableCell className="font-medium">{tableData.sections_dept}</TableCell>
+									<TableCell>{tableData.sections_id}</TableCell>
+									<TableCell className="text-right">{tableData.overallAvg}</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+				</div>
+			) : (
+				<div></div>
+			)}
+		</>
 	);
 }
