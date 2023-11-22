@@ -108,6 +108,30 @@ export default class Server {
 		}
 	}
 
+	// private async putOperation(req: any, res: any) {
+	// 	let facade = new InsightFacade();
+	// 	const params = req.params;
+	// 	let id = params.id.toString();
+	// 	let kindQuery = params.kind.toString();
+	// 	let kind = InsightDatasetKind.Sections;
+	// 	if (kindQuery === InsightDatasetKind.Rooms) {
+	// 		kind = InsightDatasetKind.Rooms;
+	// 	}
+	// 	let content = req.body.toString("base64");
+	// 	try {
+	// 		let result = await facade.addDataset(id, content, kind);
+	// 		res.status(200);
+	// 		res.send({result: result});
+	// 		return Promise.resolve();
+	// 	} catch (error) {
+	// 		res.status(400);
+	// 		if (error instanceof InsightError) {
+	// 			res.send({error: error.message});
+	// 		}
+	// 		return Promise.resolve();
+	// 	}
+	// }
+
 	private async putOperation(req: any, res: any) {
 		let facade = new InsightFacade();
 		const params = req.params;
