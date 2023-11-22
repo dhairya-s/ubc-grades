@@ -37,14 +37,16 @@ export default class Server {
 				console.error("Server::start() - server already listening");
 				reject();
 			} else {
-				this.server = this.express.listen(this.port, () => {
-					console.info(`Server::start() - server listening on port: ${this.port}`);
-					resolve();
-				}).on("error", (err: Error) => {
-					// catches errors in server start
-					console.error(`Server::start() - server ERROR: ${err.message}`);
-					reject(err);
-				});
+				this.server = this.express
+					.listen(this.port, () => {
+						console.info(`Server::start() - server listening on port: ${this.port}`);
+						resolve();
+					})
+					.on("error", (err: Error) => {
+						// catches errors in server start
+						console.error(`Server::start() - server ERROR: ${err.message}`);
+						reject(err);
+					});
 			}
 		});
 	}
@@ -88,8 +90,7 @@ export default class Server {
 			res.send({result: result});
 			return Promise.resolve();
 		} catch (error) {
-			// Do nothing
-			return Promise.resolve();
+			console.log("Error on get");
 		}
 	}
 
@@ -138,7 +139,6 @@ export default class Server {
 		let facade = new InsightFacade();
 		const params = req.params;
 		let id = params.id.toString();
-		console.log(id);
 		try {
 			let result = await facade.removeDataset(id);
 			res.status(200);
@@ -166,14 +166,12 @@ export default class Server {
 		// list dataset
 		this.express.get("/datasets", async (req, res) => {
 			await this.getOperation(req, res);
-			return Promise.resolve();
 		});
 		// perform query
 		this.express.post("/query", async (req, res) => {
 			if (req.body) {
 				await this.postOperation(req, res);
 			}
-			return Promise.resolve();
 		});
 
 		// Add dataset
@@ -184,9 +182,7 @@ export default class Server {
 				res.status(400);
 				res.send({error: "Invalid parameters."});
 			}
-			// await this.putOperation(req, res);
 
-			return Promise.resolve();
 		});
 
 		// Delete dataset
@@ -197,7 +193,6 @@ export default class Server {
 				res.status(400);
 				res.send({error: "Invalid parameters."});
 			}
-			return Promise.resolve();
 		});
 	}
 
