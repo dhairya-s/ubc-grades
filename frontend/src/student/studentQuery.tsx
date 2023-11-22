@@ -52,8 +52,21 @@ export function FindGPABoostersForm() {
 				],
 			},
 			OPTIONS: {
-				COLUMNS: ["sections_dept", "sections_id", "sections_avg"],
-				ORDER: "sections_avg",
+				COLUMNS: ["sections_dept", "sections_id", "overallAvg"],
+				ORDER: {
+					dir: "DOWN",
+					keys: ["overallAvg"],
+				},
+			},
+			TRANSFORMATIONS: {
+				GROUP: ["sections_dept", "sections_id"],
+				APPLY: [
+					{
+						overallAvg: {
+							AVG: "sections_avg",
+						},
+					},
+				],
 			},
 		};
 
