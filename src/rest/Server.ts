@@ -88,6 +88,7 @@ export default class Server {
 			let result = await facade.listDatasets();
 			res.status(200);
 			res.send({result: result});
+			return Promise.resolve();
 		} catch (error) {
 			console.log("Error on get");
 		}
@@ -100,56 +101,59 @@ export default class Server {
 			let result = await facade.performQuery(query);
 			res.status(200);
 			res.send({result: result});
+			return Promise.resolve();
 		} catch (error) {
 			res.status(400);
 			if (error instanceof InsightError) {
 				res.send({error: error.message});
 			}
+			return Promise.resolve();
 		}
 	}
 
 	private async putOperation(req: any, res: any) {
 		let facade = new InsightFacade();
 		const params = req.params;
-		if (params.id && params.kind) {
-			let id = params.id.toString();
-			let kind = InsightDatasetKind.Sections;
-			if (req.query.kind === InsightDatasetKind.Rooms) {
-				kind = InsightDatasetKind.Rooms;
+		let id = params.id.toString();
+		let kindQuery = params.kind.toString();
+		let kind = InsightDatasetKind.Sections;
+		if (kindQuery === InsightDatasetKind.Rooms) {
+			kind = InsightDatasetKind.Rooms;
+		}
+		let content = req.body.toString("base64");
+		try {
+			let result = await facade.addDataset(id, content, kind);
+			res.status(200);
+			res.send({result: result});
+			return Promise.resolve();
+		} catch (error) {
+			res.status(400);
+			if (error instanceof InsightError) {
+				res.send({error: error.message});
 			}
-			let content = req.body.toString("base64");
-			try {
-				let result = await facade.addDataset(id, content, kind);
-				res.status(200);
-				res.send({result: result});
-			} catch (error) {
-				res.status(400);
-				if (error instanceof InsightError) {
-					res.send({error: error.message});
-				}
-			}
+			return Promise.resolve();
 		}
 	}
 
 	private async deleteOperation(req: any, res: any) {
 		let facade = new InsightFacade();
 		const params = req.params;
-		if (params.id) {
-			let id = params.id.toString();
-			try {
-				let result = await facade.removeDataset(id);
-				res.status(200);
-				res.send({result: result});
-			} catch (error) {
-				if (error instanceof InsightError) {
-					res.status(400);
-					res.send({error: error.message});
-				}
-				if (error instanceof NotFoundError) {
-					res.status(404);
-					res.send({error: error.message});
-				}
+		let id = params.id.toString();
+		try {
+			let result = await facade.removeDataset(id);
+			res.status(200);
+			res.send({result: result});
+			return Promise.resolve();
+		} catch (error) {
+			if (error instanceof InsightError) {
+				res.status(400);
+				res.send({error: error.message});
 			}
+			if (error instanceof NotFoundError) {
+				res.status(404);
+				res.send({error: error.message});
+			}
+			return Promise.resolve();
 		}
 	}
 
@@ -157,28 +161,38 @@ export default class Server {
 	private registerRoutes() {
 		// This is an example endpoint this you can invoke by accessing this URL in your browser:
 		// http://localhost:4321/echo/hello
+
 		this.express.get("/echo/:msg", Server.echo);
 		// list dataset
-		// this.express.get("/datasets", () => this.getOperation(res, req));
-
-		this.express.get("/datasets", (req, res) => {
-			this.getOperation(req, res);
-			// return Promise.resolve();
+		this.express.get("/datasets", async (req, res) => {
+			await this.getOperation(req, res);
 		});
 		// perform query
-		this.express.post("/query", (req, res) => {
-			this.postOperation(req, res);
+		this.express.post("/query", async (req, res) => {
+			if (req.body) {
+				await this.postOperation(req, res);
+			}
 		});
 
 		// Add dataset
-		this.express.put("/dataset/:id/:kind", (req, res) => {
-			this.putOperation(req, res);
-			// return Promise.resolve();
+		this.express.put("/dataset/:id?/:kind", async (req, res) => {
+			if (req.params.id && req.params.kind) {
+				await this.putOperation(req, res);
+			} else {
+				res.status(400);
+				res.send({error: "Invalid parameters."});
+			}
+
 		});
 
 		// Delete dataset
-		this.express.delete("/dataset/:id", (req, res) => {
-			this.deleteOperation(req, res);
+		this.express.delete("/dataset/:id?", async (req, res) => {
+			if (req.params.id) {
+				await this.deleteOperation(req, res);
+			} else {
+				res.status(400);
+				res.send({error: "Invalid parameters."});
+			}
 		});
 	}
 
