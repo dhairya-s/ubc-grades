@@ -7,7 +7,6 @@ import {Button} from "@/components/ui/button";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/components/ui/command";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
-import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 
 const formSchema = z.object({
@@ -37,7 +36,7 @@ export function FindGPABoostersForm() {
 
 	// 2. Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		var body = JSON.stringify({
+		const body = {
 			WHERE: {
 				AND: [
 					{
@@ -47,23 +46,22 @@ export function FindGPABoostersForm() {
 					},
 					{
 						IS: {
-							sections_title: values.courseDigit,
+							sections_id: values.courseDigit,
 						},
 					},
 				],
 			},
 			OPTIONS: {
-				COLUMNS: ["sections_dept", "sections_avg"],
+				COLUMNS: ["sections_dept", "sections_id", "sections_avg"],
 				ORDER: "sections_avg",
 			},
-		});
+		};
 
 		// const mutation = useMutation({
 		// 	mutationFn: (body) => {
 		// 		return axios.post("localhost:4321/query", body);
 		// 	},
 		// });
-
 		axios
 			.post("http://localhost:4321/query", body)
 			.then((response) => console.log(response.data))
