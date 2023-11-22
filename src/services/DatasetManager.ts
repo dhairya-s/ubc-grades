@@ -35,6 +35,7 @@ export default class DatasetManager {
 		Remove dataset from saved datasets.
 		 */
 		const datasetIds = await this.getDatasetIds();
+
 		if (datasetIds.includes(id)) {
 			await this.removeDatasetFromDisk(id);
 			await this.removeDatasetFromLedger(id);
