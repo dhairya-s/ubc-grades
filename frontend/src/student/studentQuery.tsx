@@ -30,7 +30,7 @@ const courseDigit = [
 
 export function FindGPABoostersForm() {
 	const [hasData, setData] = useState(false);
-	var tableData = [{sections_dept: "", sections_id: "", overallAvg: 0}];
+	let tableData = [{sections_dept: "", sections_id: "", overallAvg: 0}];
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
