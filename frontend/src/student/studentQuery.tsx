@@ -29,8 +29,7 @@ const courseDigit = [
 ] as const;
 
 export function FindGPABoostersForm() {
-	const [hasData, setData] = useState(false);
-	let tableData = [{sections_dept: "", sections_id: "", overallAvg: 0}];
+	const [data, setData] = useState<Array<{sections_dept: string; sections_id: string; overallAvg: number}>>();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -41,7 +40,7 @@ export function FindGPABoostersForm() {
 
 	// 2. Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		setData(false);
+		setData([]);
 		const body = {
 			WHERE: {
 				AND: [
@@ -77,9 +76,7 @@ export function FindGPABoostersForm() {
 		};
 
 		axios.post("http://localhost:4321/query", body).then((response) => {
-			tableData = response.data.result;
-			tableData.map((tableData) => console.log(tableData.overallAvg));
-			setData(true);
+			setData(response.data.result);
 		});
 	}
 	return (
@@ -156,7 +153,7 @@ export function FindGPABoostersForm() {
 					<Button type="submit">Submit</Button>
 				</form>
 			</Form>
-			{hasData == true ? (
+			{data?.length !== 0 ? (
 				<div>
 					<Table>
 						<TableCaption>A list of your recent invoices.</TableCaption>
@@ -168,8 +165,8 @@ export function FindGPABoostersForm() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{tableData.map((tableData) => (
-								<TableRow key={tableData.sections_id}>
+							{data?.map((tableData, idx) => (
+								<TableRow key={idx}>
 									<TableCell className="font-medium">{tableData.sections_dept}</TableCell>
 									<TableCell>{tableData.sections_id}</TableCell>
 									<TableCell className="text-right">{tableData.overallAvg}</TableCell>
