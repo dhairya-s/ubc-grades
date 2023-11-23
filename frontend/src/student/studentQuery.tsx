@@ -8,7 +8,6 @@ import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
 import axios from "axios";
-import {useState} from "react";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 
 const formSchema = z.object({
@@ -28,9 +27,13 @@ const courseDigit = [
 	{label: "7", value: "7*"},
 ] as const;
 
-export function FindGPABoostersForm() {
-	const [data, setData] = useState<Array<{sections_dept: string; sections_id: string; overallAvg: number}>>();
-
+export function FindGPABoostersForm({
+	res,
+	setRes,
+}: {
+	res: Array<{sections_dept: string; sections_id: string; overallAvg: number}>;
+	setRes: any;
+}) {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -40,7 +43,7 @@ export function FindGPABoostersForm() {
 
 	// 2. Define a submit handler.
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		setData([]);
+		setRes([]);
 		const body = {
 			WHERE: {
 				AND: [
@@ -76,7 +79,7 @@ export function FindGPABoostersForm() {
 		};
 
 		axios.post("http://localhost:4321/query", body).then((response) => {
-			setData(response.data.result);
+			setRes(response.data.result);
 		});
 	}
 	return (
@@ -153,7 +156,7 @@ export function FindGPABoostersForm() {
 					<Button type="submit">Submit</Button>
 				</form>
 			</Form>
-			{data?.length !== 0 ? (
+			{res?.length !== 0 ? (
 				<div>
 					<Table>
 						<TableCaption>A list of your recent invoices.</TableCaption>
@@ -165,7 +168,7 @@ export function FindGPABoostersForm() {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{data?.map((tableData, idx) => (
+							{res?.map((tableData, idx) => (
 								<TableRow key={idx}>
 									<TableCell className="font-medium">{tableData.sections_dept}</TableCell>
 									<TableCell>{tableData.sections_id}</TableCell>
