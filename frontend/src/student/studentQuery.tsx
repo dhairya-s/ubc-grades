@@ -91,11 +91,11 @@ export function FindGPABoostersForm({
 						name="average"
 						render={({field}) => (
 							<FormItem>
-								<FormLabel>Average</FormLabel>
+								<FormLabel>Course Average</FormLabel>
 								<FormControl>
 									<Input type="number" {...field} />
 								</FormControl>
-								<FormDescription>This is your public display name.</FormDescription>
+								<FormDescription>Find courses with an average greater than</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -105,7 +105,7 @@ export function FindGPABoostersForm({
 						name="courseDigit"
 						render={({field}) => (
 							<FormItem className="flex flex-col">
-								<FormLabel>Language</FormLabel>
+								<FormLabel>Course Code</FormLabel>
 								<Popover>
 									<PopoverTrigger asChild>
 										<FormControl>
@@ -127,8 +127,8 @@ export function FindGPABoostersForm({
 									</PopoverTrigger>
 									<PopoverContent className="w-[200px] p-0">
 										<Command>
-											<CommandInput placeholder="Search framework..." className="h-9" />
-											<CommandEmpty>No framework found.</CommandEmpty>
+											<CommandInput placeholder="Search code..." className="h-9" />
+											<CommandEmpty>This course code doesnt exist</CommandEmpty>
 											<CommandGroup>
 												{courseDigit.map((courseDigit) => (
 													<CommandItem
@@ -145,9 +145,7 @@ export function FindGPABoostersForm({
 										</Command>
 									</PopoverContent>
 								</Popover>
-								<FormDescription>
-									This is the language that will be used in the dashboard.
-								</FormDescription>
+								<FormDescription>Select courses beginning with the course code</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -159,7 +157,6 @@ export function FindGPABoostersForm({
 			{res?.length !== 0 ? (
 				<div>
 					<Table>
-						<TableCaption>A list of your recent invoices.</TableCaption>
 						<TableHeader>
 							<TableRow>
 								<TableHead className="w-[100px]">Department</TableHead>
