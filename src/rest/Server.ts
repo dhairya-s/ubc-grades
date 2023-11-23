@@ -88,6 +88,7 @@ export default class Server {
 			let result = await facade.listDatasets();
 			res.status(200);
 			res.send({result: result});
+			return Promise.resolve();
 		} catch (error) {
 			console.log("Error on get");
 		}
@@ -100,11 +101,13 @@ export default class Server {
 			let result = await facade.performQuery(query);
 			res.status(200);
 			res.send({result: result});
+			return Promise.resolve();
 		} catch (error) {
 			res.status(400);
 			if (error instanceof InsightError) {
 				res.send({error: error.message});
 			}
+			return Promise.resolve();
 		}
 	}
 
@@ -160,7 +163,7 @@ export default class Server {
 		let facade = new InsightFacade();
 		const params = req.params;
 		let id = params.id.toString();
-		console.log(id);
+
 		try {
 			let result = await facade.removeDataset(id);
 			res.status(200);
@@ -170,6 +173,7 @@ export default class Server {
 			if (error instanceof InsightError) {
 				res.status(400);
 				res.send({error: error.message});
+
 			}
 			if (error instanceof NotFoundError) {
 				res.status(404);
@@ -183,20 +187,17 @@ export default class Server {
 	private registerRoutes() {
 		// This is an example endpoint this you can invoke by accessing this URL in your browser:
 		// http://localhost:4321/echo/hello
+
 		this.express.get("/echo/:msg", Server.echo);
 		// list dataset
-		// this.express.get("/datasets", () => this.getOperation(res, req));
-
-		this.express.get("/datasets", (req, res) => {
-			this.getOperation(req, res);
-			// return Promise.resolve();
+		this.express.get("/datasets", async (req, res) => {
+			await this.getOperation(req, res);
 		});
 		// perform query
 		this.express.post("/query", async (req, res) => {
 			if (req.body) {
 				await this.postOperation(req, res);
 			}
-			return Promise.resolve();
 		});
 
 		// Add dataset
@@ -207,9 +208,6 @@ export default class Server {
 				res.status(400);
 				res.send({error: "Invalid parameters."});
 			}
-			// await this.putOperation(req, res);
-
-			return Promise.resolve();
 		});
 
 		// Delete dataset
@@ -220,7 +218,7 @@ export default class Server {
 				res.status(400);
 				res.send({error: "Invalid parameters."});
 			}
-			return Promise.resolve();
+
 		});
 	}
 
