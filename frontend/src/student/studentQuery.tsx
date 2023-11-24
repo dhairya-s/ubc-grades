@@ -8,12 +8,13 @@ import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {cn} from "@/lib/utils";
 import axios from "axios";
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Alert, AlertTitle} from "@/components/ui/alert";
 
 const formSchema = z.object({
-	average: z.coerce.number(),
+	average: z.coerce.number().lte(100, "Average Must Be <= 100").gte(0, "Average Must be >= 0"), // max-min 0 to 100
 	courseDigit: z.string({
-		required_error: "Please select a language",
+		required_error: "Please select a course code",
 	}),
 });
 
@@ -31,7 +32,7 @@ export function FindGPABoostersForm({
 	res,
 	setRes,
 }: {
-	res: Array<{sections_dept: string; sections_id: string; overallAvg: number}>;
+	res: Array<{sections_dept: string; sections_id: string; overallAvg: number}> | undefined;
 	setRes: any;
 }) {
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -79,7 +80,11 @@ export function FindGPABoostersForm({
 		};
 
 		axios.post("http://localhost:4321/query", body).then((response) => {
-			setRes(response.data.result);
+			if (Object.keys(response.data.result[0]).length === 0) {
+				setRes(undefined);
+			} else {
+				setRes(response.data.result);
+			}
 		});
 	}
 	return (
@@ -151,10 +156,10 @@ export function FindGPABoostersForm({
 						)}
 					/>
 
-					<Button type="submit">Submit</Button>
+					<Button type="submit">Query</Button>
 				</form>
 			</Form>
-			{res?.length !== 0 ? (
+			{res !== undefined ? (
 				<div>
 					<Table>
 						<TableHeader>
@@ -176,7 +181,11 @@ export function FindGPABoostersForm({
 					</Table>
 				</div>
 			) : (
-				<div></div>
+				<div>
+					<Alert variant="destructive">
+						<AlertTitle>NO COURSES WITH SPECIFIED INPUT PARAMETERS FOUND.</AlertTitle>
+					</Alert>
+				</div>
 			)}
 		</>
 	);
