@@ -61,7 +61,6 @@ export function FindDomainSpecialists({
 			},
 		};
 
-		console.log(body);
 		axios.post("http://localhost:4321/query", body).then((response) => {
 			if (Object.keys(response.data.result[0]).length === 0) {
 				setRes(undefined);
