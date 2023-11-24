@@ -5,14 +5,17 @@ import {useState} from "react";
 import {FindDomainSpecialists} from "./instructor/instructorQuery";
 
 function App() {
-	const [stuRes, setStuRes] = useState<Array<{sections_dept: string; sections_id: string; overallAvg: number}>>([]);
+	const [stuRes, setStuRes] = useState<
+		Array<{sections_dept: string; sections_id: string; overallAvg: number}> | undefined
+	>([]);
 	const [instRes, setInstRes] = useState<
-		Array<{sections_instructor: string; sections_dept: string; sections_id: string; sections_year: number}>
+		| Array<{sections_instructor: string; sections_dept: string; sections_id: string; sections_year: number}>
+		| undefined
 	>([]);
 	return (
 		<>
 			<div>
-				<Tabs defaultValue="Student Query" className="w-[400px]">
+				<Tabs defaultValue="Student Query">
 					<TabsList>
 						<TabsTrigger value="Student Query">Student Query</TabsTrigger>
 						<TabsTrigger value="Instructor Query">Instructor Query</TabsTrigger>

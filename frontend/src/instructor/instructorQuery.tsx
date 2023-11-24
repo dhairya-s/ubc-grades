@@ -4,9 +4,9 @@ import {useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-
 import axios from "axios";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Alert, AlertTitle} from "@/components/ui/alert";
 
 const formSchema = z.object({
 	courseDept: z.string(),
@@ -17,7 +17,9 @@ export function FindDomainSpecialists({
 	res,
 	setRes,
 }: {
-	res: Array<{sections_instructor: string; sections_dept: string; sections_id: string; sections_year: number}>;
+	res:
+		| Array<{sections_instructor: string; sections_dept: string; sections_id: string; sections_year: number}>
+		| undefined;
 	setRes: any;
 }) {
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -61,7 +63,11 @@ export function FindDomainSpecialists({
 
 		console.log(body);
 		axios.post("http://localhost:4321/query", body).then((response) => {
-			setRes(response.data.result);
+			if (Object.keys(response.data.result[0]).length === 0) {
+				setRes(undefined);
+			} else {
+				setRes(response.data.result);
+			}
 		});
 	}
 	return (
@@ -97,10 +103,10 @@ export function FindDomainSpecialists({
 						)}
 					/>
 
-					<Button type="submit">Submit</Button>
+					<Button type="submit">Query</Button>
 				</form>
 			</Form>
-			{res?.length !== 0 ? (
+			{res !== undefined ? (
 				<div>
 					<Table>
 						<TableHeader>
@@ -124,7 +130,11 @@ export function FindDomainSpecialists({
 					</Table>
 				</div>
 			) : (
-				<div></div>
+				<div>
+					<Alert variant="destructive">
+						<AlertTitle>NO INSTRUCTORS FOUND FOR THE REQUESTED COURSE</AlertTitle>
+					</Alert>
+				</div>
 			)}
 		</>
 	);
